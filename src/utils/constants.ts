@@ -1,0 +1,96 @@
+import type { Brand } from '@/types'
+
+export const BRANDS: Brand[] = [
+  {
+    id: 'craftworld',
+    name: 'CraftworldCentre',
+    logo: '/logos/craftworld.svg',
+    tagline: 'Where Waste Becomes Wonder',
+    description:
+      'The flagship brand driving the circular economy mission — curating the finest recycled, upcycled, and sustainable products across all categories.',
+    color: '#1A7A8A',
+    accentColor: '#7BC8D8',
+    founded: '2020',
+    focus: ['Curated Marketplace', 'Circular Economy', 'Sustainability'],
+  },
+  {
+    id: 'adulawo',
+    name: 'Adúláwò',
+    logo: '/logos/adulawo.svg',
+    tagline: 'Honour in Every Craft',
+    description:
+      'Adúláwò — meaning "to honour the craftsperson" in Yoruba — transforms reclaimed materials into artisanal pieces that celebrate African heritage and craftsmanship.',
+    color: '#8B6914',
+    accentColor: '#d4b896',
+    founded: '2018',
+    focus: ['Artisan Crafts', 'African Heritage', 'Reclaimed Materials'],
+  },
+  {
+    id: 'planet3r',
+    name: 'Planet 3R',
+    logo: '/logos/planet3r.svg',
+    tagline: 'Reduce. Reuse. Rethink.',
+    description:
+      'Planet 3R pioneers industrial upcycling — converting post-consumer and post-industrial waste into functional, design-forward lifestyle and home products.',
+    color: '#3d6b2d',
+    accentColor: '#a8d4a0',
+    founded: '2019',
+    focus: ['Industrial Upcycling', 'Home & Lifestyle', 'Zero Waste'],
+  },
+]
+
+export const BRAND_MAP = Object.fromEntries(BRANDS.map((b) => [b.id, b])) as Record<
+  string,
+  Brand
+>
+
+export const STATS = [
+  { value: '12,400+', label: 'Products Listed', icon: '📦' },
+  { value: '85 tonnes', label: 'Waste Diverted', icon: '♻️' },
+  { value: '3,200+', label: 'Happy Customers', icon: '🌍' },
+  { value: '3', label: 'Partner Brands', icon: '🤝' },
+]
+
+export const CATEGORIES = [
+  { id: 'home-decor', name: 'Home Décor', icon: '🏡', count: 240, color: '#1A7A8A' },
+  { id: 'fashion', name: 'Fashion', icon: '👗', count: 185, color: '#8B6914' },
+  { id: 'furniture', name: 'Furniture', icon: '🪑', count: 92, color: '#3d6b2d' },
+  { id: 'art', name: 'Art & Crafts', icon: '🎨', count: 310, color: '#6B4A8A' },
+  { id: 'accessories', name: 'Accessories', icon: '💍', count: 156, color: '#8A4A3A' },
+  { id: 'stationery', name: 'Stationery', icon: '📝', count: 88, color: '#4A6A8A' },
+]
+
+export const HOW_IT_WORKS = [
+  {
+    step: '01',
+    title: 'Waste is Collected',
+    description:
+      'Our partner brands and artisans source post-consumer and industrial waste materials that would otherwise end up in landfills.',
+    icon: '🗂️',
+    color: '#1A7A8A',
+  },
+  {
+    step: '02',
+    title: 'Transformed with Craft',
+    description:
+      'Skilled craftspeople apply creativity and technique to transform raw waste into beautiful, functional products with a story.',
+    icon: '⚒️',
+    color: '#8B6914',
+  },
+  {
+    step: '03',
+    title: 'Listed on CraftworldCentre',
+    description:
+      'Products are quality-checked, photographed, and listed on our platform with full transparency about materials and origin.',
+    icon: '🛒',
+    color: '#3d6b2d',
+  },
+  {
+    step: '04',
+    title: 'Delivered to You',
+    description:
+      'Your purchase arrives in eco-friendly packaging. You receive a product — and the story behind the waste it saved.',
+    icon: '📬',
+    color: '#6B4A8A',
+  },
+]
