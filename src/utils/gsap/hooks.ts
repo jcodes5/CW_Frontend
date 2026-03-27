@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { gsap, ScrollTrigger, GSAPTweenVars, GSAPTimeline, GSAPScrollTrigger } from './index'
+import { gsap, ScrollTrigger, GSAPTweenVars, GSAPTimeline } from './index'
 
 /**
  * Hook for scroll-triggered animations

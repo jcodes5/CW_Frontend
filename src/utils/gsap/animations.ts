@@ -187,6 +187,8 @@ export const shake = (
     repeat: 5,
     yoyo: true,
     ease: 'power2.inOut',
-    onComplete: () => gsap.set(element, { x: 0 })
+    onComplete: () => {
+      gsap.set(element, { x: 0 });
+    }
   })
 }

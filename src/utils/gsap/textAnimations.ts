@@ -159,8 +159,6 @@ export function scrambleText(
   delay = 0
 ): gsap.core.Timeline {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()'
-  const originalText = element.textContent || ''
-
   const tl = gsap.timeline({ delay })
 
   tl.to(element, {
