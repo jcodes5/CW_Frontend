@@ -358,221 +358,224 @@ export default function ShopPage() {
 
   return (
     <main className="min-h-screen bg-[#f8fafb]">
-      <section id="hero" className="relative overflow-hidden bg-white">
-        <div
-          className="absolute inset-0 opacity-[0.045] pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle, #1A7A8A 1px, transparent 1px)',
-            backgroundSize: '28px 28px',
-          }}
-        />
-        <div className="absolute top-0 right-0 w-[52%] h-full bg-[#1A7A8A]/[0.035] rounded-bl-[80px] pointer-events-none" />
-        <div className="h-1 w-full bg-gradient-to-r from-[#7BC8D8] via-[#1A7A8A] to-[#7BC8D8]" />
+     <section id="hero" className="relative overflow-hidden bg-white">
+  <div
+    className="absolute inset-0 opacity-[0.045] pointer-events-none"
+    style={{
+      backgroundImage: 'radial-gradient(circle, #1A7A8A 1px, transparent 1px)',
+      backgroundSize: '28px 28px',
+    }}
+  />
+  <div className="hidden lg:block absolute top-0 right-0 w-[52%] h-full bg-[#1A7A8A]/[0.035] rounded-bl-[80px] pointer-events-none" />
+  <div className="h-1 w-full bg-gradient-to-r from-[#7BC8D8] via-[#1A7A8A] to-[#7BC8D8]" />
 
-        <div className="relative z-10 container-max px-6 lg:px-12 xl:px-16 pt-14 pb-20 lg:pt-20 lg:pb-28">
-          <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16 items-center min-h-[82vh]">
+  <div className="relative z-10 container-max px-4 sm:px-6 lg:px-12 xl:px-16 pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-20 lg:pb-28">
+    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8 sm:gap-10 lg:gap-16 items-center lg:min-h-[82vh]">
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="space-y-6 sm:space-y-8 lg:space-y-10"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="inline-flex flex-wrap items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-[#1A7A8A]/[0.08] border border-[#1A7A8A]/20"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1A7A8A] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1A7A8A]" />
+          </span>
+          <span className="text-[#1A7A8A] text-xs sm:text-sm font-semibold tracking-wide">{total}+ Items Available</span>
+          {!useApi && (
+            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] sm:text-xs rounded-full font-mono border border-amber-200">
+              DEMO
+            </span>
+          )}
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 36 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.1, ease: 'easeOut' }}
+          className="font-display font-black leading-[0.92] tracking-[-0.03em] text-[clamp(2.2rem,11vw,6rem)] text-gray-900"
+        >
+          From
+          <br />
+          <span className="text-[#1A7A8A]">Waste</span>
+          <br />
+          to Wonder
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="text-base sm:text-lg lg:text-xl text-gray-500 max-w-none sm:max-w-[24rem] lg:max-w-[22rem] leading-relaxed font-light"
+        >
+          Artisan-crafted goods from recycled materials supporting circular economy and local craftspeople across Nigeria.
+        </motion.p>
+
+        <motion.form
+          onSubmit={handleSearch}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="relative max-w-none sm:max-w-md"
+        >
+          <SearchOutlined className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" sx={{ fontSize: 20, color: '#1A7A8A' }} />
+          <input
+            type="search"
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            placeholder="Search sustainable products..."
+            className="w-full pl-12 pr-4 sm:pr-28 py-3.5 sm:py-4 text-[0.95rem] bg-white rounded-2xl border-2 border-[#7BC8D8]/60 focus:border-[#1A7A8A] focus:outline-none shadow-sm shadow-[#1A7A8A]/10 transition-all duration-300 placeholder-gray-400 text-gray-800"
+          />
+          <button
+            type="submit"
+            className="mt-2 sm:mt-0 w-full sm:w-auto sm:absolute sm:right-2 sm:top-1/2 sm:-translate-y-1/2 px-4 py-2 bg-[#1A7A8A] text-white text-sm font-semibold rounded-xl hover:bg-[#115762] active:scale-95 transition-all duration-200"
+          >
+            Search
+          </button>
+        </motion.form>
+
+        <motion.div className="flex flex-wrap items-center gap-4 sm:gap-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}>
+          <StatCounter label="Products" value={total} color="teal" />
+          <div className="hidden sm:block w-px h-10 bg-gray-200" />
+          <StatCounter label="Artisans" value={247} color="amber" />
+          <div className="hidden sm:block w-px h-10 bg-gray-200" />
+          <StatCounter label="Waste Saved (kg)" value={85000} color="green" />
+        </motion.div>
+
+        <motion.div
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-1 sm:pt-2"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.65 }}
+        >
+          <button
+            onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+            className="group w-full sm:flex-1 flex items-center justify-center gap-2.5 bg-[#1A7A8A] text-white font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-2xl hover:bg-[#115762] shadow-lg shadow-[#1A7A8A]/30 hover:shadow-[#1A7A8A]/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
+          >
+            Explore Collection
+            <ArrowForwardOutlined sx={{ fontSize: 20 }} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setIsMobileFiltersOpen(true)}
+            className="w-full sm:flex-1 flex items-center justify-center gap-2.5 bg-white border-2 border-[#1A7A8A] text-[#1A7A8A] font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-2xl hover:bg-[#1A7A8A]/[0.06] transition-all duration-300 text-sm sm:text-base shadow-sm"
+          >
+            <TuneOutlined sx={{ fontSize: 20 }} />
+            Browse Filters
+          </motion.button>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+        className="relative h-[280px] sm:h-[420px] lg:h-[580px] w-full max-w-[620px] mx-auto"
+      >
+        <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-[#1A7A8A]/20 ring-1 ring-black/5">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={`img-${currentImageIndex}`}
+              src={SHOP_CAROUSEL_SLIDES[currentImageIndex].image}
+              alt={SHOP_CAROUSEL_SLIDES[currentImageIndex].alt}
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.75, ease: 'easeInOut' }}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </AnimatePresence>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1A7A8A]/75 via-[#1A7A8A]/15 to-transparent" />
+
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="space-y-8 lg:space-y-10"
+              key={`text-${currentImageIndex}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.45 }}
+              className="absolute bottom-0 left-0 right-0 p-4 sm:p-7 lg:p-8"
             >
-              <motion.div
-                initial={{ opacity: 0, y: -16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1A7A8A]/[0.08] border border-[#1A7A8A]/20"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1A7A8A] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1A7A8A]" />
-                </span>
-                <span className="text-[#1A7A8A] text-sm font-semibold tracking-wide">{total}+ Items Available</span>
-                {!useApi && (
-                  <span className="ml-1 px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full font-mono border border-amber-200">
-                    DEMO
-                  </span>
-                )}
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 36 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.1, ease: 'easeOut' }}
-                className="font-display font-black leading-[0.88] tracking-[-0.03em] text-[clamp(3.2rem,7vw,6rem)] text-gray-900"
-              >
-                From
-                <br />
-                <span className="text-[#1A7A8A]">Waste</span>
-                <br />
-                to Wonder
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.35 }}
-                className="text-lg lg:text-xl text-gray-500 max-w-[22rem] leading-relaxed font-light"
-              >
-                Artisan-crafted goods from recycled materials supporting circular economy and local craftspeople across Nigeria.
-              </motion.p>
-
-              <motion.form
-                onSubmit={handleSearch}
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
-                className="relative max-w-md"
-              >
-                <SearchOutlined className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" sx={{ fontSize: 20, color: '#1A7A8A' }} />
-                <input
-                  type="search"
-                  value={localSearch}
-                  onChange={(e) => setLocalSearch(e.target.value)}
-                  placeholder="Search sustainable products..."
-                  className="w-full pl-12 pr-28 py-4 text-[0.95rem] bg-white rounded-2xl border-2 border-[#7BC8D8]/60 focus:border-[#1A7A8A] focus:outline-none shadow-sm shadow-[#1A7A8A]/10 transition-all duration-300 placeholder-gray-400 text-gray-800"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-[#1A7A8A] text-white text-sm font-semibold rounded-xl hover:bg-[#115762] active:scale-95 transition-all duration-200"
-                >
-                  Search
-                </button>
-              </motion.form>
-
-              <motion.div className="flex items-center gap-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}>
-                <StatCounter label="Products" value={total} color="teal" />
-                <div className="w-px h-10 bg-gray-200" />
-                <StatCounter label="Artisans" value={247} color="amber" />
-                <div className="w-px h-10 bg-gray-200" />
-                <StatCounter label="Waste Saved (kg)" value={85000} color="green" />
-              </motion.div>
-
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4 pt-2"
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65 }}
-              >
-                <button
-                  onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="group flex-1 flex items-center justify-center gap-2.5 bg-[#1A7A8A] text-white font-bold py-4 px-8 rounded-2xl hover:bg-[#115762] shadow-lg shadow-[#1A7A8A]/30 hover:shadow-[#1A7A8A]/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-base"
-                >
-                  Explore Collection
-                  <ArrowForwardOutlined sx={{ fontSize: 20 }} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setIsMobileFiltersOpen(true)}
-                  className="flex-1 flex items-center justify-center gap-2.5 bg-white border-2 border-[#1A7A8A] text-[#1A7A8A] font-bold py-4 px-8 rounded-2xl hover:bg-[#1A7A8A]/[0.06] transition-all duration-300 text-base shadow-sm"
-                >
-                  <TuneOutlined sx={{ fontSize: 20 }} />
-                  Browse Filters
-                </motion.button>
-              </motion.div>
+              <span className="inline-block px-2.5 sm:px-3 py-1 mb-2 sm:mb-3 text-[10px] sm:text-xs font-semibold tracking-wider uppercase bg-[#7BC8D8]/30 text-white backdrop-blur-sm rounded-full border border-white/25">
+                {SHOP_CAROUSEL_SLIDES[currentImageIndex].tag}
+              </span>
+              <h3 className="font-display text-white text-lg sm:text-xl lg:text-2xl font-bold mb-1 leading-tight">
+                {SHOP_CAROUSEL_SLIDES[currentImageIndex].title}
+              </h3>
+              <p className="text-white/80 text-xs sm:text-sm leading-relaxed line-clamp-2">
+                {SHOP_CAROUSEL_SLIDES[currentImageIndex].subtitle}
+              </p>
             </motion.div>
+          </AnimatePresence>
 
+          <div className="absolute top-4 sm:top-5 right-4 sm:right-5 flex gap-1.5">
+            {SHOP_CAROUSEL_SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentImageIndex(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 bg-white ${
+                  i === currentImageIndex ? 'w-6 opacity-100' : 'w-1.5 opacity-45 hover:opacity-75'
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/20">
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-              className="relative h-[420px] sm:h-[500px] lg:h-[580px]"
-            >
-              <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-[#1A7A8A]/20 ring-1 ring-black/5">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={`img-${currentImageIndex}`}
-                    src={SHOP_CAROUSEL_SLIDES[currentImageIndex].image}
-                    alt={SHOP_CAROUSEL_SLIDES[currentImageIndex].alt}
-                    initial={{ opacity: 0, scale: 1.04 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.75, ease: 'easeInOut' }}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </AnimatePresence>
-
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A7A8A]/75 via-[#1A7A8A]/15 to-transparent" />
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`text-${currentImageIndex}`}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.45 }}
-                    className="absolute bottom-0 left-0 right-0 p-7 lg:p-8"
-                  >
-                    <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold tracking-wider uppercase bg-[#7BC8D8]/30 text-white backdrop-blur-sm rounded-full border border-white/25">
-                      {SHOP_CAROUSEL_SLIDES[currentImageIndex].tag}
-                    </span>
-                    <h3 className="font-display text-white text-xl lg:text-2xl font-bold mb-1.5 leading-tight">
-                      {SHOP_CAROUSEL_SLIDES[currentImageIndex].title}
-                    </h3>
-                    <p className="text-white/75 text-sm leading-relaxed">{SHOP_CAROUSEL_SLIDES[currentImageIndex].subtitle}</p>
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="absolute top-5 right-5 flex gap-1.5">
-                  {SHOP_CAROUSEL_SLIDES.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCurrentImageIndex(i)}
-                      aria-label={`Go to slide ${i + 1}`}
-                      className={`h-1.5 rounded-full transition-all duration-300 bg-white ${
-                        i === currentImageIndex ? 'w-6 opacity-100' : 'w-1.5 opacity-45 hover:opacity-75'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/20">
-                  <motion.div
-                    key={currentImageIndex}
-                    className="h-full bg-[#7BC8D8]"
-                    initial={{ width: '0%' }}
-                    animate={{ width: '100%' }}
-                    transition={{ duration: 5, ease: 'linear' }}
-                  />
-                </div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1, duration: 0.5 }}
-                className="absolute -left-5 top-1/3 -translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-5 py-3.5 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 bg-[#7BC8D8]/20 rounded-xl flex items-center justify-center text-lg flex-shrink-0">♻️</div>
-                <div>
-                  <div className="text-[#1A7A8A] font-black text-lg leading-none">100%</div>
-                  <div className="text-gray-400 text-xs mt-0.5">Upcycled</div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.2, duration: 0.5 }}
-                className="absolute -right-4 bottom-1/4 translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-5 py-3.5 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 bg-[#1A7A8A]/10 rounded-xl flex items-center justify-center text-lg flex-shrink-0">🌱</div>
-                <div>
-                  <div className="text-[#1A7A8A] font-black text-lg leading-none">247</div>
-                  <div className="text-gray-400 text-xs mt-0.5">Artisans</div>
-                </div>
-              </motion.div>
-
-              <div className="absolute -bottom-6 -right-6 w-28 h-28 rounded-full border-[3px] border-[#7BC8D8]/30 pointer-events-none" />
-              <div className="absolute -bottom-3 -right-3 w-14 h-14 rounded-full bg-[#1A7A8A]/10 pointer-events-none" />
-            </motion.div>
+              key={currentImageIndex}
+              className="h-full bg-[#7BC8D8]"
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 5, ease: 'linear' }}
+            />
           </div>
         </div>
 
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7BC8D8]/50 to-transparent" />
-      </section>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="hidden sm:flex absolute -left-5 top-1/3 -translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-5 py-3.5 items-center gap-3"
+        >
+          <div className="w-10 h-10 bg-[#7BC8D8]/20 rounded-xl flex items-center justify-center text-lg flex-shrink-0">♻️</div>
+          <div>
+            <div className="text-[#1A7A8A] font-black text-lg leading-none">100%</div>
+            <div className="text-gray-400 text-xs mt-0.5">Upcycled</div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.2, duration: 0.5 }}
+          className="hidden sm:flex absolute -right-4 bottom-1/4 translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-5 py-3.5 items-center gap-3"
+        >
+          <div className="w-10 h-10 bg-[#1A7A8A]/10 rounded-xl flex items-center justify-center text-lg flex-shrink-0">🌱</div>
+          <div>
+            <div className="text-[#1A7A8A] font-black text-lg leading-none">247</div>
+            <div className="text-gray-400 text-xs mt-0.5">Artisans</div>
+          </div>
+        </motion.div>
+
+        <div className="hidden sm:block absolute -bottom-6 -right-6 w-28 h-28 rounded-full border-[3px] border-[#7BC8D8]/30 pointer-events-none" />
+        <div className="hidden sm:block absolute -bottom-3 -right-3 w-14 h-14 rounded-full bg-[#1A7A8A]/10 pointer-events-none" />
+      </motion.div>
+    </div>
+  </div>
+
+  <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7BC8D8]/50 to-transparent" />
+</section>
+
 
       <div id="products" className="container-max section-padding py-8">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
