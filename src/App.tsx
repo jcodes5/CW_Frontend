@@ -6,7 +6,6 @@ import Footer from '@/components/layout/Footer'
 import ToastContainer from '@/components/ui/ToastContainer'
 import CartDrawer from '@/components/ui/CartDrawer'
 import ProtectedRoute from '@/components/ui/ProtectedRoute'
-import ScrollToTop from '@/components/ui/ScrollToTop'
 import AccountLayout from '@/components/account/AccountLayout'
 import AdminLayout from '@/components/admin/AdminLayout'
 import AdminRoute from '@/components/admin/AdminRoute'
@@ -89,7 +88,6 @@ export default function App() {
 
   return (
     <>
-      <ScrollToTop />
       {!noChrome && <Navbar />}
 
       <AnimatePresence mode="wait">
