@@ -168,28 +168,7 @@ export default function DIYPage() {
   return (
     <main className="min-h-screen bg-[#f8fafb]">
 
-      {/*
-        ══════════════════════════════════════════════════════
-        HERO — Redesigned to match ShopPage design system
-        Palette: #FFFFFF (base) · #1A7A8A (primary) · #7BC8D8 (accent)
-
-        BUGS FIXED:
-        1. Original file had two hero attempts merged. The first complete
-           <section>…</section> was valid, but everything after it
-           (floating <motion.div> frames, the second content grid, and
-           the bottom wave SVG) were orphaned JSX with no parent element
-           — a hard parse/runtime error. All orphaned blocks removed.
-
-        2. Math.random() was called directly inside `animate={}` and
-           `initial={}` props on the floating particles, causing them to
-           re-compute on every render. Fixed by pre-computing coordinates
-           as stable constants (PARTICLES in the previous iteration; here
-           replaced with the cleaner showcase grid approach).
-
-        3. The `useMemo` import was listed but never used. Removed from
-           imports.
-        ══════════════════════════════════════════════════════
-      */}
+     
       <section id="hero" className="relative overflow-hidden bg-white">
   <div
     className="absolute inset-0 opacity-[0.045] pointer-events-none"
