@@ -103,7 +103,7 @@ export default function StatsSection() {
 
       <div className="container-max section-padding relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {STATS.map((stat, i) => (
+          {STATS.map((stat, _i) => (
             <div
               key={stat.label}
               className="stat-card text-center p-6 rounded-2xl bg-gradient-to-br from-teal-50/80 to-white

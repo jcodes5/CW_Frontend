@@ -4,6 +4,7 @@ export interface User {
   firstName: string
   lastName: string
   email: string
+  phone?: string
   avatar?: string
   role: 'customer' | 'admin' | 'vendor'
   createdAt: string
@@ -19,6 +20,7 @@ export interface AuthState {
   register: (data: RegisterData) => Promise<void>
   logout: () => void
   clearError: () => void
+  updateUser: (userData: Partial<User>) => void
 }
 
 export interface LoginCredentials {

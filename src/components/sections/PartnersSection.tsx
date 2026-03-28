@@ -138,7 +138,7 @@ export default function PartnersSection() {
 
                   {/* Focus tags */}
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {brand.focus.map((f) => (
+                    {brand.focus?.map((f) => (
                       <span
                         key={f}
                         className={`text-xs px-3 py-1 rounded-full border font-medium ${v.badge}`}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { RecyclingOutlined } from '@mui/icons-material'
 import { useCartStore } from '@/store/cartStore'
 import { useCheckoutStore } from '@/store/checkoutStore'
@@ -16,7 +16,7 @@ export default function CheckoutPage() {
   const navState  = (location.state ?? {}) as { couponCode?: string; discount?: number }
   const navDiscount = navState.discount ?? 0
   const { items } = useCartStore()
-  const { step, setStep, reset } = useCheckoutStore()
+  const { step, setStep } = useCheckoutStore()
   const [deliveryFee, setDeliveryFee] = useState(0)
 
   useEffect(() => {

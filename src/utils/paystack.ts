@@ -57,13 +57,13 @@ export function initPaystack(config: PaystackConfig): void {
   }
 
   const launch = () => {
-    // @ts-expect-error — PaystackPop is injected globally by the Paystack script
-    const handler = window.PaystackPop.setup({
+    // Create the config object with the properties Paystack expects
+    const paystackConfig = {
       key: publicKey,
       email: config.email,
       amount: toKobo(config.amount),
       ref: config.reference,
-      currency: 'NGN',
+      currency: 'NGN' as const,
       firstname: config.firstName,
       lastname: config.lastName,
       phone: config.phone,
@@ -82,12 +82,14 @@ export function initPaystack(config: PaystackConfig): void {
         config.onSuccess(response.reference)
       },
       onClose: config.onClose,
-    })
+    }
+
+    const handler = window.PaystackPop.setup(paystackConfig)
     handler.openIframe()
   }
 
   // Inject script if not already present
-  if (typeof window !== 'undefined' && !(window as Record<string, unknown>).PaystackPop) {
+  if (typeof window !== 'undefined' && !('PaystackPop' in window)) {
     const script = document.createElement('script')
     script.src = 'https://js.paystack.co/v1/inline.js'
     script.async = true

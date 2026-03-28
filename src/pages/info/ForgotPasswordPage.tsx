@@ -9,7 +9,7 @@ export default function ForgotPasswordPage() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   useEffect(() => { document.title = 'Reset Password | CraftworldCentre' }, [])
-  const { register, handleSubmit, formState: { errors, isValid } } = useForm<{ email: string }>({ mode: 'onChange' })
+  const { register, handleSubmit, formState: { isValid } } = useForm<{ email: string }>({ mode: 'onChange' })
 
   const onSubmit = async () => {
     setLoading(true)

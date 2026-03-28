@@ -149,7 +149,7 @@ export const api = {
 
 // ── Products ──────────────────────────────────────────────────
 export const productsApi = {
-  list: (params: Record<string, string | number> = {}, p0?: { signal: AbortSignal }) => {
+  list: (params: Record<string, string | number> = {}) => {
     const qs = new URLSearchParams(
       Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
     ).toString()

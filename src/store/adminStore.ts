@@ -88,7 +88,6 @@ export const useAdminStore = create<AdminState>()(
       fetchProducts: async (page = 1, params = {}) => {
         set({ productsLoading: true, error: null })
         try {
-          const res = await adminApi.listOrders({ page, ...params })
           // Use products API (reuse admin list endpoint logic)
           const pRes = await import('@/services/api').then((m) =>
             m.api.get<Product[]>(`/products?page=${page}&limit=20&${new URLSearchParams(

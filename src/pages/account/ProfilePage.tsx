@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   PersonOutlined, EmailOutlined, PhoneOutlined, LockOutlined,
-  EditOutlined, CheckOutlined, VisibilityOutlined, VisibilityOffOutlined,
+ CheckOutlined, VisibilityOutlined, VisibilityOffOutlined,
   CameraAltOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
+import { authApi, ApiError } from '@/services/api'
 
 interface ProfileFormData {
   firstName: string
@@ -36,7 +37,7 @@ function getPasswordStrength(pw: string) {
 }
 
 export default function ProfilePage() {
-  const { user } = useAuthStore()
+  const { user, updateUser } = useAuthStore()
   const addToast = useUIStore((s) => s.addToast)
   const [isSavingProfile,  setIsSavingProfile]  = useState(false)
   const [isSavingPassword, setIsSavingPassword] = useState(false)
@@ -49,14 +50,13 @@ export default function ProfilePage() {
   const {
     register: regProfile,
     handleSubmit: handleProfile,
-    watch: watchProfile,
     formState: { errors: profileErrors, isDirty: profileDirty },
   } = useForm<ProfileFormData>({
     defaultValues: {
       firstName: user?.firstName ?? '',
       lastName:  user?.lastName  ?? '',
       email:     user?.email     ?? '',
-      phone:     '',
+      phone:     user?.phone     ?? '',
     },
   })
 
@@ -73,17 +73,39 @@ export default function ProfilePage() {
 
   const onSaveProfile = async (data: ProfileFormData) => {
     setIsSavingProfile(true)
-    await new Promise((r) => setTimeout(r, 800))
-    setIsSavingProfile(false)
-    addToast({ type: 'success', message: 'Profile updated successfully ✓' })
+    try {
+      const response = await authApi.updateProfile({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
+      })
+      if (response.data) {
+        updateUser(response.data)
+      }
+      addToast({ type: 'success', message: 'Profile updated successfully ✓' })
+    } catch (err) {
+      const msg = err instanceof ApiError ? err.message : 'Failed to update profile'
+      addToast({ type: 'error', message: msg })
+    } finally {
+      setIsSavingProfile(false)
+    }
   }
 
   const onSavePassword = async (data: PasswordFormData) => {
     setIsSavingPassword(true)
-    await new Promise((r) => setTimeout(r, 900))
-    setIsSavingPassword(false)
-    resetPw()
-    addToast({ type: 'success', message: 'Password changed successfully 🔒' })
+    try {
+      await authApi.changePassword({
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      })
+      resetPw()
+      addToast({ type: 'success', message: 'Password changed successfully 🔒' })
+    } catch (err) {
+      const msg = err instanceof ApiError ? err.message : 'Failed to change password'
+      addToast({ type: 'error', message: msg })
+    } finally {
+      setIsSavingPassword(false)
+    }
   }
 
   const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`.toUpperCase()

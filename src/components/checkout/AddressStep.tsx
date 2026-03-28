@@ -47,7 +47,9 @@ export default function AddressStep({ onNext }: AddressStepProps) {
   }, [shippingAddress, user, reset])
 
   const onSubmit = (data: ShippingAddress) => {
-    const clean = sanitiseFormData(data)
+    // Convert form data to the correct type before sanitising
+    const formData = { ...data } as Record<string, unknown>;
+    const clean = sanitiseFormData(formData) as unknown as ShippingAddress;
     setShippingAddress(clean)
     onNext()
   }
@@ -155,17 +157,17 @@ export default function AddressStep({ onNext }: AddressStepProps) {
         {/* Street address */}
         <FormField
           label="Street address"
-          id="address"
+          id="addressLine1"
           icon={<HomeOutlined sx={{ fontSize: 17 }} />}
-          error={errors.address?.message}
+          error={errors.addressLine1?.message}
         >
           <input
-            id="address"
+            id="addressLine1"
             type="text"
             autoComplete="street-address"
             placeholder="12 Allen Avenue, Ikeja"
-            className={fieldClass(!!errors.address)}
-            {...register('address', {
+            className={fieldClass(!!errors.addressLine1)}
+            {...register('addressLine1', {
               required: 'Address is required',
               minLength: { value: 10, message: 'Please enter a full address' },
               maxLength: { value: 200, message: 'Address too long' },
@@ -221,13 +223,13 @@ export default function AddressStep({ onNext }: AddressStepProps) {
         </FormField>
 
         {/* Delivery note */}
-        <FormField label="Delivery note (optional)" id="deliveryNote">
+        <FormField label="Delivery note (optional)" id="deliveryNotes">
           <textarea
-            id="deliveryNote"
+            id="deliveryNotes"
             rows={2}
             placeholder="Any special instructions for the delivery rider…"
             className="input-field resize-none"
-            {...register('deliveryNote', {
+            {...register('deliveryNotes', {
               maxLength: { value: 300, message: 'Maximum 300 characters' },
             })}
           />

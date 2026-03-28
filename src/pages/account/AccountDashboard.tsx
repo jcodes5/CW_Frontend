@@ -7,7 +7,6 @@ import {
   ArrowForwardOutlined, LocalShippingOutlined,
   ChevronRightOutlined,
 } from '@mui/icons-material'
-import { useAuthStore } from '@/store/authStore'
 import { useOrdersStore } from '@/store/ordersStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { getDemoOrders, ORDER_STATUS_CONFIG } from '@/utils/account'
@@ -44,7 +43,6 @@ function StatCard({ icon, label, value, sub, color, to }: {
 }
 
 export default function AccountDashboard() {
-  const { user } = useAuthStore()
   const { orders: realOrders } = useOrdersStore()
   const { items: wishlistItems } = useWishlistStore()
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  RecyclingOutlined, StarOutlined, CardGiftcardOutlined,
+ CardGiftcardOutlined,
   CheckCircleOutlined, InfoOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -23,7 +23,6 @@ export default function RewardsWidget({ compact = false }: Props) {
   const [rewards, setRewards]         = useState<RewardsDTO | null>(null)
   const [loading, setLoading]         = useState(true)
   const [redeeming, setRedeeming]     = useState(false)
-  const [showRedeemModal, setModal]   = useState(false)
   const [redeemResult, setResult]     = useState<RedemptionResult | null>(null)
   const addToast = useUIStore((s) => s.addToast)
 
@@ -192,7 +191,6 @@ export default function RewardsWidget({ compact = false }: Props) {
                 sub="Credited to your wallet"
                 color="#22c55e"
                 disabled={!rewards.canRedeem}
-                onClick={() => { if (rewards.canRedeem) { setModal(true) } }}
                 type="cashback"
                 onRedeem={handleRedeem}
                 loading={redeeming}
@@ -203,7 +201,6 @@ export default function RewardsWidget({ compact = false }: Props) {
                 sub="Code valid for 30 days"
                 color="#1A7A8A"
                 disabled={!rewards.canRedeem}
-                onClick={() => { if (rewards.canRedeem) { setModal(true) } }}
                 type="discount_code"
                 onRedeem={handleRedeem}
                 loading={redeeming}
@@ -275,7 +272,7 @@ function RewardOption({
 }: {
   emoji: string; title: string; sub: string; color: string; disabled: boolean
   type: 'cashback' | 'discount_code'; onRedeem: (t: 'cashback' | 'discount_code') => void
-  loading: boolean; onClick?: () => void
+  loading: boolean
 }) {
   return (
     <motion.button

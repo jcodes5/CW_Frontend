@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  SearchOutlined, FilterListOutlined, CloseOutlined,
+  SearchOutlined, CloseOutlined,
   ShoppingBagOutlined, ArrowForwardOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useAdminStore } from '@/store/adminStore'
-import { adminApi, type Order, type OrderDetail } from '@/services/api'
+import { type Order, type OrderDetail } from '@/services/api'
 import { useUIStore } from '@/store/uiStore'
 import { formatPrice } from '@/utils/mockData'
 import { OrderStatusBadge } from '@/components/account/OrderStatusBadge'
@@ -251,7 +251,8 @@ export default function AdminOrders() {
                 <h2 className="font-display font-bold text-gray-900">
                   {selectedOrder?.reference ?? 'Loading…'}
                 </h2>
-                <button onClick={() => setSelected(null)} className="p-2 rounded-xl hover:bg-gray-100">
+                <button onClick={() => setSelected(null)} className="p-2 rounded-xl hover:bg-gray-100"
+                  title='Select'>
                   <CloseOutlined sx={{ fontSize: 20 }} />
                 </button>
               </div>

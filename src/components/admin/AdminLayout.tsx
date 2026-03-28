@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   DashboardOutlined, InventoryOutlined, ShoppingBagOutlined,
   PeopleOutlined, BarChartOutlined, LogoutOutlined,
-  MenuOutlined, CloseOutlined, RecyclingOutlined,
+  MenuOutlined, RecyclingOutlined,
   NotificationsOutlined, SettingsOutlined, ArrowForwardOutlined,
   YouTube, LocalOfferOutlined,
 } from '@mui/icons-material'

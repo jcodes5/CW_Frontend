@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { Link, useParams, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   CheckCircleOutlined,
@@ -38,7 +38,6 @@ function ConfettiParticle({ delay, color, x }: { delay: number; color: string; x
 const CONFETTI_COLORS = ['#1A7A8A', '#7BC8D8', '#8B6914', '#d4b896', '#3d6b2d', '#a8d4a0', '#ffffff']
 
 export default function OrderConfirmationPage() {
-  const { reference } = useParams<{ reference: string }>()
   const location = useLocation()
   const { currentOrder, reset } = useCheckoutStore()
   const addOrder = useOrdersStore((s) => s.addOrder)

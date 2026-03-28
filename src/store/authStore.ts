@@ -78,6 +78,12 @@ export const useAuthStore = create<AuthState>()(
         },
 
         clearError: () => set({ error: null }),
+
+        updateUser: (userData: Partial<AuthState['user']>) => {
+          set((state) => ({
+            user: state.user ? { ...state.user, ...userData } : null,
+          }))
+        },
       }),
       {
         name: 'craftworld-auth',

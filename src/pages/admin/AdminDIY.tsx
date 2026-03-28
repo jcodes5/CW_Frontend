@@ -178,10 +178,12 @@ export default function AdminDIY() {
                       : <><VisibilityOutlined sx={{ fontSize: 14 }} /> Publish</>}
                   </button>
                   <button onClick={() => { setEdit(video); setShowModal(true) }}
+                  title='Edit Video'
                     className="p-2 rounded-lg hover:bg-teal-50 text-gray-400 hover:text-teal-600 transition-colors border border-gray-200">
                     <EditOutlined sx={{ fontSize: 16 }} />
                   </button>
                   <button onClick={() => setDel(video)}
+                  title='Delete Video'
                     className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors border border-gray-200">
                     <DeleteOutlineOutlined sx={{ fontSize: 16 }} />
                   </button>
@@ -260,8 +262,7 @@ export default function AdminDIY() {
 function VideoModal({ video, onClose, onSuccess }: {
   video: DiyVideo | null; onClose: () => void; onSuccess: () => void
 }) {
-  const [saving, setSaving]     = useState(false)
-  const [preview, setPreview]   = useState(video?.youtubeId ?? '')
+  const [saving, setSaving] = useState(false)
   const addToast = useUIStore((s) => s.addToast)
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<DiyVideoInput>({
@@ -315,7 +316,8 @@ function VideoModal({ video, onClose, onSuccess }: {
           <h2 className="font-display font-bold text-gray-900 text-lg">
             {video ? 'Edit Video' : 'Add DIY Video'}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-gray-100">
+          <button onClick={onClose} className="p-2 rounded-xl hover:bg-gray-100"
+          title='Close'>
             <CloseOutlined sx={{ fontSize: 20 }} />
           </button>
         </div>

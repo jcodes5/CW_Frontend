@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   LocalShippingOutlined, CheckCircleOutlined,
-  RefreshOutlined, ContentCopyOutlined,
+  RefreshOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { trackingApi, type TrackingEvent, type Order } from '@/services/api'
 import { OrderStatusBadge } from '@/components/account/OrderStatusBadge'
-import { useUIStore } from '@/store/uiStore'
 import type { OrderStatus } from '@/types/order'
 
 const STATUS_ICONS: Record<string, string> = {
@@ -32,7 +31,7 @@ export default function OrderTracker({ reference, initialStatus }: Props) {
   const [order, setOrder]         = useState<Order | null>(null)
   const [loading, setLoading]     = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-  const addToast = useUIStore((s) => s.addToast)
+
 
   const load = async (silent = false) => {
     if (!silent) setLoading(true)
@@ -196,7 +195,7 @@ function StaticTracker({ status }: { status: string }) {
     <div className="relative">
       <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-gray-100" />
       <div className="space-y-4">
-        {STEPS.map((step, i) => {
+        {STEPS.map((step, _i) => {
           const isComplete = step.statuses.includes(status)
           const isCurrent  = step.statuses[0] === status ||
             (step.status === 'order_placed' && ['pending', 'payment_pending'].includes(status))
