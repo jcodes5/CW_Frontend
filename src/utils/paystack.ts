@@ -63,7 +63,7 @@ export function initPaystack(config: PaystackConfig): void {
       email: config.email,
       amount: toKobo(config.amount),
       ref: config.reference,
-      currency: 'NGN' as const,
+      currency: 'NGN',
       firstname: config.firstName,
       lastname: config.lastName,
       phone: config.phone,
@@ -89,7 +89,7 @@ export function initPaystack(config: PaystackConfig): void {
   }
 
   // Inject script if not already present
-  if (typeof window !== 'undefined' && !('PaystackPop' in window)) {
+  if (typeof window !== 'undefined' && !(window as Record<string, unknown>).PaystackPop) {
     const script = document.createElement('script')
     script.src = 'https://js.paystack.co/v1/inline.js'
     script.async = true

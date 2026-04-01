@@ -381,7 +381,7 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
 
       {/* Security badges */}
       <div className="flex items-center justify-center gap-4 mt-5 flex-wrap">
-        {['🔒 SSL Encrypted', '✓ PCI DSS Compliant', '🛡️ Powered by OPay'].map((badge) => (
+        {['🔒 SSL Encrypted', '✓ PCI DSS Compliant', '🛡️ Powered by Paystack'].map((badge) => (
           <span key={badge} className="text-xs text-gray-400 font-medium">{badge}</span>
         ))}
       </div>
