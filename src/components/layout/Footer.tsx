@@ -51,6 +51,7 @@ const SOCIAL_ICON_MAP = {
   facebook: FacebookOutlined,
 }
 
+
 export default function Footer() {
   return (
     <footer className="bg-[#0d1f22] text-white relative overflow-hidden">
