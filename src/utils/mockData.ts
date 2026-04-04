@@ -136,7 +136,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',
       'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80',
     ],
-    category: { id: 'fashion', name: 'Fashion', slug: 'fashion', icon: '👗' },
+    category: { id: 'fashion', name: 'Fashion', slug: 'fashion', icon: '' },
     brand: {
       id: 'adulawo',
       name: 'Adúláwò',
@@ -344,7 +344,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=800&q=80',
       'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80',
     ],
-    category: { id: 'stationery', name: 'Stationery', slug: 'stationery', icon: '📝' },
+    category: { id: 'stationery', name: 'Stationery', slug: 'stationery', icon: '�' },
     brand: {
       id: 'planet3r',
       name: 'Planet 3R',

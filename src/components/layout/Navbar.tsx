@@ -14,21 +14,13 @@ import {
 import { useAuthStore } from '@/store/authStore'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
+import { CATEGORIES } from '@/utils/constants'
 
 const NAV_LINKS = [
   { label: 'Shop',    href: '/shop'    },
   { label: 'DIY',     href: '/diy'     },
   { label: 'Our Story', href: '/about' },
   { label: 'Partners', href: '/partners' },
-]
-
-const CATEGORIES_DROPDOWN = [
-  { label: 'Home Décor',  href: '/shop?category=home-decor',  icon: '🏡' },
-  { label: 'Fashion',     href: '/shop?category=fashion',     icon: '👗' },
-  { label: 'Furniture',   href: '/shop?category=furniture',   icon: '🪑' },
-  { label: 'Art & Crafts',href: '/shop?category=art',         icon: '🎨' },
-  { label: 'Accessories', href: '/shop?category=accessories', icon: '💍' },
-  { label: 'Stationery',  href: '/shop?category=stationery',  icon: '📝' },
 ]
 
 export default function Navbar() {
@@ -93,7 +85,7 @@ export default function Navbar() {
     <>
       {/* Announcement Bar */}
       <div className="bg-teal-500 text-white text-xs sm:text-sm py-2 px-4 text-center font-body">
-        🌿 Free shipping on orders over ₦125,000 · Every purchase diverts waste from landfill
+        Free shipping on orders over ₦125,000 · Every purchase diverts waste from landfill
       </div>
 
       <nav
@@ -163,17 +155,17 @@ export default function Navbar() {
                           className="absolute top-full left-0 mt-2 bg-white rounded-2xl
                                      shadow-card-hover p-4 grid grid-cols-2 gap-2 w-64 z-50"
                         >
-                          {CATEGORIES_DROPDOWN.map((cat) => (
+                          {CATEGORIES.map((cat) => (
                             <Link
-                              key={cat.href}
-                              to={cat.href}
+                              key={cat.id}
+                              to={`/shop?category=${cat.id}`}
                               className="flex items-center gap-2 px-3 py-2 rounded-xl
                                          hover:bg-teal-50 transition-colors text-sm
                                          text-gray-700 hover:text-teal-600"
                               onClick={() => setIsCategoriesOpen(false)}
                             >
-                              <span>{cat.icon}</span>
-                              <span className="font-medium">{cat.label}</span>
+                              <cat.icon className="w-4 h-4" />
+                              <span className="font-medium">{cat.name}</span>
                             </Link>
                           ))}
                           <Link
@@ -377,16 +369,16 @@ export default function Navbar() {
                     Categories
                   </p>
                   <div className="grid grid-cols-2 gap-2">
-                    {CATEGORIES_DROPDOWN.map((cat) => (
+                    {CATEGORIES.map((cat) => (
                       <Link
-                        key={cat.href}
-                        to={cat.href}
+                        key={cat.id}
+                        to={`/shop?category=${cat.id}`}
                         className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50
                                    hover:bg-teal-50 transition-colors text-xs text-gray-700"
                         onClick={() => setIsMobileOpen(false)}
                       >
-                        <span>{cat.icon}</span>
-                        <span className="font-medium">{cat.label}</span>
+                        <cat.icon className="w-4 h-4" />
+                        <span className="font-medium">{cat.name}</span>
                       </Link>
                     ))}
                   </div>

@@ -12,8 +12,10 @@ import {
   ArrowBackOutlined,
   CheckOutlined,
   Google as GoogleOutlined,
+  Facebook as FacebookOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
+import { AlertTriangle } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
 import type { RegisterData } from '@/types'
@@ -47,7 +49,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [passwordValue, setPasswordValue] = useState('')
-  const { register: registerUser, isLoading, error, isAuthenticated, clearError } = useAuthStore()
+  const { register: registerUser, loginWithOAuth, isLoading, error, isAuthenticated, clearError } = useAuthStore()
   const addToast = useUIStore((s) => s.addToast)
   const navigate = useNavigate()
 
@@ -75,7 +77,7 @@ export default function SignupPage() {
   const onSubmit = async (data: RegisterData) => {
     try {
       await registerUser(data)
-      addToast({ type: 'success', message: 'Welcome to CraftworldCentre! 🌿' })
+      addToast({ type: 'success', message: 'Welcome to CraftworldCentre!' })
     } catch {
       // error from store
     }
@@ -200,7 +202,7 @@ export default function SignupPage() {
                   className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700
                              rounded-xl px-4 py-3 mb-6 text-sm"
                 >
-                  <span>⚠️</span>
+                  <AlertTriangle className="w-5 h-5" />
                   <span>{error}</span>
                 </motion.div>
               )}
@@ -209,12 +211,29 @@ export default function SignupPage() {
             {/* Google OAuth */}
             <button
               type="button"
+              onClick={() => loginWithOAuth('google')}
+              disabled={isLoading}
               className="w-full flex items-center justify-center gap-3 border border-gray-200
-                         rounded-xl py-3 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50
-                         transition-all duration-200 mb-6 hover:border-gray-300"
+                          rounded-xl py-3 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50
+                          transition-all duration-200 mb-4 hover:border-gray-300
+                          disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <GoogleOutlined sx={{ fontSize: 18, color: '#EA4335' }} />
               Sign up with Google
+            </button>
+
+            {/* Facebook OAuth */}
+            <button
+              type="button"
+              onClick={() => loginWithOAuth('facebook')}
+              disabled={isLoading}
+              className="w-full flex items-center justify-center gap-3 border border-gray-200
+                          rounded-xl py-3 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50
+                          transition-all duration-200 mb-6 hover:border-gray-300
+                          disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <FacebookOutlined sx={{ fontSize: 18, color: '#1877F2' }} />
+              Sign up with Facebook
             </button>
 
             {/* Divider */}
@@ -440,7 +459,7 @@ export default function SignupPage() {
             </form>
 
             <p className="text-center text-xs text-gray-400 mt-5 flex items-center justify-center gap-1">
-              🔒 Your data is safe · 256-bit SSL encryption
+              Your data is safe · 256-bit SSL encryption
             </p>
           </motion.div>
         </div>

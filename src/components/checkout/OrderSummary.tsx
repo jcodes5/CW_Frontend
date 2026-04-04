@@ -70,7 +70,7 @@ export default function OrderSummary({ deliveryFee, collapsed = false }: OrderSu
             Delivery
           </span>
           <span className={`font-medium ${isFreeShipping ? 'text-green-600' : ''}`}>
-            {isFreeShipping ? 'Free 🎉' : formatPrice(deliveryFee)}
+            {isFreeShipping ? 'Free' : formatPrice(deliveryFee)}
           </span>
         </div>
 
@@ -93,11 +93,11 @@ export default function OrderSummary({ deliveryFee, collapsed = false }: OrderSu
 
       {/* Security badges */}
       <div className="px-5 pb-4 flex items-center justify-center gap-4 text-xs text-gray-400">
-        <span>🔒 SSL Encrypted</span>
+        <span>SSL Encrypted</span>
         <span>·</span>
         <span>⚡ Paystack</span>
         <span>·</span>
-        <span>♻️ Eco Packaging</span>
+        <span>Eco Packaging</span>
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import {
   ArrowForwardOutlined, LocalShippingOutlined,
   ChevronRightOutlined,
 } from '@mui/icons-material'
+import { Package, Sparkles, Truck, User, MapPin } from 'lucide-react'
 import { useOrdersStore } from '@/store/ordersStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { getDemoOrders, ORDER_STATUS_CONFIG } from '@/utils/account'
@@ -106,7 +107,7 @@ export default function AccountDashboard() {
             </p>
             <p className="text-white/70 text-sm">
               of waste diverted from landfill through your {orders.length} order{orders.length !== 1 ? 's' : ''}.
-              Every purchase closes the loop. 🌍
+              Every purchase closes the loop.
             </p>
           </div>
           <div className="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">
@@ -130,7 +131,7 @@ export default function AccountDashboard() {
 
             {recentOrders.length === 0 ? (
               <div className="p-8 text-center">
-                <p className="text-3xl mb-2">📦</p>
+                <div className="text-3xl mb-2 flex justify-center"><Package className="w-8 h-8" /></div>
                 <p className="text-gray-500 text-sm mb-3">No orders yet</p>
                 <Link to="/shop" className="btn-primary text-sm">Start Shopping</Link>
               </div>
@@ -175,7 +176,8 @@ export default function AccountDashboard() {
                           </p>
                           <span className={`inline-flex items-center gap-1 text-[10px] font-semibold
                                            px-2 py-0.5 rounded-full border ${cfg.color} ${cfg.bg} ${cfg.border}`}>
-                            {cfg.icon} {cfg.label}
+                            <cfg.icon className="w-3 h-3" />
+                            {cfg.label}
                           </span>
                         </div>
                         <ChevronRightOutlined
@@ -197,10 +199,10 @@ export default function AccountDashboard() {
             <h3 className="font-semibold text-gray-900 text-sm mb-4">Quick Actions</h3>
             <div className="space-y-2">
               {[
-                { label: 'Browse New Arrivals', to: '/shop?filter=new',   icon: '✨' },
-                { label: 'Track an Order',       to: '/account/orders',    icon: '🚚' },
-                { label: 'Edit Profile',          to: '/account/profile',   icon: '👤' },
-                { label: 'Manage Addresses',      to: '/account/addresses', icon: '📍' },
+                { label: 'Browse New Arrivals', to: '/shop?filter=new',   icon: Sparkles },
+                { label: 'Track an Order',       to: '/account/orders',    icon: Truck },
+                { label: 'Edit Profile',          to: '/account/profile',   icon: User },
+                { label: 'Manage Addresses',      to: '/account/addresses', icon: MapPin },
               ].map((action) => (
                 <Link
                   key={action.to}
@@ -208,7 +210,7 @@ export default function AccountDashboard() {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-teal-50
                              transition-colors group text-sm text-gray-700"
                 >
-                  <span>{action.icon}</span>
+                  <action.icon className="w-5 h-5 text-gray-400 group-hover:text-teal-600" />
                   <span className="flex-1 font-medium">{action.label}</span>
                   <ArrowForwardOutlined
                     sx={{ fontSize: 14 }}

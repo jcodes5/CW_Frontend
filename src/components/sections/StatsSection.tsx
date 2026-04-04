@@ -111,9 +111,9 @@ export default function StatsSection() {
                          hover:shadow-brand group"
             >
               <div
-                className="stat-icon text-3xl mb-3"
+                className="stat-icon text-3xl mb-3 flex justify-center"
               >
-                {stat.icon}
+                <stat.icon className="w-8 h-8" />
               </div>
               <AnimatedNumber value={stat.value} hasPlus={stat.value.includes('+')} />
               <p className="text-sm text-gray-500 mt-1 font-medium">{stat.label}</p>
@@ -127,14 +127,14 @@ export default function StatsSection() {
           <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10" />
           <div className="flex animate-marquee whitespace-nowrap gap-8 items-center">
             {[...Array(3)].flatMap(() => [
-              '♻️ Circular Economy',
-              '🌿 Zero Waste',
-              '🏺 Handcrafted',
-              '🌍 Sustainable Living',
-              '💚 Eco-Conscious',
-              '⚒️ Upcycled Materials',
-              '🤝 Community Impact',
-              '🔄 Waste to Wealth',
+              'Circular Economy',
+              'Zero Waste',
+              'Handcrafted',
+              'Sustainable Living',
+              'Eco-Conscious',
+              'Upcycled Materials',
+              'Community Impact',
+              'Waste to Wealth',
             ]).map((text, i) => (
               <span
                 key={i}

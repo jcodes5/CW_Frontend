@@ -134,7 +134,7 @@ export function ShippingPage() {
           </table>
         </div>
         <div className="bg-teal-50 rounded-xl p-4 text-sm text-teal-700">
-          🎉 <strong>Free delivery</strong> on all orders over ₦25,000, nationwide.
+          <strong>Free delivery</strong> on all orders over ₦25,000, nationwide.
         </div>
         <div>
           <h2 className="font-display font-semibold text-gray-900 text-lg mb-2">Tracking Your Order</h2>

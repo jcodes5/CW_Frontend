@@ -5,6 +5,9 @@ import {
   LocationOnOutlined,
   EmailOutlined,
   PhoneOutlined,
+  Instagram,
+  Twitter,
+  FacebookOutlined,
 } from '@mui/icons-material'
 
 const FOOTER_LINKS = {
@@ -37,11 +40,16 @@ const FOOTER_LINKS = {
 }
 
 const SOCIAL_LINKS = [
-  { label: 'Instagram', href: 'https://instagram.com', icon: '📸' },
-  { label: 'Twitter/X', href: 'https://twitter.com', icon: '𝕏' },
-  { label: 'Facebook', href: 'https://facebook.com', icon: 'f' },
-  { label: 'Pinterest', href: 'https://pinterest.com', icon: '📌' },
+  { label: 'Instagram', href: 'https://instagram.com', icon: 'instagram' },
+  { label: 'Twitter/X', href: 'https://twitter.com', icon: 'twitter' },
+  { label: 'Facebook', href: 'https://facebook.com', icon: 'facebook' },
 ]
+
+const SOCIAL_ICON_MAP = {
+  instagram: Instagram,
+  twitter: Twitter,
+  facebook: FacebookOutlined,
+}
 
 export default function Footer() {
   return (
@@ -105,20 +113,22 @@ export default function Footer() {
 
             {/* Social Links */}
             <div className="flex gap-3">
-              {SOCIAL_LINKS.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  className="w-9 h-9 rounded-full border border-gray-700 flex items-center justify-center
-                    text-gray-400 hover:border-teal-400 hover:text-teal-400 transition-all duration-200
-                    text-sm font-bold"
-                >
-                  {social.icon}
-                </a>
-              ))}
+              {SOCIAL_LINKS.map((social) => {
+                const IconComponent = SOCIAL_ICON_MAP[social.icon as keyof typeof SOCIAL_ICON_MAP]
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="w-9 h-9 rounded-full border border-gray-700 flex items-center justify-center
+                      text-gray-400 hover:border-teal-400 hover:text-teal-400 transition-all duration-200"
+                  >
+                    <IconComponent sx={{ fontSize: 16 }} />
+                  </a>
+                )
+              })}
             </div>
           </div>
 
@@ -176,7 +186,7 @@ export default function Footer() {
           </div>
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
-              🔒 SSL Secured
+              SSL Secured
             </span>
             <span>Powered by Paystack</span>
           </div>

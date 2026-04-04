@@ -9,6 +9,7 @@ import {
   EmojiObjectsOutlined,
   PublicOutlined,
 } from '@mui/icons-material'
+import { Lightbulb, Globe, RotateCw, Sparkles, Recycle } from 'lucide-react'
 
 const ABOUT_CAROUSEL_SLIDES = [
   {
@@ -53,35 +54,35 @@ const TIMELINE = [
     year: '2018',
     title: 'Adúláwò is Founded',
     body: 'The journey begins in Ibadan with a small workshop reclaiming fabric offcuts and brass scraps, guided by a belief that African craft should honor both maker and material.',
-    icon: '🏺',
+    icon: Lightbulb,
     color: '#8B6914',
   },
   {
     year: '2019',
     title: 'Planet 3R Launches',
     body: 'Lagos-based industrial upcycling enters the picture: post-consumer plastics, construction waste, and discarded tyres transformed into functional lifestyle goods.',
-    icon: '🌍',
+    icon: Globe,
     color: '#3d6b2d',
   },
   {
     year: '2020',
     title: 'CraftworldCentre is Born',
     body: 'The flagship brand and marketplace is created to unite both companies under one roof, giving circular products a home, a story, and a growing audience.',
-    icon: '🔄',
+    icon: RotateCw,
     color: '#1A7A8A',
   },
   {
     year: '2022',
     title: '1,000 Orders Milestone',
     body: 'The platform reaches its first thousand orders, each one representing material kept out of landfill and fair-paid artisanal work.',
-    icon: '🎉',
+    icon: Sparkles,
     color: '#6B4A8A',
   },
   {
     year: '2024',
     title: '85 Tonnes Diverted',
     body: 'CraftworldCentre, Adúláwò, and Planet 3R together divert over 85 tonnes of waste from Nigerian landfills.',
-    icon: '♻️',
+    icon: Recycle,
     color: '#1A7A8A',
   },
 ]
@@ -482,10 +483,10 @@ export default function AboutPage() {
                   <div className="flex gap-6 relative">
                     <div className="flex-shrink-0 z-10">
                       <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shadow-md bg-white border-2"
+                        className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-md bg-white border-2"
                         style={{ borderColor: item.color }}
                       >
-                        {item.icon}
+                        <item.icon className="w-8 h-8" style={{ color: item.color }} />
                       </div>
                     </div>
                     <div className="flex-1 pt-2">

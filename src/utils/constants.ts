@@ -1,4 +1,7 @@
 import type { Brand } from '@/types'
+import type { LucideIcon } from 'lucide-react'
+import { Package, Recycle, Globe, Users, Folders, Wrench, ShoppingBag, Mail } from 'lucide-react'
+import { Home, Shirt, Circle, Palette, Gift, Book } from 'lucide-react'
 
 export const BRANDS: Brand[] = [
   {
@@ -44,20 +47,20 @@ export const BRAND_MAP = Object.fromEntries(BRANDS.map((b) => [b.id, b])) as Rec
   Brand
 >
 
-export const STATS = [
-  { value: '12,400+', label: 'Products Listed', icon: '📦' },
-  { value: '85 tonnes', label: 'Waste Diverted', icon: '♻️' },
-  { value: '3,200+', label: 'Happy Customers', icon: '🌍' },
-  { value: '3', label: 'Partner Brands', icon: '🤝' },
+export const STATS: Array<{ value: string; label: string; icon: LucideIcon }> = [
+  { value: '12,400+', label: 'Products Listed', icon: Package },
+  { value: '85 tonnes', label: 'Waste Diverted', icon: Recycle },
+  { value: '3,200+', label: 'Happy Customers', icon: Globe },
+  { value: '3', label: 'Partner Brands', icon: Users },
 ]
 
 export const CATEGORIES = [
-  { id: 'home-decor', name: 'Home Décor', icon: '🏡', count: 240, color: '#1A7A8A' },
-  { id: 'fashion', name: 'Fashion', icon: '👗', count: 185, color: '#8B6914' },
-  { id: 'furniture', name: 'Furniture', icon: '🪑', count: 92, color: '#3d6b2d' },
-  { id: 'art', name: 'Art & Crafts', icon: '🎨', count: 310, color: '#6B4A8A' },
-  { id: 'accessories', name: 'Accessories', icon: '💍', count: 156, color: '#8A4A3A' },
-  { id: 'stationery', name: 'Stationery', icon: '📝', count: 88, color: '#4A6A8A' },
+  { id: 'home-decor', name: 'Home Décor', icon: Home, count: 240, color: '#1A7A8A' },
+  { id: 'fashion', name: 'Fashion', icon: Shirt, count: 185, color: '#8B6914' },
+  { id: 'furniture', name: 'Furniture', icon: Circle, count: 92, color: '#3d6b2d' },
+  { id: 'art', name: 'Art & Crafts', icon: Palette, count: 310, color: '#6B4A8A' },
+  { id: 'accessories', name: 'Accessories', icon: Gift, count: 156, color: '#8A4A3A' },
+  { id: 'stationery', name: 'Stationery', icon: Book, count: 88, color: '#4A6A8A' },
 ]
 
 export const HOW_IT_WORKS = [
@@ -66,7 +69,7 @@ export const HOW_IT_WORKS = [
     title: 'Waste is Collected',
     description:
       'Our partner brands and artisans source post-consumer and industrial waste materials that would otherwise end up in landfills.',
-    icon: '🗂️',
+    icon: Folders,
     color: '#1A7A8A',
   },
   {
@@ -74,7 +77,7 @@ export const HOW_IT_WORKS = [
     title: 'Transformed with Craft',
     description:
       'Skilled craftspeople apply creativity and technique to transform raw waste into beautiful, functional products with a story.',
-    icon: '⚒️',
+    icon: Wrench,
     color: '#8B6914',
   },
   {
@@ -82,7 +85,7 @@ export const HOW_IT_WORKS = [
     title: 'Listed on CraftworldCentre',
     description:
       'Products are quality-checked, photographed, and listed on our platform with full transparency about materials and origin.',
-    icon: '🛒',
+    icon: ShoppingBag,
     color: '#3d6b2d',
   },
   {
@@ -90,7 +93,7 @@ export const HOW_IT_WORKS = [
     title: 'Delivered to You',
     description:
       'Your purchase arrives in eco-friendly packaging. You receive a product — and the story behind the waste it saved.',
-    icon: '📬',
+    icon: Mail,
     color: '#6B4A8A',
   },
 ]

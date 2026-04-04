@@ -9,17 +9,18 @@ import {
   ShareOutlined,
   HomeOutlined,
 } from '@mui/icons-material'
+import { Clock, CreditCard, Wrench, Truck, Home, Recycle } from 'lucide-react'
 import { useCheckoutStore } from '@/store/checkoutStore'
 import { useOrdersStore } from '@/store/ordersStore'
 import { formatPrice } from '@/utils/mockData'
 import type { Order } from '@/types/order'
 
 const STATUS_STEPS = [
-  { label: 'Order Placed',      icon: '📋', done: true },
-  { label: 'Payment Confirmed', icon: '💳', done: true },
-  { label: 'Processing',        icon: '⚒️',  done: false },
-  { label: 'Shipped',           icon: '🚚', done: false },
-  { label: 'Delivered',         icon: '🏠', done: false },
+  { label: 'Order Placed',      icon: Clock, done: true },
+  { label: 'Payment Confirmed', icon: CreditCard, done: true },
+  { label: 'Processing',        icon: Wrench,  done: false },
+  { label: 'Shipped',           icon: Truck, done: false },
+  { label: 'Delivered',         icon: Home, done: false },
 ]
 
 // Confetti particle
@@ -117,7 +118,7 @@ export default function OrderConfirmationPage() {
               transition={{ delay: 0.4 }}
             >
               <h1 className="font-display font-bold text-[#0d1f22] text-3xl mb-2">
-                Order Confirmed! 🎉
+                Order Confirmed!
               </h1>
               <p className="text-gray-500 mb-4 leading-relaxed">
                 Thank you,{' '}
@@ -149,13 +150,13 @@ export default function OrderConfirmationPage() {
                 Your Circular Impact
               </p>
               <div className="flex items-center justify-center gap-2 mb-1">
-                <motion.span
+                <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-                  className="text-2xl"
+                  className="flex items-center justify-center"
                 >
-                  ♻️
-                </motion.span>
+                  <Recycle className="w-6 h-6" />
+                </motion.div>
                 <span className="font-display font-bold text-3xl">
                   ~{((order.pricing.subtotal / 10000) * 1.2).toFixed(1)}kg
                 </span>
@@ -211,7 +212,7 @@ export default function OrderConfirmationPage() {
                                        : i === STATUS_STEPS.filter((x) => x.done).length
                                        ? 'bg-white border-teal-400 text-teal-500 shadow-brand'
                                        : 'bg-white border-gray-200 text-gray-400'}`}>
-                      {s.done ? '✓' : s.icon}
+                      {s.done ? '✓' : <s.icon className="w-4 h-4" />}
                     </div>
                     <div>
                       <p className={`text-sm font-semibold ${s.done ? 'text-gray-900' : 'text-gray-400'}`}>

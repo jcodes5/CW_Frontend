@@ -10,6 +10,7 @@ import {
   ExpandMoreOutlined,
   ArrowForwardOutlined,
 } from '@mui/icons-material'
+import { Recycle } from 'lucide-react'
 import ProductCard from '@/components/ui/ProductCard'
 import { ProductCardSkeleton } from '@/components/ui/Skeleton'
 import { productsApi, type Product as ApiProduct } from '@/services/api'
@@ -341,7 +342,7 @@ export default function ShopPage() {
 
       <FilterSection title="Filter By">
         <div className="space-y-1">
-          {[{ v: 'new', l: '✨ New Arrivals' }, { v: 'bestsellers', l: '🏆 Best Sellers' }].map((f) => (
+          {[{ v: 'new', l: 'New Arrivals' }, { v: 'bestsellers', l: 'Best Sellers' }].map((f) => (
             <CatBtn key={f.v} label={f.l} active={activeFilter === f.v} onClick={() => setParam('filter', activeFilter === f.v ? '' : f.v)} />
           ))}
         </div>
@@ -563,7 +564,9 @@ export default function ShopPage() {
                 transition={{ delay: 1, duration: 0.5 }}
                 className="absolute -left-5 top-1/3 -translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-5 py-3.5 flex items-center gap-3"
               >
-                <div className="w-10 h-10 bg-[#7BC8D8]/20 rounded-xl flex items-center justify-center text-lg flex-shrink-0">♻️</div>
+                <div className="w-10 h-10 bg-[#7BC8D8]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Recycle className="w-5 h-5 text-[#1A7A8A]" />
+                </div>
                 <div>
                   <div className="text-[#1A7A8A] font-black text-lg leading-none">100%</div>
                   <div className="text-gray-400 text-xs mt-0.5">Upcycled</div>

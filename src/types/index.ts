@@ -7,6 +7,7 @@ export interface User {
   phone?: string
   avatar?: string
   role: 'customer' | 'admin' | 'vendor'
+  provider: 'local' | 'google' | 'facebook'
   createdAt: string
 }
 
@@ -18,6 +19,8 @@ export interface AuthState {
   error: string | null
   login: (credentials: LoginCredentials) => Promise<void>
   register: (data: RegisterData) => Promise<void>
+  loginWithOAuth: (provider: 'google' | 'facebook') => Promise<void>
+  handleOAuthCallback: (token: string) => Promise<void>
   logout: () => void
   clearError: () => void
   updateUser: (userData: Partial<User>) => void
@@ -133,4 +136,24 @@ export interface ApiError {
   message: string
   errors?: Record<string, string[]>
   statusCode: number
+}
+
+// ─── Reviews ─────────────────────────────────────────────────
+export interface Review {
+  id: string
+  productId: string
+  userId: string
+  firstName: string
+  lastName: string
+  rating: number
+  title: string | null
+  body: string
+  isVerified: boolean
+  createdAt: string
+}
+
+export interface ReviewInput {
+  rating: number
+  title?: string
+  body: string
 }

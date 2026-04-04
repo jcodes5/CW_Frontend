@@ -51,7 +51,7 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
     toggleWishlist(product)
     addToast({
       type: isWishlisted ? 'info' : 'success',
-      message: isWishlisted ? 'Removed from wishlist' : 'Added to wishlist ❤️',
+      message: isWishlisted ? 'Removed from wishlist' : 'Added to wishlist',
     })
   }
 

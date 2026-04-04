@@ -67,7 +67,7 @@ export default function CheckoutPage() {
 
             {/* Security badge */}
             <div className="hidden sm:flex items-center gap-1 text-xs text-gray-400">
-              🔒 Secure Checkout
+              Secure Checkout
             </div>
           </div>
         </div>

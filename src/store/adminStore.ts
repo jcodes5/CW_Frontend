@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import type { DashboardStats, AnalyticsData, Product, Order, AdminUser } from '@/services/api'
+import type { DashboardStats, AnalyticsData, Product, Order, AdminUser, AdminReview } from '@/services/api'
 import { adminApi } from '@/services/api'
 
 interface AdminState {
@@ -30,6 +30,13 @@ interface AdminState {
   userTotal:     number
   usersLoading:  boolean
 
+  // Reviews
+  reviews:       AdminReview[]
+  reviewTotal:   number
+  reviewsPage:   number
+  reviewsLoading: boolean
+  reviewFilter:  { isVerified?: boolean; productId?: string }
+
   // UI
   error:         string | null
 
@@ -39,8 +46,11 @@ interface AdminState {
   fetchProducts:(page?: number, params?: Record<string, string | number>) => Promise<void>
   fetchOrders:  (page?: number, status?: string) => Promise<void>
   fetchUsers:   (page?: number) => Promise<void>
+  fetchReviews: (page?: number, filters?: { isVerified?: boolean; productId?: string }) => Promise<void>
   updateOrderStatus: (reference: string, status: string, note?: string) => Promise<void>
   deleteProduct:(id: string) => Promise<void>
+  updateReviewVerification: (reviewId: string, isVerified: boolean) => Promise<void>
+  deleteReview: (reviewId: string) => Promise<void>
   clearError:   () => void
 }
 
@@ -63,6 +73,11 @@ export const useAdminStore = create<AdminState>()(
       users:           [],
       userTotal:       0,
       usersLoading:    false,
+      reviews:         [],
+      reviewTotal:     0,
+      reviewsPage:     1,
+      reviewsLoading:  false,
+      reviewFilter:    {},
       error:           null,
 
       fetchStats: async () => {
@@ -158,6 +173,50 @@ export const useAdminStore = create<AdminState>()(
           set({ products: get().products.filter((p) => p.id !== id) })
         } catch (err) {
           set({ error: err instanceof Error ? err.message : 'Failed to delete product' })
+          throw err
+        }
+      },
+
+      fetchReviews: async (page = 1, filters = {}) => {
+        set({ reviewsLoading: true, error: null })
+        try {
+          const params: Record<string, string | number> = { page, limit: 20 }
+          if (filters.isVerified !== undefined) params.isVerified = filters.isVerified ? 'true' : 'false'
+          if (filters.productId) params.productId = filters.productId
+          const res = await adminApi.listReviews(params)
+          set({
+            reviews:      res.data ?? [],
+            reviewTotal:  res.pagination?.total ?? 0,
+            reviewsPage:  page,
+            reviewFilter: filters,
+            reviewsLoading: false,
+          })
+        } catch (err) {
+          set({ error: err instanceof Error ? err.message : 'Failed to load reviews', reviewsLoading: false })
+        }
+      },
+
+      updateReviewVerification: async (reviewId, isVerified) => {
+        try {
+          await adminApi.updateReviewVerification(reviewId, isVerified)
+          // Update local state optimistically
+          set({
+            reviews: get().reviews.map((r) =>
+              r.id === reviewId ? { ...r, is_verified: isVerified ? 1 : 0 } : r
+            ),
+          })
+        } catch (err) {
+          set({ error: err instanceof Error ? err.message : 'Failed to update review' })
+          throw err
+        }
+      },
+
+      deleteReview: async (reviewId) => {
+        try {
+          await adminApi.deleteReview(reviewId)
+          set({ reviews: get().reviews.filter((r) => r.id !== reviewId) })
+        } catch (err) {
+          set({ error: err instanceof Error ? err.message : 'Failed to delete review' })
           throw err
         }
       },

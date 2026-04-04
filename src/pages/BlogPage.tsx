@@ -131,7 +131,7 @@ export default function BlogPage() {
 
         {filtered.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-4xl mb-4">📝</p>
+            <div className="text-4xl mb-4">📰</div>
             <p className="text-gray-500">No articles found. Try a different search.</p>
           </div>
         )}

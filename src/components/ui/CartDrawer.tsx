@@ -267,7 +267,7 @@ export default function CartDrawer() {
 
                 {/* Security note */}
                 <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
-                  🔒 Secure checkout · Powered by Paystack
+                  Secure checkout · Powered by Paystack
                 </p>
               </div>
             )}

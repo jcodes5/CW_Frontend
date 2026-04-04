@@ -74,6 +74,7 @@ export default function OrderDetailPage() {
       {/* Back + header */}
       <div className="flex items-center gap-3">
         <button onClick={() => navigate('/account/orders')}
+          title='Back to orders'
           className="p-2 rounded-xl hover:bg-white hover:shadow-card transition-all">
           <ArrowBackOutlined sx={{ fontSize: 20 }} />
         </button>
@@ -157,7 +158,7 @@ export default function OrderDetailPage() {
       {/* Two-column: address + payment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="bg-white rounded-2xl shadow-card p-5">
-          <h2 className="font-semibold text-gray-900 text-sm mb-3">📦 Delivery Address</h2>
+          <h2 className="font-semibold text-gray-900 text-sm mb-3">Delivery Address</h2>
           <div className="text-sm text-gray-700 space-y-1">
             {order.shippingAddress && (
               <>
@@ -171,7 +172,7 @@ export default function OrderDetailPage() {
           </div>
         </div>
         <div className="bg-white rounded-2xl shadow-card p-5">
-          <h2 className="font-semibold text-gray-900 text-sm mb-3">💳 Payment</h2>
+          <h2 className="font-semibold text-gray-900 text-sm mb-3">Payment</h2>
           <div className="text-sm text-gray-700 space-y-2">
             <div className="flex justify-between">
               <span className="text-gray-500">Method</span>

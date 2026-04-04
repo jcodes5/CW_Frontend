@@ -153,7 +153,7 @@ export default function CartPage() {
                                 flex items-center gap-2">
                   <LocalShippingOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} />
                   <p className="text-sm text-teal-700 font-medium">
-                    🎉 You've unlocked free delivery!
+                    You've unlocked free delivery!
                   </p>
                 </div>
               )}
@@ -414,7 +414,7 @@ export default function CartPage() {
                     )}
 
                     <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
-                      🔒 Secure checkout · Powered by Paystack
+                      Secure checkout · Powered by Paystack
                     </p>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { HOW_IT_WORKS } from '@/utils/constants'
+import { Leaf, Recycle, ShoppingBag, Globe } from 'lucide-react'
 
 export default function HowItWorksSection() {
   const ref = useRef(null)
@@ -66,7 +67,7 @@ export default function HowItWorksSection() {
                              mb-5 shadow-lg z-10 bg-white border-2"
                   style={{ borderColor: step.color }}
                 >
-                  <span className="text-3xl">{step.icon}</span>
+                  <step.icon className="w-10 h-10" />
                   {/* Step number badge */}
                   <div
                     className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center
@@ -116,13 +117,13 @@ export default function HowItWorksSection() {
                         from-teal-50 to-white border border-teal-100 rounded-3xl px-8 py-6"
           >
             <div className="flex -space-x-2">
-              {['🌿', '♻️', '🏺', '🌍'].map((emoji, i) => (
+              {[Leaf, Recycle, ShoppingBag, Globe].map((Icon, i) => (
                 <div
                   key={i}
                   className="w-10 h-10 rounded-full bg-white border-2 border-teal-100
                              flex items-center justify-center text-base shadow-sm"
                 >
-                  {emoji}
+                  <Icon className="w-5 h-5" />
                 </div>
               ))}
             </div>

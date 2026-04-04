@@ -197,6 +197,7 @@ export interface InitializePaymentResponse {
 export interface VerifyPaymentResponse {
   reference: string
   status: string
+  order?: import('@/types/order').Order
 }
 
 export const paymentsApi = {
@@ -261,6 +262,18 @@ export const adminApi = {
 
   // Users
   listUsers: (page = 1) => api.get<AdminUser[]>(`/admin/users?page=${page}`),
+
+  // Reviews
+  listReviews: (params: Record<string, string | number> = {}) => {
+    const qs = new URLSearchParams(
+      Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
+    ).toString()
+    return api.get<AdminReview[]>(`/admin/reviews${qs ? `?${qs}` : ''}`)
+  },
+  updateReviewVerification: (reviewId: string, isVerified: boolean) =>
+    api.patch(`/admin/reviews/${reviewId}/verify`, { isVerified }),
+  deleteReview: (reviewId: string) =>
+    api.delete(`/admin/reviews/${reviewId}`),
 }
 
 
@@ -437,6 +450,22 @@ export interface AdminUser {
   id: string; first_name: string; last_name: string; email: string
   phone?: string; role: string; is_active: number
   created_at: string; last_login_at?: string
+}
+
+export interface AdminReview {
+  id: string
+  product_id: string
+  product_name: string
+  product_slug: string
+  user_id: string
+  first_name: string
+  last_name: string
+  email: string
+  rating: number
+  title: string | null
+  body: string
+  is_verified: number
+  created_at: string
 }
 
 // Input types

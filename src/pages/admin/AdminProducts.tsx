@@ -538,7 +538,7 @@ function ProductModal({
                   <select className={`input-field text-sm ${errors.categoryId ? 'border-red-300' : ''}`}
                     {...register('categoryId', { required: 'Category is required' })}>
                     <option value="">Select category</option>
-                    {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
+                    {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>
               </div>

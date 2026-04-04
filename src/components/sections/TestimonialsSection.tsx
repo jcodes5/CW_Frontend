@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { StarOutlined, FormatQuoteOutlined, ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material'
+import { Recycle, Star, Truck } from 'lucide-react'
 
 const TESTIMONIALS = [
   {
@@ -210,15 +211,17 @@ export default function TestimonialsSection() {
           className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-16 max-w-2xl mx-auto"
         >
           {[
-            { value: '85 tonnes', label: 'of waste diverted from landfill', icon: '♻️' },
-            { value: '4.9 / 5', label: 'average customer rating', icon: '⭐' },
-            { value: '48hrs', label: 'average delivery time', icon: '🚚' },
+            { value: '85 tonnes', label: 'of waste diverted from landfill', icon: Recycle },
+            { value: '4.9 / 5', label: 'average customer rating', icon: Star },
+            { value: '48hrs', label: 'average delivery time', icon: Truck },
           ].map((item, i) => (
             <div
               key={i}
               className="text-center p-5 rounded-2xl bg-gradient-to-br from-teal-50/50 to-white border border-teal-100"
             >
-              <div className="text-2xl mb-2">{item.icon}</div>
+              <div className="flex justify-center mb-2">
+                <item.icon className="w-8 h-8 text-teal-600" />
+              </div>
               <p className="font-display font-bold text-xl text-teal-600">{item.value}</p>
               <p className="text-xs text-gray-500 mt-1">{item.label}</p>
             </div>

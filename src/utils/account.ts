@@ -1,18 +1,22 @@
+import type { LucideIcon } from 'lucide-react'
+import {
+  Clock, CreditCard, X, Check, Wrench, Truck, Home, XCircle, RotateCcw,
+} from 'lucide-react'
 import type { OrderStatus } from '@/types/order'
 
 export const ORDER_STATUS_CONFIG: Record<
   OrderStatus,
-  { label: string; color: string; bg: string; border: string; icon: string }
+  { label: string; color: string; bg: string; border: string; icon: LucideIcon }
 > = {
-  pending:         { label: 'Pending',          color: 'text-amber-700',  bg: 'bg-amber-50',  border: 'border-amber-200',  icon: '⏳' },
-  payment_pending: { label: 'Awaiting Payment', color: 'text-orange-700', bg: 'bg-orange-50', border: 'border-orange-200', icon: '💳' },
-  payment_failed:  { label: 'Payment Failed',   color: 'text-red-700',    bg: 'bg-red-50',    border: 'border-red-200',    icon: '❌' },
-  confirmed:       { label: 'Confirmed',         color: 'text-teal-700',   bg: 'bg-teal-50',   border: 'border-teal-200',   icon: '✅' },
-  processing:      { label: 'Processing',        color: 'text-blue-700',   bg: 'bg-blue-50',   border: 'border-blue-200',   icon: '⚒️'  },
-  shipped:         { label: 'Shipped',           color: 'text-indigo-700', bg: 'bg-indigo-50', border: 'border-indigo-200', icon: '🚚' },
-  delivered:       { label: 'Delivered',         color: 'text-green-700',  bg: 'bg-green-50',  border: 'border-green-200',  icon: '🏠' },
-  cancelled:       { label: 'Cancelled',         color: 'text-gray-700',   bg: 'bg-gray-50',   border: 'border-gray-200',   icon: '🚫' },
-  refunded:        { label: 'Refunded',          color: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-200', icon: '↩️' },
+  pending:         { label: 'Pending',          color: 'text-amber-700',  bg: 'bg-amber-50',  border: 'border-amber-200',  icon: Clock },
+  payment_pending: { label: 'Awaiting Payment', color: 'text-orange-700', bg: 'bg-orange-50', border: 'border-orange-200', icon: CreditCard },
+  payment_failed:  { label: 'Payment Failed',   color: 'text-red-700',    bg: 'bg-red-50',    border: 'border-red-200',    icon: X },
+  confirmed:       { label: 'Confirmed',         color: 'text-teal-700',   bg: 'bg-teal-50',   border: 'border-teal-200',   icon: Check },
+  processing:      { label: 'Processing',        color: 'text-blue-700',   bg: 'bg-blue-50',   border: 'border-blue-200',   icon: Wrench },
+  shipped:         { label: 'Shipped',           color: 'text-indigo-700', bg: 'bg-indigo-50', border: 'border-indigo-200', icon: Truck },
+  delivered:       { label: 'Delivered',         color: 'text-green-700',  bg: 'bg-green-50',  border: 'border-green-200',  icon: Home },
+  cancelled:       { label: 'Cancelled',         color: 'text-gray-700',   bg: 'bg-gray-50',   border: 'border-gray-200',   icon: XCircle },
+  refunded:        { label: 'Refunded',          color: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-200', icon: RotateCcw },
 }
 
 export function getInitials(firstName: string, lastName: string): string {

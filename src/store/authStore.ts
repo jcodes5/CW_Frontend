@@ -41,6 +41,46 @@ export const useAuthStore = create<AuthState>()(
           }
         },
 
+        loginWithOAuth: async (provider: 'google' | 'facebook') => {
+          set({ isLoading: true, error: null })
+          try {
+            // Redirect to OAuth provider
+            window.location.href = `${API_BASE}/auth/${provider}`
+          } catch (err) {
+            set({
+              isLoading: false,
+              error: err instanceof Error ? err.message : 'OAuth login failed',
+            })
+            throw err
+          }
+        },
+
+        handleOAuthCallback: async (token: string) => {
+          set({ isLoading: true, error: null })
+          try {
+            // Fetch user data with the token
+            const res = await fetch(`${API_BASE}/auth/me`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            const data = await res.json()
+            if (!res.ok) throw new Error(data.message || 'Failed to get user data')
+
+            set({
+              user: data.data,
+              token: token,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null,
+            })
+          } catch (err) {
+            set({
+              isLoading: false,
+              error: err instanceof Error ? err.message : 'OAuth callback failed',
+            })
+            throw err
+          }
+        },
+
         register: async (data: RegisterData) => {
           set({ isLoading: true, error: null })
           try {

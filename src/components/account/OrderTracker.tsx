@@ -7,18 +7,19 @@ import {
 import CircularProgress from '@mui/material/CircularProgress'
 import { trackingApi, type TrackingEvent, type Order } from '@/services/api'
 import { OrderStatusBadge } from '@/components/account/OrderStatusBadge'
+import { Clock, CreditCard, X, Check, Settings, Truck, Home, XCircle, Package, MapPin } from 'lucide-react'
 import type { OrderStatus } from '@/types/order'
 
-const STATUS_ICONS: Record<string, string> = {
-  pending:         '📋',
-  payment_pending: '⏳',
-  payment_failed:  '❌',
-  confirmed:       '✅',
-  processing:      '⚙️',
-  shipped:         '🚚',
-  delivered:       '🏠',
-  cancelled:       '🚫',
-  refunded:        '💳',
+const STATUS_ICONS: Record<string, typeof Package> = {
+  pending:         Clock,
+  payment_pending: CreditCard,
+  payment_failed:  X,
+  confirmed:       Check,
+  processing:      Settings,
+  shipped:         Truck,
+  delivered:       Home,
+  cancelled:       XCircle,
+  refunded:        CreditCard,
 }
 
 interface Props {
@@ -123,7 +124,10 @@ export default function OrderTracker({ reference, initialStatus }: Props) {
                                        : 'bg-white border-gray-200 text-base'}`}>
                       {isLatest
                         ? <CheckCircleOutlined sx={{ fontSize: 16 }} />
-                        : STATUS_ICONS[event.status] ?? '📦'}
+                        : (() => {
+                            const IconComponent = STATUS_ICONS[event.status] ?? Package
+                            return <IconComponent className="w-4 h-4" />
+                          })()}
                     </div>
 
                     <div className="flex-1 min-w-0 pt-0.5">
@@ -145,7 +149,7 @@ export default function OrderTracker({ reference, initialStatus }: Props) {
                       )}
                       {event.location && (
                         <p className="text-xs text-teal-600 mt-0.5 flex items-center gap-1">
-                          📍 {event.location}
+                          <MapPin className="w-3 h-3" /> {event.location}
                         </p>
                       )}
                       {isLatest && ['confirmed', 'processing', 'shipped'].includes(event.status) && (
@@ -183,11 +187,11 @@ export default function OrderTracker({ reference, initialStatus }: Props) {
 
 // ── Static fallback tracker ───────────────────────────────────
 const STEPS = [
-  { status: 'order_placed',       label: 'Order Placed',      icon: '📋', statuses: ['pending', 'payment_pending', 'payment_failed', 'confirmed', 'processing', 'shipped', 'delivered'] },
-  { status: 'payment_confirmed',  label: 'Payment Confirmed', icon: '💳', statuses: ['confirmed', 'processing', 'shipped', 'delivered'] },
-  { status: 'processing',         label: 'Processing',        icon: '⚙️',  statuses: ['processing', 'shipped', 'delivered'] },
-  { status: 'shipped',            label: 'Shipped',           icon: '🚚', statuses: ['shipped', 'delivered'] },
-  { status: 'delivered',          label: 'Delivered',         icon: '🏠', statuses: ['delivered'] },
+  { status: 'order_placed',       label: 'Order Placed',      icon: Clock, statuses: ['pending', 'payment_pending', 'payment_failed', 'confirmed', 'processing', 'shipped', 'delivered'] },
+  { status: 'payment_confirmed',  label: 'Payment Confirmed', icon: CreditCard, statuses: ['confirmed', 'processing', 'shipped', 'delivered'] },
+  { status: 'processing',         label: 'Processing',        icon: Settings,  statuses: ['processing', 'shipped', 'delivered'] },
+  { status: 'shipped',            label: 'Shipped',           icon: Truck, statuses: ['shipped', 'delivered'] },
+  { status: 'delivered',          label: 'Delivered',         icon: Home, statuses: ['delivered'] },
 ]
 
 function StaticTracker({ status }: { status: string }) {
@@ -206,7 +210,7 @@ function StaticTracker({ status }: { status: string }) {
                                ${isComplete
                                  ? 'bg-teal-500 border-teal-500 text-white'
                                  : 'bg-white border-gray-200 text-base'}`}>
-                {isComplete ? '✓' : step.icon}
+                {isComplete ? <Check className="w-4 h-4" /> : <step.icon className="w-4 h-4" />}
               </div>
               <div>
                 <p className={`text-sm font-semibold

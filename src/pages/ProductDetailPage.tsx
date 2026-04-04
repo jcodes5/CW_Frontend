@@ -17,12 +17,14 @@ import {
   ChevronLeftOutlined,
   ChevronRightOutlined,
 } from '@mui/icons-material'
+import { Recycle, Globe, Users, Package } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useUIStore } from '@/store/uiStore'
 import { formatPrice } from '@/utils/mockData'
 import { productsApi } from '@/services/api'
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton'
 import ProductCard from '@/components/ui/ProductCard'
+import ReviewsList from '@/components/ui/ReviewsList'
 import type { Product } from '@/types'
 
 const BRAND_CONFIG: Record<string, { bg: string; text: string; border: string; label: string }> = {
@@ -324,7 +326,7 @@ export default function ProductDetailPage() {
               </div>
               {product.stock <= 5 && product.stock > 0 && (
                 <p className="text-amber-600 text-xs mt-1.5 font-medium">
-                  ⚠️ Only {product.stock} left in stock
+                  Only {product.stock} left in stock
                 </p>
               )}
             </div>
@@ -358,7 +360,7 @@ export default function ProductDetailPage() {
                   setIsWishlisted(!isWishlisted)
                   addToast({
                     type: isWishlisted ? 'info' : 'success',
-                    message: isWishlisted ? 'Removed from wishlist' : 'Saved to wishlist ❤️',
+                    message: isWishlisted ? 'Removed from wishlist' : 'Saved to wishlist',
                   })
                 }}
                 aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -415,7 +417,7 @@ export default function ProductDetailPage() {
             {(
               [
                 { id: 'description', label: 'Description' },
-                { id: 'sustainability', label: '🌿 Sustainability' },
+                { id: 'sustainability', label: 'Sustainability' },
                 { id: 'reviews', label: `Reviews (${product.reviewCount})` },
               ] as const
             ).map((tab) => (
@@ -489,22 +491,22 @@ export default function ProductDetailPage() {
                 <div className="space-y-5">
                   {[
                     {
-                      icon: '♻️',
+                      icon: Recycle,
                       title: 'Circular Materials',
                       body: `This product is made entirely from recovered or reclaimed materials. Nothing was extracted from virgin natural resources.`,
                     },
                     {
-                      icon: '🌍',
+                      icon: Globe,
                       title: 'Carbon Impact',
                       body: `By choosing this product, you helped divert approximately ${(product.price / 1000).toFixed(1)}kg of material from landfill, and avoided the carbon cost of producing equivalent new goods.`,
                     },
                     {
-                      icon: '🤝',
+                      icon: Users,
                       title: 'Artisan Livelihoods',
                       body: `Every product supports Nigerian artisans and craftspeople who are trained and fairly compensated as part of our circular economy programme.`,
                     },
                     {
-                      icon: '📦',
+                      icon: Package,
                       title: 'Eco Packaging',
                       body: 'Shipped in recycled and compostable packaging. We never use single-use plastic in any of our fulfilment processes.',
                     },
@@ -513,7 +515,9 @@ export default function ProductDetailPage() {
                       key={item.title}
                       className="flex gap-4 p-5 rounded-2xl bg-gradient-to-br from-teal-50/50 to-white border border-teal-100"
                     >
-                      <span className="text-2xl flex-shrink-0 mt-0.5">{item.icon}</span>
+                      <div className="flex-shrink-0 mt-0.5">
+                        <item.icon className="w-6 h-6 text-teal-600" />
+                      </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 text-sm mb-1">{item.title}</h4>
                         <p className="text-sm text-gray-600 leading-relaxed">{item.body}</p>
@@ -524,73 +528,11 @@ export default function ProductDetailPage() {
               )}
 
               {activeTab === 'reviews' && (
-                <div className="space-y-6">
-                  {/* Summary */}
-                  <div className="flex items-center gap-6 p-6 bg-teal-50 rounded-2xl border border-teal-100">
-                    <div className="text-center">
-                      <p className="font-display font-bold text-5xl text-teal-600">{product.rating}</p>
-                      <div className="flex gap-0.5 justify-center my-1">
-                        {[1, 2, 3, 4, 5].map((s) => (
-                          <StarOutlined key={s} sx={{ fontSize: 14, color: '#f59e0b' }} />
-                        ))}
-                      </div>
-                      <p className="text-xs text-gray-500">{product.reviewCount} reviews</p>
-                    </div>
-                    <div className="flex-1 space-y-1.5">
-                      {[5, 4, 3, 2, 1].map((star) => {
-                        const pct = star === 5 ? 72 : star === 4 ? 20 : star === 3 ? 5 : 2
-                        return (
-                          <div key={star} className="flex items-center gap-2">
-                            <span className="text-xs w-3 text-gray-500">{star}</span>
-                            <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-amber-400 rounded-full"
-                                style={{ width: `${pct}%` }}
-                              />
-                            </div>
-                            <span className="text-xs text-gray-400 w-8">{pct}%</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Sample reviews */}
-                  {[
-                    {
-                      name: 'Adaeze O.',
-                      rating: 5,
-                      date: '2 weeks ago',
-                      body: "Absolutely stunning piece. The craftsmanship is exceptional and you can really feel the quality of the materials. Love that it's sustainable too!",
-                      avatar: 'AO',
-                    },
-                    {
-                      name: 'Tunde B.',
-                      rating: 5,
-                      date: '1 month ago',
-                      body: "Fast delivery, beautiful packaging, and the product exceeded my expectations. Will definitely be ordering again.",
-                      avatar: 'TB',
-                    },
-                  ].map((review) => (
-                    <div key={review.name} className="border-b border-gray-100 pb-5">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-9 h-9 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-bold">
-                          {review.avatar}
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">{review.name}</p>
-                          <p className="text-xs text-gray-400">{review.date}</p>
-                        </div>
-                        <div className="ml-auto flex gap-0.5">
-                          {[...Array(review.rating)].map((_, i) => (
-                            <StarOutlined key={i} sx={{ fontSize: 13, color: '#f59e0b' }} />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-600 leading-relaxed">{review.body}</p>
-                    </div>
-                  ))}
-                </div>
+                <ReviewsList
+                  productSlug={product.slug}
+                  rating={product.rating}
+                  reviewCount={product.reviewCount}
+                />
               )}
             </motion.div>
           </AnimatePresence>

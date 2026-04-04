@@ -89,7 +89,7 @@ export default function OrderSummaryPanel({ deliveryFee, discount = 0 }: Props) 
               Delivery
             </span>
             <span className={`font-medium ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-              {deliveryFee === 0 ? '🎉 Free' : formatPrice(deliveryFee)}
+              {deliveryFee === 0 ? 'Free' : formatPrice(deliveryFee)}
             </span>
           </div>
           {discount > 0 && (

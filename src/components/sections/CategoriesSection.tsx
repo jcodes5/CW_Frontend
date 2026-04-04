@@ -114,13 +114,13 @@ export default function CategoriesSection() {
                              hover:border-teal-200 hover:shadow-card transition-all duration-300
                              text-center group cursor-pointer min-h-[120px]`}
               >
-                <motion.span
-                  className="text-3xl sm:text-4xl"
+                <motion.div
+                  className="flex justify-center"
                   animate={{ rotate: [0, -5, 5, 0] }}
                   transition={{ duration: 4 + i, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  {cat.icon}
-                </motion.span>
+                  <cat.icon className="w-10 h-10 sm:w-12 sm:h-12" />
+                </motion.div>
                 <div>
                   <p className="font-semibold text-gray-800 text-sm leading-tight">{cat.name}</p>
                   <p className="text-xs text-gray-400 mt-0.5">{cat.count} items</p>

@@ -32,7 +32,7 @@ export default function CouponField({ subtotal, onApply, onRemove, applied }: Pr
           res.data.type === 'percent'
             ? `${res.data.value}%`
             : `₦${res.data.discount.toLocaleString()}`
-        } 🎉` })
+        } successfully applied` })
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid coupon code')

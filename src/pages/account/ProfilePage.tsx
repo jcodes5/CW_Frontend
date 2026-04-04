@@ -99,7 +99,7 @@ export default function ProfilePage() {
         newPassword: data.newPassword,
       })
       resetPw()
-      addToast({ type: 'success', message: 'Password changed successfully 🔒' })
+      addToast({ type: 'success', message: 'Password changed successfully' })
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Failed to change password'
       addToast({ type: 'error', message: msg })
@@ -145,7 +145,7 @@ export default function ProfilePage() {
           </p>
           <p className="text-sm text-gray-400">{user?.email}</p>
           <p className="text-xs text-teal-600 font-medium mt-1 flex items-center gap-1">
-            ♻️ Circular Shopper
+            Circular Shopper
           </p>
         </div>
       </div>

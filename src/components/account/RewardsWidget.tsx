@@ -5,14 +5,16 @@ import {
   CheckCircleOutlined, InfoOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
+import { DollarSign, Ticket, Sparkles } from 'lucide-react'
 import { rewardsApi, type RewardsDTO, type RedemptionResult } from '@/services/api'
 import { useUIStore } from '@/store/uiStore'
+import type { LucideIcon } from 'lucide-react'
 
 const TIER_CONFIG = {
-  bronze:   { label: 'Bronze',   color: '#CD7F32', bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-700',   icon: '🥉' },
-  silver:   { label: 'Silver',   color: '#C0C0C0', bg: 'bg-gray-50',    border: 'border-gray-200',    text: 'text-gray-600',    icon: '🥈' },
-  gold:     { label: 'Gold',     color: '#FFD700', bg: 'bg-yellow-50',  border: 'border-yellow-200',  text: 'text-yellow-700',  icon: '🥇' },
-  platinum: { label: 'Platinum', color: '#E5E4E2', bg: 'bg-purple-50',  border: 'border-purple-200',  text: 'text-purple-700',  icon: '💎' },
+  bronze:   { label: 'Bronze',   color: '#CD7F32', bg: 'bg-amber-50',   border: 'border-amber-200',   text: 'text-amber-700' },
+  silver:   { label: 'Silver',   color: '#C0C0C0', bg: 'bg-gray-50',    border: 'border-gray-200',    text: 'text-gray-600' },
+  gold:     { label: 'Gold',     color: '#FFD700', bg: 'bg-yellow-50',  border: 'border-yellow-200',  text: 'text-yellow-700' },
+  platinum: { label: 'Platinum', color: '#E5E4E2', bg: 'bg-purple-50',  border: 'border-purple-200',  text: 'text-purple-700' },
 }
 
 interface Props {
@@ -41,7 +43,7 @@ export default function RewardsWidget({ compact = false }: Props) {
       // Refresh rewards balance
       const updated = await rewardsApi.get()
       setRewards(updated.data ?? null)
-      addToast({ type: 'success', message: '🎉 Reward redeemed successfully!' })
+      addToast({ type: 'success', message: 'Reward redeemed successfully!' })
     } catch (err) {
       addToast({ type: 'error', message: err instanceof Error ? err.message : 'Redemption failed' })
     } finally {
@@ -66,7 +68,7 @@ export default function RewardsWidget({ compact = false }: Props) {
       <div className={`rounded-xl p-4 border ${tier.bg} ${tier.border}`}>
         <div className="flex items-center justify-between mb-2">
           <span className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: tier.color }}>
-            {tier.icon} {tier.label} Member
+            {tier.label} Member
           </span>
           <span className="font-bold text-sm text-gray-900">{rewards.points.toLocaleString()} pts</span>
         </div>
@@ -81,7 +83,7 @@ export default function RewardsWidget({ compact = false }: Props) {
         </div>
         <p className="text-[10px] text-gray-500 mt-1">
           {rewards.canRedeem
-            ? '🎉 Ready to redeem!'
+            ? 'Ready to redeem!'
             : `${rewards.pointsToReward} pts to reward`}
         </p>
       </div>
@@ -99,7 +101,7 @@ export default function RewardsWidget({ compact = false }: Props) {
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl">{tier.icon}</span>
+                <div className="w-8 h-8 rounded-full" style={{ backgroundColor: tier.color }}></div>
                 <span className="font-bold text-base" style={{ color: tier.color }}>
                   {tier.label} Member
                 </span>
@@ -186,7 +188,7 @@ export default function RewardsWidget({ compact = false }: Props) {
             </p>
             <div className="grid grid-cols-2 gap-3">
               <RewardOption
-                emoji="💵"
+                icon={DollarSign}
                 title={`₦${rewards.cashbackValue} Cashback`}
                 sub="Credited to your wallet"
                 color="#22c55e"
@@ -196,7 +198,7 @@ export default function RewardsWidget({ compact = false }: Props) {
                 loading={redeeming}
               />
               <RewardOption
-                emoji="🎟️"
+                icon={Ticket}
                 title={`${rewards.discountPercent}% Discount`}
                 sub="Code valid for 30 days"
                 color="#1A7A8A"
@@ -238,9 +240,9 @@ export default function RewardsWidget({ compact = false }: Props) {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
-                className="text-5xl mb-4"
+                className="flex justify-center mb-4"
               >
-                🎉
+                <Sparkles className="w-12 h-12 text-yellow-500" />
               </motion.div>
               <h3 className="font-display font-bold text-gray-900 text-2xl mb-2">Reward Redeemed!</h3>
               <p className="text-gray-500 text-sm mb-4 leading-relaxed">
@@ -268,9 +270,9 @@ export default function RewardsWidget({ compact = false }: Props) {
 }
 
 function RewardOption({
-  emoji, title, sub, color, disabled, type, onRedeem, loading,
+  icon: Icon, title, sub, color, disabled, type, onRedeem, loading,
 }: {
-  emoji: string; title: string; sub: string; color: string; disabled: boolean
+  icon: LucideIcon; title: string; sub: string; color: string; disabled: boolean
   type: 'cashback' | 'discount_code'; onRedeem: (t: 'cashback' | 'discount_code') => void
   loading: boolean
 }) {
@@ -285,7 +287,7 @@ function RewardOption({
           : 'border-current hover:shadow-md cursor-pointer'}`}
       style={!disabled ? { borderColor: `${color}40`, backgroundColor: `${color}08` } : {}}
     >
-      <span className="text-xl mb-2">{emoji}</span>
+      <Icon className="w-6 h-6 mb-2" style={{ color }} />
       <p className="font-semibold text-gray-900 text-sm">{title}</p>
       <p className="text-xs text-gray-500 mt-0.5">{sub}</p>
       {!disabled && (
