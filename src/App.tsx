@@ -60,6 +60,7 @@ const AdminUsers      = lazy(() => import('@/pages/admin/AdminUsers'))
 const AdminAnalytics  = lazy(() => import('@/pages/admin/AdminAnalytics'))
 const AdminCoupons    = lazy(() => import('@/pages/admin/AdminCoupons'))
 const AdminDIY        = lazy(() => import('@/pages/admin/AdminDIY'))
+const AdminHeroImages = lazy(() => import('@/pages/admin/AdminHeroImages'))
 
 // ── Helpers ───────────────────────────────────────────────────
 const CHROME_FREE = ['/login', '/signup', '/checkout', '/order-confirmation', '/forgot-password', '/admin']
@@ -151,6 +152,7 @@ export default function App() {
               <Route path="analytics"   element={<Wrap><AdminAnalytics /></Wrap>} />
               <Route path="coupons"     element={<Wrap><AdminCoupons /></Wrap>} />
               <Route path="diy"         element={<Wrap><AdminDIY /></Wrap>} />
+              <Route path="hero-images" element={<Wrap><AdminHeroImages /></Wrap>} />
             </Route>
 
             {/* 404 */}

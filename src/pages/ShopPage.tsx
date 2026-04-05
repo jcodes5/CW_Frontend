@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, type FormEvent, type ReactNode } from 'react'
+import type { LucideIcon } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -13,7 +14,7 @@ import {
 import { Recycle } from 'lucide-react'
 import ProductCard from '@/components/ui/ProductCard'
 import { ProductCardSkeleton } from '@/components/ui/Skeleton'
-import { productsApi, type Product as ApiProduct } from '@/services/api'
+import { productsApi, type Product as ApiProduct, api } from '@/services/api'
 import { MOCK_PRODUCTS } from '@/utils/mockData'
 import { CATEGORIES, BRANDS } from '@/utils/constants'
 import type { Product } from '@/types'
@@ -33,40 +34,41 @@ const PRICE_RANGES = [
   { label: 'Over ₦50,000', min: 50000, max: Infinity },
 ]
 
-const SHOP_CAROUSEL_SLIDES = [
+// Fallback carousel slides (used if no admin-managed slides are available)
+const DEFAULT_CAROUSEL_SLIDES = [
   {
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80',
     title: 'Beautiful Products from Waste',
     subtitle: 'Unique, handcrafted items made from recycled materials.',
-    alt: 'Upcycled wooden furniture showcase',
+    alt_text: 'Upcycled wooden furniture showcase',
     tag: 'Furniture',
   },
   {
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
     title: 'Sustainable Fashion Reimagined',
     subtitle: 'Bags and accessories made from recycled materials.',
-    alt: 'Handcrafted recycled bags collection',
+    alt_text: 'Handcrafted recycled bags collection',
     tag: 'Fashion',
   },
   {
-    image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&q=80',
     title: 'Eco-Friendly Wardrobe Essentials',
     subtitle: 'Fashion that makes a positive impact.',
-    alt: 'Sustainable fashion items display',
+    alt_text: 'Sustainable fashion items display',
     tag: 'Clothing',
   },
   {
-    image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80',
     title: 'Artisan Craftsmanship',
     subtitle: 'Local artisans transforming waste into beauty.',
-    alt: 'Artisan craftsmanship showcase',
+    alt_text: 'Artisan craftsmanship showcase',
     tag: 'Artisan',
   },
   {
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
     title: 'From Waste to Wonder',
     subtitle: 'Beautiful home essentials from discarded materials.',
-    alt: 'Sustainable home goods collection',
+    alt_text: 'Sustainable home goods collection',
     tag: 'Home',
   },
 ]
@@ -142,14 +144,15 @@ function BrandBtn({
   )
 }
 
-function CatBtn({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function CatBtn({ label, active, onClick, icon: Icon }: { label: string; active: boolean; onClick: () => void; icon?: LucideIcon }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left text-sm px-3 py-2 rounded-xl transition-colors ${
+      className={`w-full text-left text-sm px-3 py-2 rounded-xl transition-colors flex items-center gap-2 ${
         active ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'
       }`}
     >
+      {Icon && <Icon size={16} />}
       {label}
     </button>
   )
@@ -195,8 +198,28 @@ export default function ShopPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [useApi, setUseApi] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [carouselSlides, setCarouselSlides] = useState(DEFAULT_CAROUSEL_SLIDES)
+  const [carouselLoading, setCarouselLoading] = useState(true)
 
   const abortRef = useRef<AbortController | null>(null)
+
+  // Fetch hero images from API
+  useEffect(() => {
+    const loadCarouselSlides = async () => {
+      try {
+        const data = await api.get('/hero-images')
+        if (data && Array.isArray(data.data) && data.data.length > 0) {
+          setCarouselSlides(data.data)
+        }
+      } catch {
+        // Silently fail - use default slides
+      } finally {
+        setCarouselLoading(false)
+      }
+    }
+
+    loadCarouselSlides()
+  }, [])
 
   const activeBrand = searchParams.get('brand') ?? 'all'
   const activeCategory = searchParams.get('category') ?? 'all'
@@ -205,12 +228,14 @@ export default function ShopPage() {
   const searchQuery = searchParams.get('q') ?? ''
   const priceRange = searchParams.get('price') ?? ''
 
+  // Carousel auto-rotation
   useEffect(() => {
+    if (carouselSlides.length === 0 || carouselLoading) return
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % SHOP_CAROUSEL_SLIDES.length)
+      setCurrentImageIndex((prev) => (prev + 1) % carouselSlides.length)
     }, 5000)
     return () => clearInterval(interval)
-  }, [])
+  }, [carouselSlides.length, carouselLoading])
 
   const setParam = useCallback(
     (key: string, val: string) => {
@@ -327,7 +352,7 @@ export default function ShopPage() {
         <div className="space-y-1">
           <CatBtn label="All Categories" active={activeCategory === 'all'} onClick={() => setParam('category', 'all')} />
           {CATEGORIES.map((c) => (
-            <CatBtn key={c.id} label={`${c.icon ?? '📦'} ${c.name}`} active={activeCategory === c.id} onClick={() => setParam('category', c.id)} />
+            <CatBtn key={c.id} label={c.name} icon={c.icon} active={activeCategory === c.id} onClick={() => setParam('category', c.id)} />
           ))}
         </div>
       </FilterSection>
@@ -503,8 +528,8 @@ export default function ShopPage() {
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={`img-${currentImageIndex}`}
-                    src={SHOP_CAROUSEL_SLIDES[currentImageIndex].image}
-                    alt={SHOP_CAROUSEL_SLIDES[currentImageIndex].alt}
+                    src={carouselSlides[currentImageIndex]?.image_url}
+                    alt={carouselSlides[currentImageIndex]?.alt_text}
                     initial={{ opacity: 0, scale: 1.04 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
@@ -525,17 +550,17 @@ export default function ShopPage() {
                     className="absolute bottom-0 left-0 right-0 p-7 lg:p-8"
                   >
                     <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold tracking-wider uppercase bg-[#7BC8D8]/30 text-white backdrop-blur-sm rounded-full border border-white/25">
-                      {SHOP_CAROUSEL_SLIDES[currentImageIndex].tag}
+                      {carouselSlides[currentImageIndex]?.tag}
                     </span>
                     <h3 className="font-display text-white text-xl lg:text-2xl font-bold mb-1.5 leading-tight">
-                      {SHOP_CAROUSEL_SLIDES[currentImageIndex].title}
+                      {carouselSlides[currentImageIndex]?.title}
                     </h3>
-                    <p className="text-white/75 text-sm leading-relaxed">{SHOP_CAROUSEL_SLIDES[currentImageIndex].subtitle}</p>
+                    <p className="text-white/75 text-sm leading-relaxed">{carouselSlides[currentImageIndex]?.subtitle}</p>
                   </motion.div>
                 </AnimatePresence>
 
                 <div className="absolute top-5 right-5 flex gap-1.5">
-                  {SHOP_CAROUSEL_SLIDES.map((_, i) => (
+                  {carouselSlides.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setCurrentImageIndex(i)}

@@ -7,7 +7,7 @@
 
 import { useAuthStore } from '@/store/authStore'
 
-const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
+export const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
 
 // ── Response shape from backend ───────────────────────────────
 export interface ApiResponse<T = unknown> {
@@ -141,6 +141,9 @@ export const api = {
 
   upload: <T>(path: string, formData: FormData) =>
     request<T>(path, { method: 'POST', body: formData }),
+
+  putUpload: <T>(path: string, formData: FormData) =>
+    request<T>(path, { method: 'PUT', body: formData }),
 }
 
 // ═══════════════════════════════════════════════════════════════

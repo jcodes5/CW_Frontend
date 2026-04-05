@@ -6,6 +6,7 @@ import {
   VerifiedOutlined, LocalShippingOutlined, Co2Outlined as EcoOutlined,
 } from '@mui/icons-material'
 import { gsap } from '@/utils/gsap'
+import { api } from '@/services/api'
 
 // Split layout hero
 const HERO_IMAGES = [
@@ -23,42 +24,43 @@ const HERO_IMAGES = [
   },
 ]
 
-const HERO_CAROUSEL_SLIDES = [
+// Fallback carousel slides (used if no admin-managed slides are available)
+const DEFAULT_CAROUSEL_SLIDES = [
   {
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80',
     title: 'Give Waste a Second Life',
     subtitle: 'Discover unique, handcrafted products made from recycled materials at Craftworld Centre.',
-    alt: 'Upcycled wooden furniture showcase'
+    alt_text: 'Upcycled wooden furniture showcase'
   },
   {
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
     title: 'Sustainable Fashion Reimagined',
     subtitle: 'Beautiful handcrafted bags and accessories made from recycled materials with love.',
-    alt: 'Handcrafted recycled bags collection'
+    alt_text: 'Handcrafted recycled bags collection'
   },
   {
-    image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&q=80',
     title: 'Eco-Friendly Wardrobe',
     subtitle: 'Sustainable fashion that tells a story of renewal and conscious consumption.',
-    alt: 'Sustainable fashion items display'
+    alt_text: 'Sustainable fashion items display'
   },
   {
-    image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80',
     title: 'Artisan Craftsmanship',
     subtitle: 'Supporting local artisans who transform discarded materials into works of art.',
-    alt: 'Artisan craftsmanship showcase'
+    alt_text: 'Artisan craftsmanship showcase'
   },
   {
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
     title: 'Circular Economy in Action',
     subtitle: 'Every purchase supports sustainable practices and reduces environmental impact.',
-    alt: 'Circular economy marketplace'
+    alt_text: 'Circular economy marketplace'
   },
   {
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
+    image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
     title: 'From Waste to Wonder',
     subtitle: 'Transforming discarded materials into beautiful, functional home essentials.',
-    alt: 'Sustainable home goods collection'
+    alt_text: 'Sustainable home goods collection'
   },
 ]
 
@@ -72,17 +74,39 @@ export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [carouselSlides, setCarouselSlides] = useState(DEFAULT_CAROUSEL_SLIDES)
+  const [carouselLoading, setCarouselLoading] = useState(true)
+
+  // Fetch hero images from API
+  useEffect(() => {
+    const loadCarouselSlides = async () => {
+      try {
+        const data = await api.get('/hero-images')
+        if (data && Array.isArray(data.data) && data.data.length > 0) {
+          setCarouselSlides(data.data)
+        }
+      } catch {
+        // Silently fail - use default slides
+      } finally {
+        setCarouselLoading(false)
+      }
+    }
+
+    loadCarouselSlides()
+  }, [])
 
   // Image carousel effect
   useEffect(() => {
+    if (carouselSlides.length === 0 || carouselLoading) return
+    
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) =>
-        (prevIndex + 1) % HERO_CAROUSEL_SLIDES.length
+        (prevIndex + 1) % carouselSlides.length
       )
     }, 5000) // Change image every 5 seconds
 
     return () => clearInterval(interval)
-  }, [])
+  }, [carouselSlides.length, carouselLoading])
 
   useEffect(() => {
     // Respect user's motion preferences
@@ -160,11 +184,11 @@ export default function HeroSection() {
             <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
               {/* Image Carousel */}
               <div className="relative w-full h-64 sm:h-80 lg:h-96">
-                {HERO_CAROUSEL_SLIDES.map((slide, index) => (
+                {carouselSlides.map((slide, index) => (
                   <motion.img
-                    key={slide.image}
-                    src={slide.image}
-                    alt={slide.alt}
+                    key={slide.image_url}
+                    src={slide.image_url}
+                    alt={slide.alt_text}
                     className="absolute inset-0 w-full h-full object-cover"
                     initial={{ opacity: 0 }}
                     animate={{
@@ -193,7 +217,7 @@ export default function HeroSection() {
                   className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 sm:mb-4
                                  drop-shadow-lg"
                 >
-                  {HERO_CAROUSEL_SLIDES[currentImageIndex].title.split(' ').map((word, idx) => (
+                  {carouselSlides[currentImageIndex]?.title.split(' ').map((word, idx) => (
                     word === 'Waste' || word === 'Eco-Friendly' || word === 'Artisan' || word === 'Circular' || word === 'From' ? (
                       <span key={idx} className="text-[#7BC8D8]">{word} </span>
                     ) : (
@@ -208,13 +232,13 @@ export default function HeroSection() {
                   transition={{ duration: 0.6, delay: 0.5 }}
                   className="text-white/90 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed"
                 >
-                  {HERO_CAROUSEL_SLIDES[currentImageIndex].subtitle}
+                  {carouselSlides[currentImageIndex]?.subtitle}
                 </motion.p>
               </div>
 
               {/* Carousel Indicators */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {HERO_CAROUSEL_SLIDES.map((_, index) => (
+                {carouselSlides.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
@@ -223,7 +247,7 @@ export default function HeroSection() {
                         ? 'bg-white scale-125'
                         : 'bg-white/50 hover:bg-white/75'
                     }`}
-                    aria-label={`Go to slide ${index + 1}: ${HERO_CAROUSEL_SLIDES[index].title}`}
+                    aria-label={`Go to slide ${index + 1}: ${carouselSlides[index]?.title}`}
                   />
                 ))}
               </div>
@@ -251,11 +275,11 @@ export default function HeroSection() {
                 </p>
                 <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4">
                   <div className="flex items-center gap-2 text-[#1A7A8A]">
-                    <RecyclingOutlined sx={{ fontSize: 18, sm: 20 }} />
+                    <RecyclingOutlined sx={{ fontSize: 20 }} />
                     <span className="font-medium text-sm sm:text-base">100% Recycled Materials</span>
                   </div>
                   <div className="flex items-center gap-2 text-[#1A7A8A]">
-                    <VerifiedOutlined sx={{ fontSize: 18, sm: 20 }} />
+                    <VerifiedOutlined sx={{ fontSize: 20 }} />
                     <span className="font-medium text-sm sm:text-base">Artisan Crafted</span>
                   </div>
                 </div>
@@ -317,7 +341,7 @@ export default function HeroSection() {
                            hover:shadow-xl active:scale-95 text-base sm:text-lg"
               >
                 Start Shopping
-                <ArrowForwardOutlined sx={{ fontSize: 18, sm: 20 }} />
+                <ArrowForwardOutlined sx={{ fontSize: 20 }} />
               </Link>
             </motion.div>
 
@@ -335,7 +359,7 @@ export default function HeroSection() {
                     className="flex-shrink-0 bg-white/90 backdrop-blur-sm border border-[#1A7A8A]/20
                                rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-center shadow-lg min-w-[140px] sm:min-w-[160px]"
                   >
-                    <badge.icon sx={{ fontSize: 20, sm: 24, color: '#1A7A8A', marginBottom: 2 }} />
+                    <badge.icon sx={{ fontSize: 24, color: '#1A7A8A', marginBottom: 2 }} />
                     <p className="text-[#1A7A8A] font-medium text-sm sm:text-base">{badge.label}</p>
                   </div>
                 ))}

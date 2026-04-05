@@ -6,7 +6,7 @@ import {
   PeopleOutlined, BarChartOutlined, LogoutOutlined,
   MenuOutlined, RecyclingOutlined,
   NotificationsOutlined, SettingsOutlined, ArrowForwardOutlined,
-  YouTube, LocalOfferOutlined, RateReviewOutlined,
+  YouTube, LocalOfferOutlined, RateReviewOutlined, ImageOutlined,
 } from '@mui/icons-material'
 import Badge from '@mui/material/Badge'
 import { useAuthStore } from '@/store/authStore'
@@ -21,6 +21,7 @@ const NAV = [
   { to: '/admin/analytics',label: 'Analytics',  icon: BarChartOutlined,   exact: false },
   { to: '/admin/coupons',  label: 'Coupons',    icon: LocalOfferOutlined,       exact: false },
   { to: '/admin/diy',      label: 'DIY Videos', icon: YouTube,             exact: false },
+  { to: '/admin/hero-images', label: 'Hero Images', icon: ImageOutlined, exact: false },
 ]
 
 export default function AdminLayout() {
