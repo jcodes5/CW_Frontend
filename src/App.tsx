@@ -55,6 +55,7 @@ const WalletPage            = lazy(() => import('@/pages/account/WalletPage'))
 const AdminDashboard  = lazy(() => import('@/pages/admin/AdminDashboard'))
 const AdminProducts   = lazy(() => import('@/pages/admin/AdminProducts'))
 const AdminOrders     = lazy(() => import('@/pages/admin/AdminOrders'))
+const AdminPayments   = lazy(() => import('@/pages/admin/AdminPayments'))
 const AdminReviews    = lazy(() => import('@/pages/admin/AdminReviews'))
 const AdminUsers      = lazy(() => import('@/pages/admin/AdminUsers'))
 const AdminAnalytics  = lazy(() => import('@/pages/admin/AdminAnalytics'))
@@ -147,6 +148,7 @@ export default function App() {
               <Route index              element={<Wrap><AdminDashboard /></Wrap>} />
               <Route path="products"    element={<Wrap><AdminProducts /></Wrap>} />
               <Route path="orders"      element={<Wrap><AdminOrders /></Wrap>} />
+              <Route path="payments"    element={<Wrap><AdminPayments /></Wrap>} />
               <Route path="reviews"     element={<Wrap><AdminReviews /></Wrap>} />
               <Route path="users"       element={<Wrap><AdminUsers /></Wrap>} />
               <Route path="analytics"   element={<Wrap><AdminAnalytics /></Wrap>} />

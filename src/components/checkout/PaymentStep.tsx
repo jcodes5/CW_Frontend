@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LockOutlined, ArrowBackOutlined, CheckCircleOutlined, InfoOutlined,
@@ -9,8 +9,9 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useCartStore } from '@/store/cartStore'
 import { useCheckoutStore } from '@/store/checkoutStore'
 import { useAuthStore } from '@/store/authStore'
-import { paymentsApi, walletApi, type VerifyPaymentResponse } from '@/services/api'
+import { paymentsApi } from '@/services/api'
 import { formatPrice } from '@/utils/mockData'
+import { useWebhookPolling } from '@/hooks/useWebhookPolling'
 import type { Order } from '@/types/order'
 
 interface Props {
@@ -62,6 +63,8 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
   const [error, setError] = useState<string | null>(null)
   const [walletBalance, setWalletBalance] = useState<number>(0)
   const [isLoadingWallet, setIsLoadingWallet] = useState(false)
+  const [currentPaymentReference, setCurrentPaymentReference] = useState<string | null>(null)
+  
   const items = useCartStore((s) => s.items)
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
   const clearCart = useCartStore((s) => s.clearCart)
@@ -72,15 +75,20 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
   const customerEmail = shippingAddress.email ?? user?.email ?? ''
   const canUseWallet = walletBalance >= grandTotal
 
+  // Webhook polling hook
+  const webhook = useWebhookPolling({
+    reference: currentPaymentReference || '',
+    enabled: !!currentPaymentReference,
+    maxAttempts: 60, // 60 attempts * 1 second = 60 seconds
+    pollInterval: 1000, // poll every 1 second
+  })
+
   // Fetch wallet balance
   useEffect(() => {
     const fetchWalletBalance = async () => {
       try {
         setIsLoadingWallet(true)
-        const response = await walletApi.getBalance()
-        if (response.data) {
-          setWalletBalance(response.data.balance)
-        }
+        setWalletBalance(0)
       } catch (err) {
         console.error('Failed to fetch wallet balance:', err)
       } finally {
@@ -93,8 +101,31 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
     }
   }, [user])
 
+  // Handle webhook confirmation
+  useEffect(() => {
+    if (webhook.isConfirmed && webhook.status.order) {
+      console.log('✓ Webhook confirmed - order processing complete')
+      clearCart()
+      setOrder(webhook.status.order as unknown as Order)
+      onSuccess(webhook.status.order as unknown as Order)
+      window.location.href = `/order-confirmation?reference=${currentPaymentReference}`
+    } else if (webhook.isFailed) {
+      setIsProcessing(false)
+      setError(webhook.status.error || 'Payment failed')
+      setCurrentPaymentReference(null)
+    }
+  }, [webhook.isConfirmed, webhook.isFailed, webhook.status, clearCart, setOrder, onSuccess, currentPaymentReference])
+
   /**
    * Handle payment - calls backend to initialize payment
+   * 
+   * FLOW:
+   * 1. Backend creates order and initializes Paystack transaction
+   * 2. Returns payment reference for polling
+   * 3. User redirected to Paystack payment screen
+   * 4. After payment, webhook processes the order (source of truth)
+   * 5. Our polling+WebSocket detects when webhook confirms
+   * 6. Order auto-confirms on frontend when webhook processes
    * 
    * SECURITY:
    * - Amount is calculated on backend (not frontend)
@@ -158,11 +189,15 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
       // Handle Paystack payment
       const response = await paymentsApi.initialize(orderData)
       
-      if (!response.data?.payment?.authorizationUrl) {
+      if (!response.data?.payment?.authorizationUrl || !response.data?.payment?.reference) {
         throw new Error('Failed to initialize payment')
       }
 
-      const { authorizationUrl } = response.data.payment
+      const { authorizationUrl, reference } = response.data.payment
+
+      // Start polling for webhook confirmation with this reference
+      setCurrentPaymentReference(reference)
+      webhook.startPolling()
 
       // Redirect to Paystack payment page
       window.location.href = authorizationUrl
@@ -173,53 +208,6 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
       setIsProcessing(false)
     }
   }
-
-  /**
-   * Verify payment - called from callback URL
-   * This is a fallback - the webhook is the primary source of truth
-   */
-  const verifyPayment = useCallback(async (reference: string): Promise<VerifyPaymentResponse | null> => {
-    try {
-      const response = await paymentsApi.verify(reference)
-      return response.data ?? null
-    } catch (err) {
-      console.error('Payment verification error:', err)
-      return null
-    }
-  }, [])
-
-  // Check for payment reference in URL on mount (callback from payment provider)
-  const handlePaymentCallback = useCallback(async () => {
-    const params = new URLSearchParams(window.location.search)
-    const reference = params.get('reference')
-    const status = params.get('status')
-    
-    if (reference && status === 'success') {
-      // Verify payment with backend
-      const result = await verifyPayment(reference)
-      
-      if (result && (result.status === 'confirmed' || result.status === 'already_confirmed')) {
-        // Order was created on backend after payment verification
-        if (result.order) {
-          clearCart()
-          setOrder(result.order)
-
-          // Call onSuccess callback to notify parent component
-          onSuccess(result.order)
-
-          // Redirect to confirmation page
-          window.location.href = `/order-confirmation?reference=${reference}`
-        } else {
-          console.error('Order not found in verification response')
-        }
-      }
-    }
-  }, [verifyPayment, clearCart, setOrder, onSuccess, items, shippingAddress, customerEmail, total, deliveryFee, discount, grandTotal])
-
-  // Run callback check on mount
-  useEffect(() => {
-    handlePaymentCallback()
-  }, [handlePaymentCallback])
 
   return (
     <motion.div
@@ -561,6 +549,37 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ──────────────────────────────────────── */}
+      {/* WEBHOOK POLLING STATUS */}
+      {/* ──────────────────────────────────────── */}
+      <AnimatePresence>
+        {webhook.isPolling && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className="bg-blue-50 border border-blue-200 text-blue-700 rounded-2xl px-5 py-4 flex items-start gap-3 shadow-sm"
+          >
+            <div className="flex-shrink-0 mt-0.5">
+              <CircularProgress size={14} sx={{ color: '#3b82f6' }} />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium">Processing your payment...</p>
+              <p className="text-xs text-blue-600 mt-1">
+                Waiting for confirmation (attempt {webhook.status.attempt}/60)
+              </p>
+              <p className="text-xs text-blue-600 mt-2">
+                💡 <strong>Tip:</strong> You can close this page - your order will be confirmed when payment is received.
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ──────────────────────────────────────── */}
+      {/* ERROR ALERT FOR POLLING */}
+      {/* ──────────────────────────────────────── */}
 
       {/* ──────────────────────────────────────── */}
       {/* CTA BUTTONS */}

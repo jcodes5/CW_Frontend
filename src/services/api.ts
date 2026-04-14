@@ -50,47 +50,73 @@ async function request<T>(
     ...(options.headers as Record<string, string> ?? {}),
   }
 
-  const res = await fetch(`${BASE}${path}`, {
-    ...options,
-    headers,
-    credentials: 'include',   // send refresh token cookie
-  })
+  // Add timeout to prevent hanging requests (30s default, 60s for long operations)
+  const isLongOperation = path.includes('/deposit/init') || path.includes('/upload')
+  const timeoutMs = isLongOperation ? 60000 : 30000
+  
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
-  // Handle 401 — try to refresh token once
-  if (res.status === 401) {
-    const refreshed = await tryRefreshToken()
-    if (refreshed) {
-      // Retry original request with new token
-      const newToken = useAuthStore.getState().token
-      const retryRes = await fetch(`${BASE}${path}`, {
-        ...options,
-        headers: {
-          ...headers,
-          Authorization: `Bearer ${newToken}`,
-        },
-        credentials: 'include',
-      })
-      if (retryRes.ok) {
-        return retryRes.json() as Promise<ApiResponse<T>>
-      }
-    }
-    // Logout if still 401
-    useAuthStore.getState().logout()
-    throw new ApiError(401, 'Session expired — please log in again')
-  }
-
-  let body: ApiResponse<T>
   try {
-    body = await res.json()
-  } catch {
-    throw new ApiError(res.status, 'Invalid response from server')
-  }
+    const res = await fetch(`${BASE}${path}`, {
+      ...options,
+      headers,
+      credentials: 'include',   // send refresh token cookie
+      signal: controller.signal,
+    })
 
-  if (!res.ok) {
-    throw new ApiError(res.status, body.message ?? 'Request failed', body.errors)
-  }
+    // Handle 401 — try to refresh token once
+    if (res.status === 401) {
+      const refreshed = await tryRefreshToken()
+      if (refreshed) {
+        // Retry original request with new token
+        const newToken = useAuthStore.getState().token
+        const retryRes = await fetch(`${BASE}${path}`, {
+          ...options,
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${newToken}`,
+          },
+          credentials: 'include',
+          signal: controller.signal,
+        })
+        if (retryRes.ok) {
+          clearTimeout(timeoutId)
+          return retryRes.json() as Promise<ApiResponse<T>>
+        }
+      }
+      // Logout if still 401
+      useAuthStore.getState().logout()
+      clearTimeout(timeoutId)
+      throw new ApiError(401, 'Session expired — please log in again')
+    }
 
-  return body
+    let body: ApiResponse<T>
+    try {
+      body = await res.json()
+    } catch {
+      clearTimeout(timeoutId)
+      throw new ApiError(res.status, 'Invalid response from server')
+    }
+
+    if (!res.ok) {
+      clearTimeout(timeoutId)
+      throw new ApiError(res.status, body.message ?? 'Request failed', body.errors)
+    }
+
+    clearTimeout(timeoutId)
+    return body
+  } catch (error) {
+    clearTimeout(timeoutId)
+    
+    // Handle AbortError (timeout)
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new ApiError(408, `Request timeout after ${timeoutMs}ms. The server is taking too long to respond. Please check your wallet settings and try again.`)
+    }
+    
+    // Re-throw other errors as-is
+    throw error
+  }
 }
 
 // ── Token refresh ─────────────────────────────────────────────
@@ -200,6 +226,9 @@ export interface InitializePaymentResponse {
 export interface VerifyPaymentResponse {
   reference: string
   status: string
+  paymentConfirmed: boolean
+  webhookProcessed: boolean
+  webhookEventId?: string
   order?: import('@/types/order').Order
 }
 
@@ -263,6 +292,12 @@ export const adminApi = {
   updateOrderStatus: (reference: string, status: string, note?: string) =>
     api.patch(`/admin/orders/${reference}/status`, { status, note }),
 
+  // Payments
+  confirmPayment: (reference: string, channel?: string, notes?: string) =>
+    api.post('/payments/admin/confirm-payment', { reference, channel, notes }),
+  getPaymentDiagnostics: (reference: string) =>
+    api.get(`/payments/admin/diagnostics/${reference}`),
+
   // Users
   listUsers: (page = 1) => api.get<AdminUser[]>(`/admin/users?page=${page}`),
 
@@ -325,8 +360,8 @@ export const walletApi = {
     ),
   
   // Initialize deposit (creates Paystack transaction)
-  initializeDeposit: (amount: number) => 
-    api.post<InitializeDepositResponse>('/wallet/deposit', { amount }),
+  initializeDeposit: (amount: number) =>
+    api.post<InitializeDepositResponse>('/wallet/deposit/init', { amount }),
   
   // Verify deposit (called from callback)
   verifyDeposit: (reference: string) => 

@@ -7,6 +7,7 @@ import {
   MenuOutlined, RecyclingOutlined,
   NotificationsOutlined, SettingsOutlined, ArrowForwardOutlined,
   YouTube, LocalOfferOutlined, RateReviewOutlined, ImageOutlined,
+  CreditCardOutlined,
 } from '@mui/icons-material'
 import Badge from '@mui/material/Badge'
 import { useAuthStore } from '@/store/authStore'
@@ -16,6 +17,7 @@ const NAV = [
   { to: '/admin',          label: 'Dashboard',  icon: DashboardOutlined,  exact: true  },
   { to: '/admin/products', label: 'Products',   icon: InventoryOutlined,  exact: false },
   { to: '/admin/orders',   label: 'Orders',     icon: ShoppingBagOutlined,exact: false },
+  { to: '/admin/payments', label: 'Payments',   icon: CreditCardOutlined, exact: false },
   { to: '/admin/reviews',  label: 'Reviews',    icon: RateReviewOutlined, exact: false },
   { to: '/admin/users',    label: 'Users',      icon: PeopleOutlined,     exact: false },
   { to: '/admin/analytics',label: 'Analytics',  icon: BarChartOutlined,   exact: false },

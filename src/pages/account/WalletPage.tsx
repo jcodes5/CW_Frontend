@@ -50,14 +50,40 @@ export default function WalletPage() {
     try {
       setIsDepositing(true)
       const response = await walletApi.initializeDeposit(amount)
-      
-      if (response.data?.authorizationUrl) {
+
+      console.log('Deposit response:', response)
+
+      if (response.success && response.data?.authorizationUrl) {
         // Redirect to Paystack for payment
         window.location.href = response.data.authorizationUrl
+      } else {
+        console.error('Invalid response structure:', response)
+        toast.error('Failed to get payment link. Please try again.')
       }
     } catch (err: unknown) {
-      const error = err as { message?: string }
-      toast.error(error.message ?? 'Failed to initialize deposit')
+      console.error('Deposit error:', err)
+      
+      let errorMessage = 'Failed to initialize deposit'
+      
+      if (err instanceof Error) {
+        errorMessage = err.message
+      } else if (typeof err === 'object' && err !== null) {
+        const errorObj = err as Record<string, unknown>
+        if (typeof errorObj.message === 'string') {
+          errorMessage = errorObj.message
+        }
+      }
+      
+      // Provide helpful error messages
+      if (errorMessage.includes('timeout') || errorMessage.includes('408')) {
+        toast.error('Payment link request timed out. Please check your internet connection and try again.')
+      } else if (errorMessage.includes('Session expired')) {
+        toast.error('Your session has expired. Please log back in and try again.')
+      } else if (errorMessage.includes('Insufficient') || errorMessage.includes('balance')) {
+        toast.error('Payment failed. ' + errorMessage)
+      } else {
+        toast.error(errorMessage || 'Failed to initialize deposit. Please try again.')
+      }
     } finally {
       setIsDepositing(false)
     }

@@ -48,6 +48,8 @@ interface AdminState {
   fetchUsers:   (page?: number) => Promise<void>
   fetchReviews: (page?: number, filters?: { isVerified?: boolean; productId?: string }) => Promise<void>
   updateOrderStatus: (reference: string, status: string, note?: string) => Promise<void>
+  confirmPayment: (reference: string, channel?: string, notes?: string) => Promise<void>
+  getPaymentDiagnostics: (reference: string) => Promise<any>
   deleteProduct:(id: string) => Promise<void>
   updateReviewVerification: (reviewId: string, isVerified: boolean) => Promise<void>
   deleteReview: (reviewId: string) => Promise<void>
@@ -163,6 +165,31 @@ export const useAdminStore = create<AdminState>()(
           })
         } catch (err) {
           set({ error: err instanceof Error ? err.message : 'Failed to update status' })
+          throw err
+        }
+      },
+
+      confirmPayment: async (reference, channel, notes) => {
+        try {
+          await adminApi.confirmPayment(reference, channel, notes)
+          // Update local state optimistically
+          set({
+            orders: get().orders.map((o) =>
+              o.reference === reference ? { ...o, status: 'confirmed' } : o
+            ),
+          })
+        } catch (err) {
+          set({ error: err instanceof Error ? err.message : 'Failed to confirm payment' })
+          throw err
+        }
+      },
+
+      getPaymentDiagnostics: async (reference) => {
+        try {
+          const res = await adminApi.getPaymentDiagnostics(reference)
+          return res.data
+        } catch (err) {
+          set({ error: err instanceof Error ? err.message : 'Failed to get diagnostics' })
           throw err
         }
       },
