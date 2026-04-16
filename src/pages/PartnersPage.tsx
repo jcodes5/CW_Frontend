@@ -9,6 +9,7 @@ import {
 } from '@mui/icons-material'
 import { BRANDS } from '@/utils/constants'
 
+// Brand-level UI/content metadata used to enrich each partner section.
 type BrandDetail = {
   gradient: string
   orb: string
@@ -20,6 +21,7 @@ type BrandDetail = {
   slideSubtitle: string
 }
 
+// Static lookup table keyed by brand id from BRANDS.
 const BRAND_DETAILS: Record<string, BrandDetail> = {
   craftworld: {
     gradient: 'from-teal-900 via-teal-800 to-[#0d1f22]',
@@ -80,6 +82,7 @@ const BRAND_DETAILS: Record<string, BrandDetail> = {
   },
 }
 
+// Safe fallback when a brand id has no matching details.
 const DEFAULT_DETAILS: BrandDetail = {
   gradient: 'from-slate-900 via-slate-800 to-slate-900',
   orb: 'rgba(148,163,184,0.2)',
@@ -95,6 +98,7 @@ const DEFAULT_DETAILS: BrandDetail = {
   slideSubtitle: 'A mission-aligned partner in the CraftworldCentre ecosystem.',
 }
 
+// Reusable reveal-on-scroll wrapper for section blocks.
 function FadeIn({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
@@ -112,24 +116,26 @@ function FadeIn({ children, delay = 0 }: { children: ReactNode; delay?: number }
 }
 
 export default function PartnersPage() {
+  // Active slide index for the hero carousel.
   const [currentIndex, setCurrentIndex] = useState(0)
-
+// Set page title once on mount.
   useEffect(() => {
     document.title = 'Our Partners | CraftworldCentre'
   }, [])
-
+// Auto-rotate carousel every 5s; cleanup prevents interval leaks.
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % BRANDS.length)
     }, 5000)
     return () => clearInterval(interval)
   }, [])
-
+// Resolve current brand and detail payload with fallback protection.
   const currentBrand = BRANDS[currentIndex]
   const currentDetails = BRAND_DETAILS[currentBrand?.id] ?? DEFAULT_DETAILS
 
   return (
     <main className="min-h-screen bg-white">
+      {/* HERO: mission statement, high-level metrics, CTA buttons, rotating visual */}
       <section id="hero" className="relative overflow-hidden bg-white">
         <div
           className="absolute inset-0 opacity-[0.045] pointer-events-none"
@@ -329,7 +335,7 @@ export default function PartnersPage() {
 
         <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7BC8D8]/50 to-transparent" />
       </section>
-
+ {/* BRANDS: detailed profile cards rendered from BRANDS + BRAND_DETAILS */}
       <div id="brands" className="bg-[#f8fafb]">
         {BRANDS.map((brand, idx) => {
           const details = BRAND_DETAILS[brand.id] ?? DEFAULT_DETAILS
@@ -347,7 +353,13 @@ export default function PartnersPage() {
                     <FadeIn>
                       <div className="flex items-center gap-3 mb-5">
                         <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-md" style={{ backgroundColor: color }}>
-                          {brand.id === 'craftworld' ? '🔄' : brand.id === 'adulawo' ? '🏺' : '🌍'}
+                          {brand.id === 'craftworld' ? (
+                            <img src="/logos/craftworld.png" alt="Craftworld Logo" className="w-12 h-12" />
+                          ) : brand.id === 'adulawo' ? (
+                            <img src="/logos/adulawo.png" alt="Adulawo Logo" className="w-12 h-12" />
+                          ) : (
+                            <img src="/logos/planet3r.png" alt="Planet3r Logo" className="w-8 h-8" />
+                          )}
                         </div>
                         <div>
                           <h2 className="font-display font-bold text-[#0d1f22] text-2xl sm:text-3xl">{brand.name}</h2>
@@ -440,7 +452,13 @@ export default function PartnersPage() {
                             transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
                             className="text-6xl mb-5"
                           >
-                            {brand.id === 'craftworld' ? '🔄' : brand.id === 'adulawo' ? '🏺' : '🌍'}
+                            {brand.id === 'craftworld' ? (
+                              <img src="/logos/craftworld.png" alt="Craftworld Logo" className="w-16 h-16 mx-auto" />
+                            ) : brand.id === 'adulawo' ? (
+                              <img src="/logos/adulawo.png" alt="Adulawo Logo" className="w-16 h-16 mx-auto" />
+                            ) : (
+                              <img src="/logos/planet3r.png" alt="Planet3r Logo" className="w-16 h-16 mx-auto" />
+                            )}
                           </motion.div>
                           <h3 className="font-display font-bold text-white text-2xl mb-2">{brand.name}</h3>
                           <p className={`text-sm font-medium italic mb-5 ${details.accentText}`}>"{tagline}"</p>
@@ -456,6 +474,7 @@ export default function PartnersPage() {
         })}
       </div>
 
+{/* CTA: final conversion block for potential partners */}
       <section className="py-20 bg-white">
         <div className="container-max section-padding text-center">
           <FadeIn>
