@@ -7,7 +7,7 @@ export const BRANDS: Brand[] = [
   {
     id: 'craftworld',
     name: 'CraftworldCentre',
-    logo: '/logos/craftworld.svg',
+    logo: '/logos/craftworld.png',
     tagline: 'Where Waste Becomes Wonder',
     description:
       'The flagship brand driving the circular economy mission — curating the finest recycled, upcycled, and sustainable products across all categories.',
@@ -19,7 +19,7 @@ export const BRANDS: Brand[] = [
   {
     id: 'adulawo',
     name: 'Adúláwò',
-    logo: '/logos/adulawo.svg',
+    logo: '/logos/adulawo.png',
     tagline: 'Honour in Every Craft',
     description:
       'Adúláwò — meaning "to honour the craftsperson" in Yoruba — transforms reclaimed materials into artisanal pieces that celebrate African heritage and craftsmanship.',
@@ -31,7 +31,7 @@ export const BRANDS: Brand[] = [
   {
     id: 'planet3r',
     name: 'Planet 3R',
-    logo: '/logos/planet3r.svg',
+    logo: '/logos/planet3r.png',
     tagline: 'Reduce. Reuse. Rethink.',
     description:
       'Planet 3R pioneers industrial upcycling — converting post-consumer and post-industrial waste into functional, design-forward lifestyle and home products.',

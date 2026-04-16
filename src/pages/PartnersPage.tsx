@@ -2,146 +2,102 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import {
-  GroupsOutlined,
-  RecyclingOutlined,
   ArrowForwardOutlined,
-  FavoriteOutlined,
-  EmojiObjectsOutlined,
-  PublicOutlined,
+  RecyclingOutlined,
+  CheckOutlined,
+  GroupsOutlined,
 } from '@mui/icons-material'
-import { Lightbulb, Globe, RotateCw, Sparkles, Recycle } from 'lucide-react'
+import { BRANDS } from '@/utils/constants'
 
-const ABOUT_CAROUSEL_SLIDES = [
-  {
+type BrandDetail = {
+  gradient: string
+  orb: string
+  accentText: string
+  stats: Array<{ v: string; l: string }>
+  perks: string[]
+  image: string
+  slideTitle: string
+  slideSubtitle: string
+}
+
+const BRAND_DETAILS: Record<string, BrandDetail> = {
+  craftworld: {
+    gradient: 'from-teal-900 via-teal-800 to-[#0d1f22]',
+    orb: 'rgba(123,200,216,0.2)',
+    accentText: 'text-teal-300',
+    stats: [
+      { v: '6,000+', l: 'Products Listed' },
+      { v: '3K+', l: 'Happy Customers' },
+      { v: '2020', l: 'Founded' },
+    ],
+    perks: [
+      'Curated quality control on all listings',
+      'Pan-Nigeria delivery network',
+      'Sustainability-first product sourcing policy',
+      'Full brand transparency on every product page',
+    ],
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80',
-    title: 'From Waste to Wealth',
-    subtitle: "Nigeria's circular economy pioneers transforming discarded materials into beautiful products.",
-    alt: 'Upcycled wooden furniture transformation',
-    tag: 'Impact',
+    slideTitle: 'CraftworldCentre Marketplace',
+    slideSubtitle: 'The flagship platform where curated circular products meet conscious shoppers.',
   },
-  {
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80',
-    title: 'Artisan Empowerment',
-    subtitle: 'Supporting local artisans who turn waste into works of art.',
-    alt: 'Handcrafted recycled bags by artisans',
-    tag: 'Artisans',
+  adulawo: {
+    gradient: 'from-amber-950 via-stone-900 to-[#1a1008]',
+    orb: 'rgba(212,184,150,0.2)',
+    accentText: 'text-amber-300',
+    stats: [
+      { v: '3,200+', l: 'Pieces Made' },
+      { v: '12', l: 'Master Artisans' },
+      { v: '2018', l: 'Founded' },
+    ],
+    perks: [
+      'All materials sourced from post-production offcuts',
+      'Yoruba cultural heritage embedded in every design',
+      'Women-led artisan programme in Abeokuta & Ibadan',
+      'Zero synthetic chemicals in any finishing process',
+    ],
+    image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1200&q=80',
+    slideTitle: 'Adúláwò Atelier',
+    slideSubtitle: 'Traditional craftsmanship reimagined with reclaimed materials and cultural depth.',
   },
-  {
-    image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&q=80',
-    title: 'Sustainable Innovation',
-    subtitle: 'Pioneering new ways to create beautiful products while protecting our environment.',
-    alt: 'Sustainable fashion innovation showcase',
-    tag: 'Innovation',
+  planet3r: {
+    gradient: 'from-green-950 via-emerald-900 to-[#0a1a0a]',
+    orb: 'rgba(168,212,160,0.2)',
+    accentText: 'text-green-300',
+    stats: [
+      { v: '85T', l: 'Waste Diverted' },
+      { v: '40+', l: 'Material Types' },
+      { v: '2019', l: 'Founded' },
+    ],
+    perks: [
+      'Industrial-scale post-consumer plastic processing',
+      'Construction waste turned into homeware',
+      'Every product carries a material traceability report',
+      'ISO-aligned zero-waste production facility',
+    ],
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=80',
+    slideTitle: 'Planet 3R Systems',
+    slideSubtitle: 'High-impact upcycling infrastructure that powers circular production at scale.',
   },
-  {
-    image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80',
-    title: 'Community Impact',
-    subtitle: 'Building a community that values sustainability and craftsmanship.',
-    alt: 'Community of sustainable artisans',
-    tag: 'Community',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
-    title: 'Circular Future',
-    subtitle: 'Leading Nigeria toward a circular economy where nothing is wasted.',
-    alt: 'Circular economy future vision',
-    tag: 'Future',
-  },
-]
+}
 
-const TIMELINE = [
-  {
-    year: '2018',
-    title: 'Adúláwò is Founded',
-    body: 'The journey begins in Ibadan with a small workshop reclaiming fabric offcuts and brass scraps, guided by a belief that African craft should honor both maker and material.',
-    icon: Lightbulb,
-    color: '#8B6914',
-  },
-  {
-    year: '2019',
-    title: 'Planet 3R Launches',
-    body: 'Lagos-based industrial upcycling enters the picture: post-consumer plastics, construction waste, and discarded tyres transformed into functional lifestyle goods.',
-    icon: Globe,
-    color: '#3d6b2d',
-  },
-  {
-    year: '2020',
-    title: 'CraftworldCentre is Born',
-    body: 'The flagship brand and marketplace is created to unite both companies under one roof, giving circular products a home, a story, and a growing audience.',
-    icon: RotateCw,
-    color: '#1A7A8A',
-  },
-  {
-    year: '2022',
-    title: '1,000 Orders Milestone',
-    body: 'The platform reaches its first thousand orders, each one representing material kept out of landfill and fair-paid artisanal work.',
-    icon: Sparkles,
-    color: '#6B4A8A',
-  },
-  {
-    year: '2024',
-    title: '85 Tonnes Diverted',
-    body: 'CraftworldCentre, Adúláwò, and Planet 3R together divert over 85 tonnes of waste from Nigerian landfills.',
-    icon: Recycle,
-    color: '#1A7A8A',
-  },
-]
-
-const VALUES = [
-  {
-    icon: RecyclingOutlined,
-    title: 'Circular by Design',
-    body: 'Every product starts with waste. We avoid virgin raw materials whenever reclaimed alternatives exist.',
-  },
-  {
-    icon: FavoriteOutlined,
-    title: 'Craft with Dignity',
-    body: 'Artisans are paid fairly, credited openly, and celebrated rather than hidden in supply chains.',
-  },
-  {
-    icon: EmojiObjectsOutlined,
-    title: 'Honest Innovation',
-    body: 'We push boundaries of material transformation without greenwashing or shortcuts.',
-  },
-  {
-    icon: GroupsOutlined,
-    title: 'Community First',
-    body: 'Customers, makers, and partners are co-builders of the mission, not just transactions.',
-  },
-  {
-    icon: PublicOutlined,
-    title: 'Transparency Always',
-    body: "Every product page tells you what it's made from, who made it, and what it saved.",
-  },
-]
-
-const TEAM = [
-  {
-    name: 'Founder & CEO',
-    role: 'CraftworldCentre Group',
-    initials: 'CF',
-    color: '#1A7A8A',
-    bio: 'Founder of all three brands, focused on proving that circular economy can be both viable and beautiful.',
-  },
-  {
-    name: 'Head of Craft, Adúláwò',
-    role: 'Artisan Lead',
-    initials: 'AL',
-    color: '#8B6914',
-    bio: 'Master weaver trained in Abeokuta, leading the Adúláwò atelier and artisan training programme.',
-  },
-  {
-    name: 'Head of Production, Planet 3R',
-    role: 'Upcycling Lead',
-    initials: 'PL',
-    color: '#3d6b2d',
-    bio: "Industrial engineer leading material innovation to tackle Nigeria's plastic waste crisis.",
-  },
-]
+const DEFAULT_DETAILS: BrandDetail = {
+  gradient: 'from-slate-900 via-slate-800 to-slate-900',
+  orb: 'rgba(148,163,184,0.2)',
+  accentText: 'text-slate-300',
+  stats: [
+    { v: 'Growing', l: 'Network' },
+    { v: 'Nigeria', l: 'Focus' },
+    { v: 'Now', l: 'Active' },
+  ],
+  perks: ['Circular sourcing', 'Transparent production', 'Community-centered growth', 'Quality-first outputs'],
+  image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80',
+  slideTitle: 'Circular Partner',
+  slideSubtitle: 'A mission-aligned partner in the CraftworldCentre ecosystem.',
+}
 
 function FadeIn({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const inView = useInView(ref, { once: true, margin: '-50px' })
 
   return (
     <motion.div
@@ -155,19 +111,22 @@ function FadeIn({ children, delay = 0 }: { children: ReactNode; delay?: number }
   )
 }
 
-export default function AboutPage() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+export default function PartnersPage() {
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
-    document.title = 'Our Story | CraftworldCentre'
+    document.title = 'Our Partners | CraftworldCentre'
   }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % ABOUT_CAROUSEL_SLIDES.length)
+      setCurrentIndex((prev) => (prev + 1) % BRANDS.length)
     }, 5000)
     return () => clearInterval(interval)
   }, [])
+
+  const currentBrand = BRANDS[currentIndex]
+  const currentDetails = BRAND_DETAILS[currentBrand?.id] ?? DEFAULT_DETAILS
 
   return (
     <main className="min-h-screen bg-white">
@@ -196,32 +155,30 @@ export default function AboutPage() {
                 transition={{ delay: 0.15 }}
                 className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#1A7A8A]/[0.08] border border-[#1A7A8A]/20"
               >
-                <span className="text-[#1A7A8A] text-sm font-semibold tracking-wide">
-                  CraftworldCentre · Adúláwò · Planet 3R
-                </span>
+                <span className="text-[#1A7A8A] text-sm font-semibold tracking-wide">Three Brands, One Mission</span>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 36 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.1, ease: 'easeOut' }}
-                className="font-display font-black leading-[0.88] tracking-[-0.03em] text-[clamp(3rem,7vw,5.8rem)] text-gray-900"
+                className="font-display font-black leading-[0.88] tracking-[-0.03em] text-[clamp(3.2rem,7vw,6rem)] text-gray-900"
               >
-                From
+                The
                 <br />
-                <span className="text-[#1A7A8A]">Waste</span>
+                <span className="text-[#1A7A8A]">Craft</span>
                 <br />
-                to Legacy
+                Ecosystem
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.35 }}
-                className="text-lg lg:text-xl text-gray-500 max-w-[29rem] leading-relaxed font-light"
+                className="text-lg lg:text-xl text-gray-500 max-w-[28rem] leading-relaxed font-light"
               >
-                We build a circular future where reclaimed materials become desirable products,
-                artisan jobs grow, and sustainability becomes everyday culture.
+                Distinct brands mastering different layers of circular craftsmanship, united to transform Nigeria&apos;s
+                waste into quality products and livelihoods.
               </motion.p>
 
               <motion.div
@@ -231,18 +188,18 @@ export default function AboutPage() {
                 transition={{ delay: 0.55 }}
               >
                 <div>
-                  <div className="text-2xl font-black text-[#1A7A8A]">85+</div>
-                  <div className="text-sm text-gray-500">Tonnes Diverted</div>
+                  <div className="text-2xl font-black text-[#1A7A8A]">85T</div>
+                  <div className="text-sm text-gray-500">Waste Diverted</div>
                 </div>
                 <div className="w-px h-10 bg-gray-200" />
                 <div>
-                  <div className="text-2xl font-black text-amber-600">1,000+</div>
-                  <div className="text-sm text-gray-500">Orders Fulfilled</div>
+                  <div className="text-2xl font-black text-amber-600">12</div>
+                  <div className="text-sm text-gray-500">Master Artisans</div>
                 </div>
                 <div className="w-px h-10 bg-gray-200" />
                 <div>
-                  <div className="text-2xl font-black text-green-700">50+</div>
-                  <div className="text-sm text-gray-500">Artisans</div>
+                  <div className="text-2xl font-black text-green-700">40+</div>
+                  <div className="text-sm text-gray-500">Material Types</div>
                 </div>
               </motion.div>
 
@@ -252,23 +209,23 @@ export default function AboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.65 }}
               >
-                <Link
-                  to="/shop"
+                <button
+                  onClick={() => document.getElementById('brands')?.scrollIntoView({ behavior: 'smooth' })}
                   className="group flex-1 flex items-center justify-center gap-2.5 bg-[#1A7A8A] text-white font-bold py-4 px-8 rounded-2xl hover:bg-[#115762] shadow-lg shadow-[#1A7A8A]/30 hover:shadow-[#1A7A8A]/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-base"
                 >
-                  Explore Collection
+                  Explore the Brands
                   <ArrowForwardOutlined
                     sx={{ fontSize: 20 }}
                     className="transition-transform duration-300 group-hover:translate-x-1"
                   />
-                </Link>
+                </button>
 
-                <button
-                  onClick={() => document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' })}
+                <Link
+                  to="/shop"
                   className="flex-1 flex items-center justify-center gap-2.5 bg-white border-2 border-[#1A7A8A] text-[#1A7A8A] font-bold py-4 px-8 rounded-2xl hover:bg-[#1A7A8A]/[0.06] transition-all duration-300 text-base shadow-sm"
                 >
-                  Our Journey
-                </button>
+                  Shop Collection
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -281,9 +238,9 @@ export default function AboutPage() {
               <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-[#1A7A8A]/20 ring-1 ring-black/5">
                 <AnimatePresence mode="wait">
                   <motion.img
-                    key={`about-img-${currentImageIndex}`}
-                    src={ABOUT_CAROUSEL_SLIDES[currentImageIndex].image}
-                    alt={ABOUT_CAROUSEL_SLIDES[currentImageIndex].alt}
+                    key={`partner-img-${currentBrand?.id ?? currentIndex}`}
+                    src={currentDetails.image}
+                    alt={currentBrand?.name ?? 'Partner'}
                     initial={{ opacity: 0, scale: 1.04 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
@@ -296,7 +253,7 @@ export default function AboutPage() {
 
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={`about-text-${currentImageIndex}`}
+                    key={`partner-text-${currentBrand?.id ?? currentIndex}`}
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
@@ -304,25 +261,23 @@ export default function AboutPage() {
                     className="absolute bottom-0 left-0 right-0 p-7 lg:p-8"
                   >
                     <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold tracking-wider uppercase bg-[#7BC8D8]/30 text-white backdrop-blur-sm rounded-full border border-white/25">
-                      {ABOUT_CAROUSEL_SLIDES[currentImageIndex].tag}
+                      {currentBrand?.name ?? 'Partner'}
                     </span>
                     <h3 className="font-display text-white text-xl lg:text-2xl font-bold mb-1.5 leading-tight">
-                      {ABOUT_CAROUSEL_SLIDES[currentImageIndex].title}
+                      {currentDetails.slideTitle}
                     </h3>
-                    <p className="text-white/75 text-sm leading-relaxed">
-                      {ABOUT_CAROUSEL_SLIDES[currentImageIndex].subtitle}
-                    </p>
+                    <p className="text-white/75 text-sm leading-relaxed">{currentDetails.slideSubtitle}</p>
                   </motion.div>
                 </AnimatePresence>
 
                 <div className="absolute top-5 right-5 flex gap-1.5">
-                  {ABOUT_CAROUSEL_SLIDES.map((_, i) => (
+                  {BRANDS.map((brand, i) => (
                     <button
-                      key={i}
-                      onClick={() => setCurrentImageIndex(i)}
-                      aria-label={`Go to slide ${i + 1}`}
+                      key={brand.id}
+                      onClick={() => setCurrentIndex(i)}
+                      aria-label={`Go to ${brand.name}`}
                       className={`h-1.5 rounded-full transition-all duration-300 bg-white ${
-                        i === currentImageIndex ? 'w-6 opacity-100' : 'w-1.5 opacity-45 hover:opacity-75'
+                        i === currentIndex ? 'w-6 opacity-100' : 'w-1.5 opacity-45 hover:opacity-75'
                       }`}
                     />
                   ))}
@@ -330,7 +285,7 @@ export default function AboutPage() {
 
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/20">
                   <motion.div
-                    key={`about-progress-${currentImageIndex}`}
+                    key={`partner-progress-${currentIndex}`}
                     className="h-full bg-[#7BC8D8]"
                     initial={{ width: '0%' }}
                     animate={{ width: '100%' }}
@@ -349,8 +304,8 @@ export default function AboutPage() {
                   ♻️
                 </div>
                 <div>
-                  <div className="text-[#1A7A8A] font-black text-lg leading-none">85T+</div>
-                  <div className="text-gray-400 text-xs mt-0.5">Waste diverted</div>
+                  <div className="text-[#1A7A8A] font-black text-lg leading-none">85T</div>
+                  <div className="text-gray-400 text-xs mt-0.5">Diverted</div>
                 </div>
               </motion.div>
 
@@ -361,11 +316,11 @@ export default function AboutPage() {
                 className="absolute -right-4 bottom-1/4 translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-5 py-3.5 flex items-center gap-3"
               >
                 <div className="w-10 h-10 bg-[#1A7A8A]/10 rounded-xl flex items-center justify-center text-lg flex-shrink-0">
-                  👥
+                  🤝
                 </div>
                 <div>
-                  <div className="text-[#1A7A8A] font-black text-lg leading-none">50+</div>
-                  <div className="text-gray-400 text-xs mt-0.5">Artisans</div>
+                  <div className="text-[#1A7A8A] font-black text-lg leading-none">3</div>
+                  <div className="text-gray-400 text-xs mt-0.5">Core brands</div>
                 </div>
               </motion.div>
             </motion.div>
@@ -375,223 +330,149 @@ export default function AboutPage() {
         <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7BC8D8]/50 to-transparent" />
       </section>
 
-      <section id="mission" className="py-20 sm:py-28 bg-white">
-        <div className="container-max section-padding">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-            <FadeIn>
-              <span className="inline-block text-teal-500 text-xs font-semibold uppercase tracking-widest bg-teal-50 px-4 py-2 rounded-full border border-teal-100 mb-4">
-                Our Mission
-              </span>
-              <h2 className="font-display font-bold text-[#0d1f22] mb-5" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
-                Turning Nigeria&apos;s Waste
-                <br />
-                <span className="italic text-teal-500">Into National Wealth</span>
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Nigeria generates over 32 million tonnes of solid waste annually. Most of it is landfilled or burned.
-                We believe this is not only a waste problem, but an access and creativity opportunity.
-              </p>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                CraftworldCentre connects skilled artisans who transform waste into premium products with customers who
-                want conscious living without compromising quality or design.
-              </p>
-              <Link to="/shop" className="btn-primary text-sm inline-flex">
-                See the Products
-                <ArrowForwardOutlined sx={{ fontSize: 16 }} />
-              </Link>
-            </FadeIn>
+      <div id="brands" className="bg-[#f8fafb]">
+        {BRANDS.map((brand, idx) => {
+          const details = BRAND_DETAILS[brand.id] ?? DEFAULT_DETAILS
+          const isEven = idx % 2 === 0
+          const color = brand.color ?? '#1A7A8A'
+          const focus = brand.focus ?? []
+          const tagline = brand.tagline ?? 'Circular craftsmanship with measurable impact.'
+          const description = brand.description ?? 'A mission-driven brand inside the CraftworldCentre ecosystem.'
 
-            <FadeIn delay={0.15}>
-              <div className="grid grid-cols-2 gap-3 h-[400px]">
-                <div className="row-span-2 rounded-2xl overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80"
-                    alt="Craftwork"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="rounded-2xl overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80"
-                    alt="Upcycled planters"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="rounded-2xl overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80"
-                    alt="Handcrafted bag"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 sm:py-24 bg-[#f8fafb]">
-        <div className="container-max section-padding">
-          <FadeIn>
-            <div className="text-center mb-14">
-              <span className="inline-block text-teal-500 text-xs font-semibold uppercase tracking-widest bg-teal-50 px-4 py-2 rounded-full border border-teal-100 mb-4">
-                What We Stand For
-              </span>
-              <h2 className="font-display font-bold text-[#0d1f22]" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)' }}>
-                Our <span className="italic text-teal-500">Values</span>
-              </h2>
-            </div>
-          </FadeIn>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {VALUES.map((v, i) => {
-              const Icon = v.icon
-              return (
-                <FadeIn key={v.title} delay={i * 0.08}>
-                  <div className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 h-full">
-                    <div className="w-11 h-11 rounded-xl bg-teal-50 flex items-center justify-center mb-4">
-                      <Icon sx={{ fontSize: 22, color: '#1A7A8A' }} />
-                    </div>
-                    <h3 className="font-display font-semibold text-gray-900 text-lg mb-2">{v.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">{v.body}</p>
-                  </div>
-                </FadeIn>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="timeline" className="py-20 sm:py-28 bg-white">
-        <div className="container-max section-padding">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <span className="inline-block text-teal-500 text-xs font-semibold uppercase tracking-widest bg-teal-50 px-4 py-2 rounded-full border border-teal-100 mb-4">
-                Our Journey
-              </span>
-              <h2 className="font-display font-bold text-[#0d1f22]" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)' }}>
-                From Workshop to <span className="italic text-teal-500">Marketplace</span>
-              </h2>
-            </div>
-          </FadeIn>
-
-          <div className="max-w-2xl mx-auto relative">
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-200 via-teal-300 to-transparent" />
-            <div className="space-y-10">
-              {TIMELINE.map((item, i) => (
-                <FadeIn key={item.year} delay={i * 0.1}>
-                  <div className="flex gap-6 relative">
-                    <div className="flex-shrink-0 z-10">
-                      <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-md bg-white border-2"
-                        style={{ borderColor: item.color }}
-                      >
-                        <item.icon className="w-8 h-8" style={{ color: item.color }} />
-                      </div>
-                    </div>
-                    <div className="flex-1 pt-2">
-                      <div className="flex items-center gap-3 mb-1">
-                        <span className="font-mono font-bold text-sm" style={{ color: item.color }}>
-                          {item.year}
+          return (
+            <section key={brand.id} id={brand.id} className={`py-20 sm:py-28 ${isEven ? 'bg-[#f8fafb]' : 'bg-white'}`}>
+              <div className="container-max section-padding">
+                <div className={`grid grid-cols-1 lg:grid-cols-2 gap-14 items-center ${!isEven ? 'lg:grid-flow-dense' : ''}`}>
+                  <div className={!isEven ? 'lg:col-start-2' : ''}>
+                    <FadeIn>
+                      <div className="flex items-center gap-3 mb-5">
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-md" style={{ backgroundColor: color }}>
+                          {brand.id === 'craftworld' ? '🔄' : brand.id === 'adulawo' ? '🏺' : '🌍'}
+                        </div>
+                        <div>
+                          <h2 className="font-display font-bold text-[#0d1f22] text-2xl sm:text-3xl">{brand.name}</h2>
+                          <p className="text-sm italic" style={{ color }}>
+                            {tagline}
+                          </p>
+                        </div>
+                        <span
+                          className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-full border"
+                          style={{ borderColor: `${color}40`, color, backgroundColor: `${color}10` }}
+                        >
+                          {brand.id === 'craftworld' ? 'Flagship' : 'Partner'}
                         </span>
-                        <h3 className="font-display font-semibold text-gray-900">{item.title}</h3>
                       </div>
-                      <p className="text-sm text-gray-500 leading-relaxed">{item.body}</p>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="py-20 sm:py-28 bg-gradient-to-br from-[#f8fafb] to-white relative overflow-hidden">
-        <div className="container-max section-padding relative z-10">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <span className="inline-block text-teal-500 text-xs font-semibold uppercase tracking-widest bg-teal-50 px-4 py-2 rounded-full border border-teal-100 mb-4">
-                The People
-              </span>
-              <h2 className="font-display font-bold text-[#0d1f22] mb-4" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
-                Meet the <span className="italic text-teal-500">Visionaries</span>
-              </h2>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-                The team behind a circular economy movement that turns waste into dignified livelihoods and premium design.
-              </p>
-            </div>
-          </FadeIn>
+                      <p className="text-gray-600 leading-relaxed mb-6 text-base">{description}</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {TEAM.map((member, i) => (
-              <FadeIn key={member.name} delay={i * 0.15}>
-                <motion.div
-                  className="group relative bg-white rounded-3xl shadow-card hover:shadow-2xl p-8 text-center transition-all duration-500 hover:-translate-y-2 border border-gray-50 overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                >
-                  <div
-                    className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-3xl"
-                    style={{ background: `linear-gradient(135deg, ${member.color}15, transparent)` }}
-                  />
+                      <div className="grid grid-cols-3 gap-3 mb-6">
+                        {details.stats.map((s) => (
+                          <div key={s.l} className="bg-white rounded-2xl p-4 shadow-card text-center">
+                            <p className="font-display font-bold text-xl" style={{ color }}>
+                              {s.v}
+                            </p>
+                            <p className="text-[10px] text-gray-400 mt-0.5">{s.l}</p>
+                          </div>
+                        ))}
+                      </div>
 
-                  <div className="relative mb-6">
-                    <div
-                      className="w-24 h-24 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mx-auto shadow-xl transform group-hover:scale-110 transition-transform duration-300"
-                      style={{ backgroundColor: member.color }}
-                    >
-                      {member.initials}
-                    </div>
-                  </div>
+                      <div className="space-y-2.5 mb-7">
+                        {details.perks.map((p) => (
+                          <div key={p} className="flex items-start gap-2.5">
+                            <div
+                              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                              style={{ backgroundColor: `${color}15` }}
+                            >
+                              <CheckOutlined sx={{ fontSize: 12 }} style={{ color }} />
+                            </div>
+                            <p className="text-sm text-gray-600">{p}</p>
+                          </div>
+                        ))}
+                      </div>
 
-                  <div className="space-y-3">
-                    <h3 className="font-display font-bold text-[#0d1f22] text-lg">{member.name}</h3>
-                    <p
-                      className="text-sm font-semibold px-3 py-1 rounded-full inline-block"
-                      style={{ backgroundColor: `${member.color}15`, color: member.color }}
-                    >
-                      {member.role}
-                    </p>
-                    <p className="text-sm text-gray-600 leading-relaxed">{member.bio}</p>
+                      {focus.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-7">
+                          {focus.map((f) => (
+                            <span
+                              key={f}
+                              className="text-xs font-semibold px-3 py-1.5 rounded-full border"
+                              style={{ borderColor: `${color}30`, color, backgroundColor: `${color}08` }}
+                            >
+                              {f}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <Link
+                        to={`/shop?brand=${brand.id}`}
+                        className="inline-flex items-center gap-2 font-semibold text-sm px-6 py-3 rounded-full text-white transition-all duration-200 shadow-md hover:opacity-90 active:scale-95"
+                        style={{ backgroundColor: color }}
+                      >
+                        Shop {brand.name}
+                        <ArrowForwardOutlined sx={{ fontSize: 16 }} />
+                      </Link>
+                    </FadeIn>
                   </div>
 
-                  <div
-                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 group-hover:w-16 h-1 rounded-full transition-all duration-500 delay-100"
-                    style={{ backgroundColor: member.color }}
-                  />
-                </motion.div>
-              </FadeIn>
-            ))}
-          </div>
-
-          <FadeIn delay={0.4}>
-            <div className="mt-16 text-center">
-              <div className="inline-flex items-center gap-3 bg-white rounded-2xl shadow-card px-6 py-4 border border-gray-50">
-                <GroupsOutlined sx={{ fontSize: 20, color: '#1A7A8A' }} />
-                <span className="text-sm text-gray-600 font-medium">
-                  Part of a growing community of 50+ artisans and makers across Nigeria
-                </span>
+                  <div className={!isEven ? 'lg:col-start-1 lg:row-start-1' : ''}>
+                    <FadeIn delay={0.15}>
+                      <div className={`relative rounded-3xl overflow-hidden h-[400px] sm:h-[480px] bg-gradient-to-br ${details.gradient}`}>
+                        <div
+                          className="absolute inset-0 opacity-[0.06]"
+                          style={{
+                            backgroundImage:
+                              'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
+                          }}
+                        />
+                        <div
+                          className="absolute top-0 right-0 w-64 h-64 -translate-y-1/2 translate-x-1/2 rounded-full"
+                          style={{ background: `radial-gradient(circle, ${details.orb} 0%, transparent 70%)` }}
+                        />
+                        <img
+                          src={details.image}
+                          alt={brand.name}
+                          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-40"
+                        />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+                          <motion.div
+                            animate={{ rotate: [0, 8, -6, 0] }}
+                            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                            className="text-6xl mb-5"
+                          >
+                            {brand.id === 'craftworld' ? '🔄' : brand.id === 'adulawo' ? '🏺' : '🌍'}
+                          </motion.div>
+                          <h3 className="font-display font-bold text-white text-2xl mb-2">{brand.name}</h3>
+                          <p className={`text-sm font-medium italic mb-5 ${details.accentText}`}>"{tagline}"</p>
+                          <p className="text-white/50 text-xs">Nigeria</p>
+                        </div>
+                      </div>
+                    </FadeIn>
+                  </div>
+                </div>
               </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+            </section>
+          )
+        })}
+      </div>
 
       <section className="py-20 bg-white">
         <div className="container-max section-padding text-center">
           <FadeIn>
             <div className="max-w-xl mx-auto bg-gradient-to-br from-teal-50 to-white border border-teal-100 rounded-3xl p-10">
               <RecyclingOutlined sx={{ fontSize: 44, color: '#1A7A8A', marginBottom: '16px' }} />
-              <h2 className="font-display font-bold text-[#0d1f22] text-2xl sm:text-3xl mb-4">Ready to Shop Circular?</h2>
+              <h2 className="font-display font-bold text-[#0d1f22] text-2xl mb-3">Want to Partner With Us?</h2>
               <p className="text-gray-500 text-sm mb-7 leading-relaxed">
-                Every purchase is a vote for a better material economy. Find products with purpose, quality, and story.
+                If you&apos;re an artisan, upcycler, or circular-economy brand in Nigeria, let&apos;s build the next phase together.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link to="/shop" className="btn-primary">
-                  Shop All Products <ArrowForwardOutlined sx={{ fontSize: 16 }} />
+                <Link to="/contact" className="btn-primary inline-flex">
+                  Get in Touch
+                  <ArrowForwardOutlined sx={{ fontSize: 16 }} />
                 </Link>
-                <Link to="/partners" className="btn-outline">
-                  Meet Our Partners
+                <Link to="/about" className="btn-outline inline-flex">
+                  <GroupsOutlined sx={{ fontSize: 16 }} />
+                  Learn Our Story
                 </Link>
               </div>
             </div>

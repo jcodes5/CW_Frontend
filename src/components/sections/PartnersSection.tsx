@@ -11,7 +11,6 @@ const BRAND_VISUALS = {
     orb2: 'rgba(26,122,138,0.3)',
     badge: 'bg-teal-400/20 text-teal-200 border-teal-400/30',
     btn: 'bg-teal-400 hover:bg-teal-300 text-teal-900',
-    icon: '🔄',
   },
   adulawo: {
     bg: 'from-amber-950 via-stone-900 to-[#1a1008]',
@@ -19,7 +18,6 @@ const BRAND_VISUALS = {
     orb2: 'rgba(139,105,20,0.3)',
     badge: 'bg-amber-400/20 text-amber-200 border-amber-400/30',
     btn: 'bg-amber-400 hover:bg-amber-300 text-amber-900',
-    icon: '🏺',
   },
   planet3r: {
     bg: 'from-green-950 via-emerald-900 to-[#0a1a0a]',
@@ -27,7 +25,6 @@ const BRAND_VISUALS = {
     orb2: 'rgba(61,107,45,0.3)',
     badge: 'bg-green-400/20 text-green-200 border-green-400/30',
     btn: 'bg-green-400 hover:bg-green-300 text-green-900',
-    icon: '🌍',
   },
 }
 
@@ -104,15 +101,15 @@ export default function PartnersSection() {
                 />
 
                 <div className="relative z-10">
-                  {/* Top: Icon + Badge */}
+                  {/* Top: Logo + Badge */}
                   <div className="flex items-start justify-between mb-6">
-                    <motion.div
+                    <motion.img
+                      src={brand.logo}
+                      alt={`${brand.name} logo`}
+                      className="w-17 h-16 object-contain"
                       animate={{ rotate: [0, 10, -5, 0] }}
                       transition={{ duration: 6, repeat: Infinity, delay: i }}
-                      className="text-4xl"
-                    >
-                      {v.icon}
-                    </motion.div>
+                    />
                     {brand.id === 'craftworld' && (
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${v.badge}`}>
                         Flagship
@@ -122,7 +119,7 @@ export default function PartnersSection() {
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${v.badge}`}>
                         Partner
                       </span>
-                    )}
+                    )}  
                   </div>
 
                   {/* Brand Name */}

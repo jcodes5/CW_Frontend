@@ -9,7 +9,6 @@ import {
   CloseOutlined,
   FavoriteBorderOutlined,
   ExpandMoreOutlined,
-  RecyclingOutlined,
 } from '@mui/icons-material'
 import { useAuthStore } from '@/store/authStore'
 import { useCartStore } from '@/store/cartStore'
@@ -70,14 +69,12 @@ export default function Navbar() {
   }
 
   // Styles driven by transparency state
-  // When at hero section (not scrolled), use white background with black text for visibility
+  // When at hero section (not scrolled), ensure logo remains visible against potentially dark background
   const navBg = isTransparent
   ? 'bg-white/90'
   : 'bg-white backdrop-blur-md shadow-sm border-b border-gray-100'
   const navText  = isTransparent ? 'text-gray-900' : 'text-gray-800'
-  const logoColor = isTransparent ? '#1A7A8A'   : '#1A7A8A'
-  const logoBg   = isTransparent ? '#ffffff'    : '#1A7A8A'
-  const logoIcon = isTransparent ? '#1A7A8A'    : '#ffffff'
+  const logoColor = isTransparent ? '#ffffff'   : '#1A7A8A'
   // Ensure navbar stays above hero content
   const navZIndex = isTransparent ? 'z-[100]' : 'z-50'
 
@@ -102,14 +99,16 @@ export default function Navbar() {
               className="flex items-center gap-2.5 group flex-shrink-0"
               aria-label="CraftworldCentre Home"
             >
-              <motion.div
+              <motion.img
+                src="/logos/craftworld.png"
+                alt="Craftworld Logo"
+                className="w-12 h-12 object-contain transition-opacity duration-300"
+                style={{ 
+                  filter: isTransparent ? 'invert(1) brightness(0.9)' : 'none',
+                }}
                 whileHover={{ rotate: 180 }}
                 transition={{ duration: 0.4 }}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300"
-                style={{ backgroundColor: logoBg }}
-              >
-                <RecyclingOutlined sx={{ fontSize: 17, color: logoIcon }} />
-              </motion.div>
+              />
               <div className="hidden sm:block">
                 <span
                   className="font-display font-bold text-lg leading-tight block transition-colors duration-300"
