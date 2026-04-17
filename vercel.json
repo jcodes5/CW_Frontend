@@ -4,16 +4,17 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { 
+      "config": {
         "distDir": "dist",
         "buildCommand": "npm run build"
       }
     }
   ],
   "routes": [
+    { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "env": {
-    "VITE_API_BASE_URL": "https://your-render-backend-url.onrender.com/api/v1"
+    "VITE_API_BASE_URL": "https://cw-backend-xd5s.onrender.com/api/v1"
   }
 }
