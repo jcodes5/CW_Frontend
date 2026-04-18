@@ -115,6 +115,6 @@ export default function ResendVerificationPage() {
           </Link>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   )
 }

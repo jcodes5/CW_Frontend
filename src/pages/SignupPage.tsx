@@ -77,11 +77,9 @@ export default function SignupPage() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
-      const result = await registerUser(data)
-      if (result?.success) {
-        setRegistrationSuccess(true)
-        addToast({ type: 'success', message: 'Account created! Please check your email to verify your account.' })
-      }
+      await registerUser(data)
+      setRegistrationSuccess(true)
+      addToast({ type: 'success', message: 'Account created! Please check your email to verify your account.' })
     } catch {
       // error from store
     }

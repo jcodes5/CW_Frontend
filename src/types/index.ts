@@ -23,6 +23,8 @@ export interface AuthState {
   loginWithOAuth: (provider: 'google' | 'facebook') => Promise<void>
   handleOAuthCallback: (token: string) => Promise<void>
   logout: () => void
+  verifyEmail: (token: string) => Promise<void>
+  resendVerification: (email: string) => Promise<void>
   clearError: () => void
   updateUser: (userData: Partial<User>) => void
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { CheckCircle, XCircle, AlertCircle, RecyclingOutlined } from '@mui/icons-material'
+import { CheckCircle, Error, Warning, RecyclingOutlined } from '@mui/icons-material'
 import { useAuthStore } from '@/store/authStore'
 
 type VerificationState = 'loading' | 'success' | 'error' | 'expired'
@@ -86,7 +86,7 @@ export default function VerifyEmailPage() {
             className="text-center"
           >
             <div className="w-16 h-16 mx-auto mb-6 bg-yellow-100 rounded-full flex items-center justify-center">
-              <AlertCircle sx={{ fontSize: 32, color: '#f59e0b' }} />
+              <Warning sx={{ fontSize: 32, color: '#f59e0b' }} />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Link Expired</h2>
             <p className="text-gray-600 mb-6">{message}</p>
@@ -107,7 +107,7 @@ export default function VerifyEmailPage() {
             className="text-center"
           >
             <div className="w-16 h-16 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
-              <XCircle sx={{ fontSize: 32, color: '#ef4444' }} />
+              <Error sx={{ fontSize: 32, color: '#ef4444' }} />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Verification Failed</h2>
             <p className="text-gray-600 mb-6">{message}</p>
