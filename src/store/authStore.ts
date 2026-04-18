@@ -22,8 +22,21 @@ export const useAuthStore = create<AuthState>()(
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(credentials),
             })
-            const data = await res.json()
-            if (!res.ok) throw new Error(data.message || 'Login failed')
+
+            let data
+            try {
+              data = await res.json()
+            } catch {
+              // Handle non-JSON responses (like HTML error pages)
+              if (res.status >= 500) {
+                throw new Error('Server error. Please try again later.')
+              }
+              throw new Error('Invalid response from server')
+            }
+
+            if (!res.ok) {
+              throw new Error(data.message || `Login failed (${res.status})`)
+            }
 
             set({
               user: data.data.user,
@@ -33,9 +46,17 @@ export const useAuthStore = create<AuthState>()(
               error: null,
             })
           } catch (err) {
+            let errorMessage = 'Login failed'
+
+            if (err instanceof TypeError && err.message.includes('fetch')) {
+              errorMessage = 'Unable to connect to server. Please check your internet connection.'
+            } else if (err instanceof Error) {
+              errorMessage = err.message
+            }
+
             set({
               isLoading: false,
-              error: err instanceof Error ? err.message : 'Login failed',
+              error: errorMessage,
             })
             throw err
           }
@@ -62,8 +83,21 @@ export const useAuthStore = create<AuthState>()(
             const res = await fetch(`${API_BASE}/auth/me`, {
               headers: { Authorization: `Bearer ${token}` },
             })
-            const data = await res.json()
-            if (!res.ok) throw new Error(data.message || 'Failed to get user data')
+
+            let data
+            try {
+              data = await res.json()
+            } catch {
+              // Handle non-JSON responses
+              if (res.status >= 500) {
+                throw new Error('Server error. Please try again later.')
+              }
+              throw new Error('Invalid response from server')
+            }
+
+            if (!res.ok) {
+              throw new Error(data.message || `Failed to get user data (${res.status})`)
+            }
 
             set({
               user: data.data,
@@ -73,9 +107,17 @@ export const useAuthStore = create<AuthState>()(
               error: null,
             })
           } catch (err) {
+            let errorMessage = 'OAuth login failed'
+
+            if (err instanceof TypeError && err.message.includes('fetch')) {
+              errorMessage = 'Unable to connect to server. Please check your internet connection.'
+            } else if (err instanceof Error) {
+              errorMessage = err.message
+            }
+
             set({
               isLoading: false,
-              error: err instanceof Error ? err.message : 'OAuth callback failed',
+              error: errorMessage,
             })
             throw err
           }
@@ -89,8 +131,21 @@ export const useAuthStore = create<AuthState>()(
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(data),
             })
-            const resData = await res.json()
-            if (!res.ok) throw new Error(resData.message || 'Registration failed')
+
+            let resData
+            try {
+              resData = await res.json()
+            } catch {
+              // Handle non-JSON responses (like HTML error pages)
+              if (res.status >= 500) {
+                throw new Error('Server error. Please try again later.')
+              }
+              throw new Error('Invalid response from server')
+            }
+
+            if (!res.ok) {
+              throw new Error(resData.message || `Registration failed (${res.status})`)
+            }
 
             set({
               user: resData.data.user,
@@ -100,9 +155,17 @@ export const useAuthStore = create<AuthState>()(
               error: null,
             })
           } catch (err) {
+            let errorMessage = 'Registration failed'
+
+            if (err instanceof TypeError && err.message.includes('fetch')) {
+              errorMessage = 'Unable to connect to server. Please check your internet connection.'
+            } else if (err instanceof Error) {
+              errorMessage = err.message
+            }
+
             set({
               isLoading: false,
-              error: err instanceof Error ? err.message : 'Registration failed',
+              error: errorMessage,
             })
             throw err
           }
