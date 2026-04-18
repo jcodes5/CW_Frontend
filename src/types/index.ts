@@ -17,6 +17,7 @@ export interface AuthState {
   isAuthenticated: boolean
   isLoading: boolean
   error: string | null
+  successMessage: string | null
   login: (credentials: LoginCredentials) => Promise<void>
   register: (data: RegisterData) => Promise<void>
   loginWithOAuth: (provider: 'google' | 'facebook') => Promise<void>

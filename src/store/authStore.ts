@@ -13,6 +13,7 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: false,
         isLoading: false,
         error: null,
+        successMessage: null,
 
         login: async (credentials: LoginCredentials) => {
           set({ isLoading: true, error: null })
@@ -35,6 +36,11 @@ export const useAuthStore = create<AuthState>()(
             }
 
             if (!res.ok) {
+              // Special handling for unverified accounts
+              if (data.message?.includes('verify your email')) {
+                set({ isLoading: false, error: data.message })
+                throw new Error(data.message)
+              }
               throw new Error(data.message || `Login failed (${res.status})`)
             }
 
@@ -147,13 +153,14 @@ export const useAuthStore = create<AuthState>()(
               throw new Error(resData.message || `Registration failed (${res.status})`)
             }
 
+            // Registration successful - user will need to verify email before logging in
             set({
-              user: resData.data.user,
-              token: resData.data.accessToken,
-              isAuthenticated: true,
               isLoading: false,
               error: null,
             })
+
+            // Return success indicator for UI handling
+          set({ successMessage: 'Account created successfully. Please check your email to verify your account.' })
           } catch (err) {
             let errorMessage = 'Registration failed'
 
@@ -178,6 +185,82 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: false,
             error: null,
           })
+        },
+
+        verifyEmail: async (token: string) => {
+          set({ isLoading: true, error: null })
+          try {
+            const res = await fetch(`${API_BASE}/auth/verify-email`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token }),
+            })
+
+            let data
+            try {
+              data = await res.json()
+            } catch {
+              if (res.status >= 500) {
+                throw new Error('Server error. Please try again later.')
+              }
+              throw new Error('Invalid response from server')
+            }
+
+            if (!res.ok) {
+              throw new Error(data.message || `Verification failed (${res.status})`)
+            }
+
+            set({ isLoading: false, error: null })
+          } catch (err) {
+            let errorMessage = 'Verification failed'
+
+            if (err instanceof TypeError && err.message.includes('fetch')) {
+              errorMessage = 'Unable to connect to server. Please check your internet connection.'
+            } else if (err instanceof Error) {
+              errorMessage = err.message
+            }
+
+            set({ isLoading: false, error: errorMessage })
+            throw err
+          }
+        },
+
+        resendVerification: async (email: string) => {
+          set({ isLoading: true, error: null })
+          try {
+            const res = await fetch(`${API_BASE}/auth/resend-verification`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email }),
+            })
+
+            let data
+            try {
+              data = await res.json()
+            } catch {
+              if (res.status >= 500) {
+                throw new Error('Server error. Please try again later.')
+              }
+              throw new Error('Invalid response from server')
+            }
+
+            if (!res.ok) {
+              throw new Error(data.message || `Failed to resend verification (${res.status})`)
+            }
+
+            set({ isLoading: false, error: null })
+          } catch (err) {
+            let errorMessage = 'Failed to resend verification email'
+
+            if (err instanceof TypeError && err.message.includes('fetch')) {
+              errorMessage = 'Unable to connect to server. Please check your internet connection.'
+            } else if (err instanceof Error) {
+              errorMessage = err.message
+            }
+
+            set({ isLoading: false, error: errorMessage })
+            throw err
+          }
         },
 
         clearError: () => set({ error: null }),

@@ -25,6 +25,8 @@ const NotFoundPage          = lazy(() => import('@/pages/NotFoundPage'))
 // ── Auth (fullscreen) ─────────────────────────────────────────
 const LoginPage             = lazy(() => import('@/pages/LoginPage'))
 const SignupPage            = lazy(() => import('@/pages/SignupPage'))
+const VerifyEmailPage       = lazy(() => import('@/pages/VerifyEmailPage'))
+const ResendVerificationPage = lazy(() => import('@/pages/ResendVerificationPage'))
 const OAuthCallbackPage     = lazy(() => import('@/pages/OAuthCallbackPage'))
 const ForgotPasswordPage    = lazy(() => import('@/pages/info/ForgotPasswordPage'))
 
@@ -64,7 +66,7 @@ const AdminDIY        = lazy(() => import('@/pages/admin/AdminDIY'))
 const AdminHeroImages = lazy(() => import('@/pages/admin/AdminHeroImages'))
 
 // ── Helpers ───────────────────────────────────────────────────
-const CHROME_FREE = ['/login', '/signup', '/checkout', '/order-confirmation', '/forgot-password', '/admin']
+const CHROME_FREE = ['/login', '/signup', '/verify-email', '/resend-verification', '/checkout', '/order-confirmation', '/forgot-password', '/admin']
 const hideChrome  = (path: string) => CHROME_FREE.some((r) => path.startsWith(r))
 
 function PageLoader() {
@@ -121,10 +123,12 @@ export default function App() {
             <Route path="/orders"   element={<ProtectedRoute><Wrap><OrdersPage /></Wrap></ProtectedRoute>} />
 
             {/* Auth — fullscreen */}
-            <Route path="/login"           element={<LoginPage />} />
-            <Route path="/signup"          element={<SignupPage />} />
-            <Route path="/oauth/callback"  element={<OAuthCallbackPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/login"                element={<LoginPage />} />
+            <Route path="/signup"               element={<SignupPage />} />
+            <Route path="/verify-email"         element={<VerifyEmailPage />} />
+            <Route path="/resend-verification"  element={<ResendVerificationPage />} />
+            <Route path="/oauth/callback"       element={<OAuthCallbackPage />} />
+            <Route path="/forgot-password"      element={<ForgotPasswordPage />} />
 
             {/* Checkout — fullscreen */}
             <Route path="/checkout"        element={<CheckoutPage />} />

@@ -49,6 +49,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [passwordValue, setPasswordValue] = useState('')
+  const [registrationSuccess, setRegistrationSuccess] = useState(false)
   const { register: registerUser, loginWithOAuth, isLoading, error, isAuthenticated, clearError } = useAuthStore()
   const addToast = useUIStore((s) => s.addToast)
   const navigate = useNavigate()
@@ -76,11 +77,48 @@ export default function SignupPage() {
 
   const onSubmit = async (data: RegisterData) => {
     try {
-      await registerUser(data)
-      addToast({ type: 'success', message: 'Welcome to CraftworldCentre!' })
+      const result = await registerUser(data)
+      if (result?.success) {
+        setRegistrationSuccess(true)
+        addToast({ type: 'success', message: 'Account created! Please check your email to verify your account.' })
+      }
     } catch {
       // error from store
     }
+  }
+
+  if (registrationSuccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md w-full text-center"
+        >
+          <div className="w-16 h-16 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+            <RecyclingOutlined sx={{ fontSize: 32, color: '#22c55e' }} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Account Created!</h2>
+          <p className="text-gray-600 mb-6">
+            We've sent a verification link to your email address. Please check your inbox and click the link to verify your account before signing in.
+          </p>
+          <div className="space-y-3">
+            <Link
+              to="/login"
+              className="block bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition-colors"
+            >
+              Go to Sign In
+            </Link>
+            <button
+              onClick={() => setRegistrationSuccess(false)}
+              className="block text-teal-600 hover:underline font-semibold mx-auto"
+            >
+              Create Another Account
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
