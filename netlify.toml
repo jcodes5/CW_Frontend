@@ -15,4 +15,4 @@
   VITE_PAYSTACK_PUBLIC_KEY = "pk_test_114c21fffccc16b3ef3582d43192e6a5841c48dd"
   VITE_SOCKET_URL = "https://cw-backend-xd5s.onrender.com"
   VITE_APP_NAME = "CraftworldCentre"
-  VITE_APP_URL = "https://your-netlify-site.netlify.app"
+  VITE_APP_URL = "https://ctaftworldcentre.netlify.app"
