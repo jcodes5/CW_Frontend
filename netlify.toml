@@ -9,8 +9,8 @@
 
 [build.environment]
   VITE_API_BASE_URL = "https://cw-backend-xd5s.onrender.com/api/v1"
-  VITE_CLOUDINARY_CLOUD_NAME = "dfg39b8ns"
-  VITE_CLOUDINARY_UPLOAD_PRESET = "craftworld_unsigned"
+  VITE_CLOUDINARY_CLOUD_NAME = "dakxoin3j"
+  VITE_CLOUDINARY_UPLOAD_PRESET = "craftworld"
   VITE_PAYMENT_PROVIDER = "paystack"
   VITE_PAYSTACK_PUBLIC_KEY = "pk_test_114c21fffccc16b3ef3582d43192e6a5841c48dd"
   VITE_SOCKET_URL = "https://cw-backend-xd5s.onrender.com"
