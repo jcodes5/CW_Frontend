@@ -139,16 +139,8 @@ export default function DIYPage() {
   const [activeCategory, setCategory] = useState('All')
   const [searchQuery, setSearch]      = useState('')
   const [total, setTotal]             = useState(0)
-  // FIX: progress bar width driven by state instead of a motion animation
-  // inside a deeply nested component — avoids stale ref issues on first mount.
-  const [progressWidth, setProgressWidth] = useState(0)
 
   useEffect(() => { document.title = 'DIY & Craft Videos | CraftworldCentre' }, [])
-
-  useEffect(() => {
-    const t = setTimeout(() => setProgressWidth(65), 1600)
-    return () => clearTimeout(t)
-  }, [])
 
   useEffect(() => {
     setLoading(true)
@@ -171,24 +163,24 @@ export default function DIYPage() {
      
       <section id="hero" className="relative overflow-hidden bg-white">
   <div
-    className="absolute inset-0 opacity-[0.045] pointer-events-none"
-    style={{
-      backgroundImage: 'radial-gradient(circle, #1A7A8A 1px, transparent 1px)',
-      backgroundSize: '28px 28px',
-    }}
-  />
+  className="absolute inset-0 opacity-[0.045] pointer-events-none z-0"
+  style={{
+    backgroundImage: 'radial-gradient(circle, #1A7A8A 1px, transparent 1px)',
+    backgroundSize: '28px 28px',
+  }}
+/>
 
-  <div className="hidden lg:block absolute top-0 right-0 w-[52%] h-full bg-[#1A7A8A]/[0.035] rounded-bl-[80px] pointer-events-none" />
-  <div className="h-1 w-full bg-gradient-to-r from-[#7BC8D8] via-[#1A7A8A] to-[#7BC8D8]" />
+<div className="hidden lg:block absolute top-0 right-0 w-[45%] h-full bg-[#1A7A8A]/[0.035] rounded-tl-[80px] pointer-events-none z-0" />
+ <div className="h-1 w-full bg-gradient-to-r from-[#7BC8D8] via-[#1A7A8A] to-[#7BC8D8]" />
 
   <div className="relative z-10 container-max px-4 sm:px-6 lg:px-12 xl:px-16 pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-20 lg:pb-28">
-    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8 sm:gap-10 lg:gap-16 items-center lg:min-h-[82vh]">
+    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8 sm:gap-10 lg:gap-16 items-start lg:min-h-[82vh]">
 
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="space-y-6 sm:space-y-8 lg:space-y-10"
+        className="min-w-0 space-y-6 sm:space-y-8 lg:space-y-10"
       >
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -207,7 +199,7 @@ export default function DIYPage() {
           initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.1, ease: 'easeOut' }}
-          className="font-display font-black leading-[0.92] tracking-[-0.03em] text-[clamp(2.2rem,11vw,6rem)] text-gray-900"
+          className="font-display font-black leading-[0.92] tracking-[-0.03em]  text-[clamp(2.2rem,9vw,5rem)] text-gray-900"
         >
           Learn the
           <br />
@@ -255,7 +247,7 @@ export default function DIYPage() {
           transition={{ delay: 0.6 }}
         >
           <a
-            href="https://youtube.com/@craftworldcentre"
+            href="https://youtube.com/@planet3R"
             target="_blank"
             rel="noopener noreferrer"
             className="group w-full sm:flex-1 flex items-center justify-center gap-2.5 bg-[#1A7A8A] text-white font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-2xl hover:bg-[#115762] shadow-lg shadow-[#1A7A8A]/30 hover:shadow-[#1A7A8A]/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
@@ -282,46 +274,36 @@ export default function DIYPage() {
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-        className="relative h-[280px] sm:h-[420px] lg:h-auto w-full max-w-[620px] mx-auto"
+        className="relative min-w-0 h-[280px] sm:h-[420px] lg:h-auto w-full max-w-[620px] mx-auto"
       >
-        <div className="relative w-full max-w-sm sm:max-w-none mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-2xl shadow-[#1A7A8A]/25 border border-white/10 aspect-video">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1A7A8A]/40 to-[#8B6914]/40" />
+        <div className="relative w-full max-w-sm sm:max-w-none mx-auto rounded-2xl overflow-hidden shadow-2xl shadow-[#1A7A8A]/25 border border-white/10 aspect-video">
+  <video
+    controls
+    muted
+    className="absolute inset-0 w-full h-full object-cover"
+    poster="/logos/craftworld.png" // Optional poster image
+  >
+    <source src="/DIY video/Planet 3R.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.6, delay: 1.0, type: 'spring', stiffness: 200 }}
-              className="w-14 h-14 sm:w-16 sm:h-16 bg-[#1A7A8A] rounded-full flex items-center justify-center shadow-xl shadow-[#1A7A8A]/40 cursor-pointer hover:scale-110 transition-transform duration-300"
-            >
-              <PlayCircleOutlined sx={{ fontSize: 34, color: 'white' }} />
-            </motion.div>
-          </div>
+  {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-6 pb-3">
+    <div className="text-white font-semibold text-sm leading-snug mb-0.5">
+      From Plastic Bottles to Beautiful Baskets
+    </div>
+    <div className="text-white/60 text-xs">Adúláwò Artisan Workshop</div>
+  </div> */}
 
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-6 pb-3">
-            <div className="text-white font-semibold text-sm leading-snug mb-0.5">
-              From Plastic Bottles to Beautiful Baskets
-            </div>
-            <div className="text-white/60 text-xs">Adúláwò Artisan Workshop</div>
-          </div>
+  {/* <div className="absolute top-3 right-3 bg-black/60 text-white text-xs font-mono font-bold px-2 py-0.5 rounded-md">
+    12:34
+  </div> */}
 
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/15">
-            <div
-              className="h-full bg-[#7BC8D8] transition-all duration-[2000ms] ease-out rounded-full"
-              style={{ width: `${progressWidth}%` }}
-            />
-          </div>
-
-          <div className="absolute top-3 right-3 bg-black/60 text-white text-xs font-mono font-bold px-2 py-0.5 rounded-md">
-            12:34
-          </div>
-
-          <div className="absolute top-3 left-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-[#1A7A8A]/80 text-white px-2 py-1 rounded-full backdrop-blur-sm">
-              Upcycling
-            </span>
-          </div>
-        </div>
+  <div className="absolute top-3 left-3">
+    <span className="text-[10px] font-bold uppercase tracking-wider bg-[#1A7A8A]/80 text-white px-2 py-1 rounded-full backdrop-blur-sm">
+      Planet3R
+    </span>
+  </div>
+</div>
 
         <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-3 sm:mt-4">
           {SHOWCASE_VIDEOS.map((vid, i) => (
@@ -357,11 +339,11 @@ export default function DIYPage() {
           </div>
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.0, duration: 0.5 }}
-          className="hidden sm:flex absolute -left-5 top-1/4 -translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-4 py-3 items-center gap-3"
+          className="hidden sm:flex absolute -left-0 top-1/4 -translate-y-1/2 bg-white rounded-2xl shadow-xl shadow-black/10 border border-gray-100/80 px-4 py-3 items-center gap-3"
         >
           <div className="w-9 h-9 bg-[#7BC8D8]/20 rounded-xl flex items-center justify-center flex-shrink-0">
             <PlayCircleOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} />
@@ -370,9 +352,9 @@ export default function DIYPage() {
             <div className="text-[#1A7A8A] font-black text-base leading-none">50+</div>
             <div className="text-gray-400 text-[11px] mt-0.5">Free Videos</div>
           </div>
-        </motion.div>
+        </motion.div> */}
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.25, duration: 0.5 }}
@@ -383,7 +365,7 @@ export default function DIYPage() {
             <div className="text-[#1A7A8A] font-black text-base leading-none">12</div>
             <div className="text-gray-400 text-[11px] mt-0.5">Artisans</div>
           </div>
-        </motion.div>
+        </motion.div> */}
 
         <div className="hidden sm:block absolute -bottom-6 -right-6 w-28 h-28 rounded-full border-[3px] border-[#7BC8D8]/30 pointer-events-none" />
         <div className="hidden sm:block absolute -bottom-3 -right-3 w-14 h-14 rounded-full bg-[#1A7A8A]/10 pointer-events-none" />
@@ -393,8 +375,6 @@ export default function DIYPage() {
 
   <div className="h-px w-full bg-gradient-to-r from-transparent via-[#7BC8D8]/50 to-transparent" />
 </section>
-
-      {/* ── END HERO — all JSX correctly closed above ── */}
 
       {/* ── VIDEO CONTENT ── */}
       <div id="video-grid" className="container-max section-padding py-10">
@@ -485,7 +465,7 @@ export default function DIYPage() {
               </h3>
             </div>
             <a
-              href="https://youtube.com/@craftworldcentre"
+              href="https://youtube.com/@planet3R"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold
