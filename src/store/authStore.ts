@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
 import type { AuthState, LoginCredentials, RegisterData } from '@/types'
 
-const API_BASE = '/api/v1'
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api/v1'
 
 export const useAuthStore = create<AuthState>()(
   devtools(
