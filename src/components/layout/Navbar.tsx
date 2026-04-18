@@ -103,11 +103,11 @@ export default function Navbar() {
                 src="/logos/craftworld.png"
                 alt="Craftworld Logo"
                 className="w-12 h-12 object-contain transition-opacity duration-300"
-                style={{ 
-                  filter: isTransparent ? 'invert(1) brightness(0.9)' : 'none',
-                }}
-                whileHover={{ rotate: 180 }}
-                transition={{ duration: 0.4 }}
+                // style={{ 
+                //   filter: isTransparent ? 'invert(1) brightness(0.9)' : 'none',
+                // }}
+                animate={{ rotate: [0, 10, -5, 0] }}
+                transition={{ duration: 6, repeat: Infinity }}
               />
               <div className="hidden sm:block">
                 <span
@@ -262,7 +262,7 @@ export default function Navbar() {
                   </motion.div>
                 </Link>
               ) : (
-                <div className=" sm:flex items-center gap-2 ml-1">
+                <div className="hidden lg:flex items-center gap-2 ml-1">
                   <Link
                     to="/login"
                     className={`text-sm font-medium px-4 py-2 rounded-full transition-all
