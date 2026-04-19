@@ -383,8 +383,27 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Mobile auth */}
-                {!isAuthenticated && (
+                {/* Mobile account / auth */}
+                {isAuthenticated ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.25 }}
+                    className="flex flex-col gap-2 pt-3 border-t border-gray-100 mt-2"
+                  >
+                    <Link
+                      to="/account"
+                      className="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-teal-50
+                                   transition-colors font-medium text-sm text-gray-700"
+                      onClick={() => setIsMobileOpen(false)}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-sm font-bold text-white">
+                        {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+                      </div>
+                      My Account
+                    </Link>
+                  </motion.div>
+                ) : (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
