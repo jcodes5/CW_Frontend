@@ -7,38 +7,70 @@ export const NIGERIAN_STATES = [
   'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara',
 ]
 
-export const DELIVERY_ZONES: Record<string, { fee: number; days: string }> = {
-  'Lagos':        { fee: 2000,  days: '1–2 business days' },
-  'Ogun':         { fee: 2500,  days: '1–2 business days' },
-  'Oyo':          { fee: 3000,  days: '2–3 business days' },
-  'Osun':         { fee: 3000,  days: '2–3 business days' },
-  'Ekiti':        { fee: 3500,  days: '2–4 business days' },
-  'Ondo':         { fee: 3500,  days: '2–4 business days' },
-  'FCT - Abuja':  { fee: 3500,  days: '2–3 business days' },
-  'Rivers':       { fee: 4000,  days: '3–4 business days' },
-  'Edo':          { fee: 3500,  days: '2–4 business days' },
-  'Delta':        { fee: 3500,  days: '2–4 business days' },
-  'Anambra':      { fee: 4000,  days: '3–5 business days' },
-  'Enugu':        { fee: 4000,  days: '3–5 business days' },
-  'Imo':          { fee: 4000,  days: '3–5 business days' },
-  'Abia':         { fee: 4000,  days: '3–5 business days' },
-  'Kano':         { fee: 4500,  days: '3–5 business days' },
-  'Kaduna':       { fee: 4500,  days: '3–5 business days' },
-  'default':      { fee: 5000,  days: '4–7 business days' },
-}
+// Speedaf delivery zones based on the rate card
+export const SPEEDAF_ZONES: Record<string, { zone: string; baseRate: number; additionalRatePerKg: number; days: string }> = {
+  'Abeokuta': { zone: 'Zone 1', baseRate: 3500, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Lagos': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Akure': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Ado-Ekiti': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Ibadan': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Ogbomosho': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Oshogbo': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Ota': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Ilorin': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
+  'Aba': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Asaba': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Enugu': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Onitsha': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Owerri': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Umuahia': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Abuja': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Benin': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Calabar': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Port Harcourt': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Uyo': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Warri': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Yenagoa': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
+  'Lafia': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Lokoja': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Makurdi': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Minna': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Bauchi': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Jalingo': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Jos': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Gombe': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Maiduguri': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Damaturu': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Yola': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Kaduna': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Katsina': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Dutse': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Birnin Kebbi': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Sokoto': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Kano': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+};
 
 export const FREE_DELIVERY_THRESHOLD = 25000
 
-export function getDeliveryInfo(state: string, subtotal: number) {
+export function getDeliveryInfo(state: string, subtotal: number, weightInKg: number = 1) {
   const isFree = subtotal >= FREE_DELIVERY_THRESHOLD
-  const zone = DELIVERY_ZONES[state] ?? DELIVERY_ZONES.default
-  const label = isFree ? 'Free' : (state === 'Lagos' || state === 'Ogun' ? 'Express' : 'Standard')
+  const zone = SPEEDAF_ZONES[state] ?? SPEEDAF_ZONES['Kano'] // Default to Zone 4 if state not found
+  const label = isFree ? 'Free' : 'Speedaf Express'
+  
+  // Calculate the delivery fee based on weight
+  let fee = 0;
+  if (!isFree) {
+    // Base rate for first 0.5kg, then additional rate per kg
+    const additionalWeight = Math.max(0, Math.ceil(weightInKg - 0.5)); // Round up to next kg
+    fee = zone.baseRate + (additionalWeight * zone.additionalRatePerKg);
+  }
   
   return {
-    fee: isFree ? 0 : zone.fee,
+    fee: isFree ? 0 : fee,
     days: zone.days,
     isFree,
     label,
+    zone: zone.zone
   }
 }
 

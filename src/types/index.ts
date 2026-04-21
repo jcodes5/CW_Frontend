@@ -50,6 +50,7 @@ export interface Product {
   slug: string
   description: string
   price: number
+  weight: number
   comparePrice?: number
   images: string[]
   specifications?: Record<string, string>

@@ -6,7 +6,6 @@ import {
   PhoneOutlined,
   EmailOutlined,
   ArrowForwardOutlined,
-  ArrowBackOutlined,
   LocalShippingOutlined,
 } from '@mui/icons-material'
 import { useCartStore } from '@/store/cartStore'
@@ -24,9 +23,16 @@ export default function ReviewStep({ onNext, onBack }: ReviewStepProps) {
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
   const { shippingAddress, setStep } = useCheckoutStore()
 
+  // Calculate total weight of items in the cart
+  const totalWeight = items.reduce((sum, item) => {
+    // Using optional chaining for weight property which may not exist in the Product interface
+    const itemWeight = item.product?.weight ?? 0.5; // Default to 0.5kg per item if weight property doesn't exist
+    return sum + (itemWeight * item.quantity);
+  }, 0)
+
   if (!shippingAddress || !shippingAddress.state) return null
 
-  const deliveryInfo = getDeliveryInfo(shippingAddress.state, total)
+  const deliveryInfo = getDeliveryInfo(shippingAddress.state, total, totalWeight)
   const deliveryFee = deliveryInfo.fee
   const grandTotal = total + deliveryFee
 
@@ -96,7 +102,7 @@ export default function ReviewStep({ onNext, onBack }: ReviewStepProps) {
         <div className="flex items-center justify-between text-sm">
           <div>
             <p className="font-medium text-gray-800">{deliveryInfo.label} Delivery</p>
-            <p className="text-xs text-gray-500 mt-0.5">Estimated: {deliveryInfo.days}</p>
+            <p className="text-xs text-gray-500 mt-0.5">Zone: {deliveryInfo.zone}, Estimated: {deliveryInfo.days}</p>
           </div>
           <span className={`font-bold text-base ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
             {deliveryFee === 0 ? 'Free 🎉' : formatPrice(deliveryFee)}
@@ -156,22 +162,20 @@ export default function ReviewStep({ onNext, onBack }: ReviewStepProps) {
       <div className="flex gap-3">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 px-5 py-3.5 rounded-xl border-2 border-gray-200
-                     text-gray-700 font-semibold text-sm hover:border-gray-300 hover:bg-gray-50
-                     transition-all duration-200"
+          className="flex-1 py-3.5 px-4 rounded-xl font-semibold text-gray-700
+                     bg-gray-100 hover:bg-gray-200 active:scale-[0.98] transition-all"
         >
-          <ArrowBackOutlined sx={{ fontSize: 16 }} /> Back
+          Back
         </button>
-        <motion.button
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={onNext}
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl
-                     bg-teal-500 text-white font-bold text-sm hover:bg-teal-600
-                     transition-all duration-200 shadow-brand hover:shadow-brand-lg"
+          className="flex-1 py-3.5 px-4 rounded-xl font-bold text-white
+                     bg-teal-600 hover:bg-teal-700 active:scale-[0.98] transition-all
+                     shadow-lg flex items-center justify-center gap-2"
         >
-          Proceed to Payment
+          Place Order
           <ArrowForwardOutlined sx={{ fontSize: 16 }} />
-        </motion.button>
+        </button>
       </div>
     </motion.div>
   )
