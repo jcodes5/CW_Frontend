@@ -1,8 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import {
-  PersonOutlined, EmailOutlined, PhoneOutlined,
-  HomeOutlined, LocationCityOutlined, ArrowForwardOutlined,
+ ArrowForwardOutlined,
 } from '@mui/icons-material'
 import { useCheckoutStore } from '@/store/checkoutStore'
 import { useAuthStore } from '@/store/authStore'

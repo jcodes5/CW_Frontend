@@ -19,6 +19,7 @@ const MOCK_PAST_ORDERS: Order[] = [
       {
         product: {
           id: 'cwc-001', name: 'Reclaimed Teak Coffee Table', slug: 'reclaimed-teak-coffee-table',
+          weight: 10,
           description: '', price: 85000, images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80'],
           category: { id: 'furniture', name: 'Furniture', slug: 'furniture', icon: '🪑' },
           brand: { id: 'craftworld', name: 'CraftworldCentre', logo: '', tagline: '', description: '', color: '#1A7A8A', accentColor: '#7BC8D8', focus: [] },
@@ -46,6 +47,7 @@ const MOCK_PAST_ORDERS: Order[] = [
       {
         product: {
           id: 'adl-001', name: 'Aso-oke Fragment Tote Bag', slug: 'asooke-fragment-tote-bag',
+          weight: 0.5,
           description: '', price: 15500, images: ['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80'],
           category: { id: 'fashion', name: 'Fashion', slug: 'fashion', icon: '👗' },
           brand: { id: 'adulawo', name: 'Adúláwò', logo: '', tagline: '', description: '', color: '#8B6914', accentColor: '#d4b896', focus: [] },
@@ -73,6 +75,7 @@ const MOCK_PAST_ORDERS: Order[] = [
       {
         product: {
           id: 'p3r-001', name: 'Recycled Plastic Planter Set', slug: 'recycled-plastic-planter-set',
+          weight: 0.8,
           description: '', price: 13500, images: ['https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80'],
           category: { id: 'home-decor', name: 'Home Décor', slug: 'home-decor', icon: '🏡' },
           brand: { id: 'planet3r', name: 'Planet 3R', logo: '', tagline: '', description: '', color: '#3d6b2d', accentColor: '#a8d4a0', focus: [] },
@@ -83,6 +86,7 @@ const MOCK_PAST_ORDERS: Order[] = [
       {
         product: {
           id: 'adl-002', name: 'Brass Offcut Pendant Necklace', slug: 'brass-offcut-pendant-necklace',
+          weight: 0.2,
           description: '', price: 9800, images: ['https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80'],
           category: { id: 'accessories', name: 'Accessories', slug: 'accessories', icon: '💍' },
           brand: { id: 'adulawo', name: 'Adúláwò', logo: '', tagline: '', description: '', color: '#8B6914', accentColor: '#d4b896', focus: [] },

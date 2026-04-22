@@ -423,7 +423,7 @@ export interface AuthResponse { user: User; accessToken: string }
 
 export interface Product {
   id: string; name: string; slug: string; description: string
-  price: number; comparePrice?: number; images: string[]
+  price: number; weight: number; comparePrice?: number; images: string[]
   specifications?: Record<string, string>
   category: { id: string; name: string; slug: string; icon: string }
   brand: { id: string; name: string; color: string; accentColor: string; tagline?: string; description?: string; logo?: string; focus?: string[] }
