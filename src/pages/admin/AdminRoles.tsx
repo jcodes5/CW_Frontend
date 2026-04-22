@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Trash2, UserCog, AlertCircle } from 'lucide-react'
 import axios from 'axios'
+import { useAuthStore } from '@/store/authStore'
 
 interface Admin {
   id: string
@@ -47,7 +48,7 @@ export function AdminRoles() {
     try {
       setLoading(true)
       setError(null)
-      const token = localStorage.getItem('accessToken')
+      const token = useAuthStore.getState().token
       const response = await axios.get(`${API_BASE}/admin/roles`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -85,7 +86,7 @@ export function AdminRoles() {
     try {
       setFormLoading(true)
       setFormError(null)
-      const token = localStorage.getItem('accessToken')
+      const token = useAuthStore.getState().token
 
       const response = await axios.post(
         `${API_BASE}/admin/roles`,
@@ -126,7 +127,7 @@ export function AdminRoles() {
     try {
       setRevoking(userId)
       setError(null)
-      const token = localStorage.getItem('accessToken')
+      const token = useAuthStore.getState().token
 
       const response = await axios.delete(`${API_BASE}/admin/roles/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
