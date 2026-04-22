@@ -33,7 +33,7 @@ export function AdminRoles() {
   // Form state
   const [formData, setFormData] = useState({
     email: '',
-    role: 'admin' as const,
+    role: 'admin' as 'admin' | 'super_admin',
   })
   const [formError, setFormError] = useState<string | null>(null)
   const [formLoading, setFormLoading] = useState(false)
@@ -264,6 +264,7 @@ export function AdminRoles() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
               <select
+               title='Role'
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'super_admin' })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"

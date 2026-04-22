@@ -6,7 +6,7 @@ export interface User {
   email: string
   phone?: string
   avatar?: string
-  role: 'customer' | 'admin' | 'vendor'
+  role: 'customer' | 'admin' | 'vendor' | 'super_admin'
   provider: 'local' | 'google' | 'facebook'
   createdAt: string
 }
