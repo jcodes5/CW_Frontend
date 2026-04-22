@@ -7,23 +7,24 @@ import {
   MenuOutlined, RecyclingOutlined,
   NotificationsOutlined, SettingsOutlined, ArrowForwardOutlined,
   YouTube, LocalOfferOutlined, RateReviewOutlined, ImageOutlined,
-  CreditCardOutlined,
+  CreditCardOutlined, AdminPanelSettingsOutlined,
 } from '@mui/icons-material'
 import Badge from '@mui/material/Badge'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
 
-const NAV = [
-  { to: '/admin',          label: 'Dashboard',  icon: DashboardOutlined,  exact: true  },
-  { to: '/admin/products', label: 'Products',   icon: InventoryOutlined,  exact: false },
-  { to: '/admin/orders',   label: 'Orders',     icon: ShoppingBagOutlined,exact: false },
-  { to: '/admin/payments', label: 'Payments',   icon: CreditCardOutlined, exact: false },
-  { to: '/admin/reviews',  label: 'Reviews',    icon: RateReviewOutlined, exact: false },
-  { to: '/admin/users',    label: 'Users',      icon: PeopleOutlined,     exact: false },
-  { to: '/admin/analytics',label: 'Analytics',  icon: BarChartOutlined,   exact: false },
-  { to: '/admin/coupons',  label: 'Coupons',    icon: LocalOfferOutlined,       exact: false },
-  { to: '/admin/diy',      label: 'DIY Videos', icon: YouTube,             exact: false },
-  { to: '/admin/hero-images', label: 'Hero Images', icon: ImageOutlined, exact: false },
+const NAV_ALL = [
+  { to: '/admin',          label: 'Dashboard',  icon: DashboardOutlined,  exact: true, superAdminOnly: false },
+  { to: '/admin/products', label: 'Products',   icon: InventoryOutlined,  exact: false, superAdminOnly: false },
+  { to: '/admin/orders',   label: 'Orders',     icon: ShoppingBagOutlined,exact: false, superAdminOnly: true },
+  { to: '/admin/payments', label: 'Payments',   icon: CreditCardOutlined, exact: false, superAdminOnly: true },
+  { to: '/admin/reviews',  label: 'Reviews',    icon: RateReviewOutlined, exact: false, superAdminOnly: true },
+  { to: '/admin/users',    label: 'Users',      icon: PeopleOutlined,     exact: false, superAdminOnly: true },
+  { to: '/admin/analytics',label: 'Analytics',  icon: BarChartOutlined,   exact: false, superAdminOnly: true },
+  { to: '/admin/coupons',  label: 'Coupons',    icon: LocalOfferOutlined,       exact: false, superAdminOnly: true },
+  { to: '/admin/diy',      label: 'DIY Videos', icon: YouTube,             exact: false, superAdminOnly: true },
+  { to: '/admin/hero-images', label: 'Hero Images', icon: ImageOutlined, exact: false, superAdminOnly: true },
+  { to: '/admin/roles',    label: 'Role Management', icon: AdminPanelSettingsOutlined, exact: false, superAdminOnly: true },
 ]
 
 export default function AdminLayout() {
@@ -62,18 +63,31 @@ export default function AdminLayout() {
                           text-white font-bold text-sm flex-shrink-0">
             {user?.firstName?.[0]?.toUpperCase() ?? 'A'}
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-white text-xs font-semibold truncate">
               {user?.firstName} {user?.lastName}
             </p>
-            <p className="text-white/40 text-[10px] truncate">{user?.email}</p>
+            <div className="flex items-center gap-2 mt-0.5">
+              <p className="text-white/40 text-[10px] truncate">{user?.email}</p>
+              <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-semibold whitespace-nowrap
+                ${user?.role === 'super_admin' 
+                  ? 'bg-purple-500/30 text-purple-200' 
+                  : 'bg-blue-500/30 text-blue-200'}`}>
+                {user?.role === 'super_admin' ? '⭐ Super' : 'Admin'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {NAV.map(({ to, label, icon: Icon, exact }) => (
+        {NAV_ALL.filter(item => {
+          // Show all items to super_admin
+          if (user?.role === 'super_admin') return true
+          // Show only non-super-admin items to regular admins
+          return !item.superAdminOnly
+        }).map(({ to, label, icon: Icon, exact }) => (
           <NavLink
             key={to}
             to={to}

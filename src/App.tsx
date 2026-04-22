@@ -9,6 +9,7 @@ import ProtectedRoute from '@/components/ui/ProtectedRoute'
 import AccountLayout from '@/components/account/AccountLayout'
 import AdminLayout from '@/components/admin/AdminLayout'
 import AdminRoute from '@/components/admin/AdminRoute'
+import SuperAdminRoute from '@/components/admin/SuperAdminRoute'
 
 // ── Public pages ──────────────────────────────────────────────
 const HomePage              = lazy(() => import('@/pages/HomePage'))
@@ -64,6 +65,7 @@ const AdminAnalytics  = lazy(() => import('@/pages/admin/AdminAnalytics'))
 const AdminCoupons    = lazy(() => import('@/pages/admin/AdminCoupons'))
 const AdminDIY        = lazy(() => import('@/pages/admin/AdminDIY'))
 const AdminHeroImages = lazy(() => import('@/pages/admin/AdminHeroImages'))
+const AdminRoles      = lazy(() => import('@/pages/admin/AdminRoles'))
 
 // ── Helpers ───────────────────────────────────────────────────
 const CHROME_FREE = ['/login', '/signup', '/verify-email', '/resend-verification', '/checkout', '/order-confirmation', '/forgot-password', '/admin']
@@ -159,6 +161,7 @@ export default function App() {
               <Route path="coupons"     element={<Wrap><AdminCoupons /></Wrap>} />
               <Route path="diy"         element={<Wrap><AdminDIY /></Wrap>} />
               <Route path="hero-images" element={<Wrap><AdminHeroImages /></Wrap>} />
+              <Route path="roles"       element={<SuperAdminRoute><Wrap><AdminRoles /></Wrap></SuperAdminRoute>} />
             </Route>
 
             {/* 404 */}
