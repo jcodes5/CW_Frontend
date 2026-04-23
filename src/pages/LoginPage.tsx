@@ -10,7 +10,6 @@ import {
   RecyclingOutlined,
   ArrowBackOutlined,
   Google as GoogleOutlined,
-  Facebook as FacebookOutlined,
 } from '@mui/icons-material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { AlertTriangle } from 'lucide-react'
@@ -191,7 +190,7 @@ export default function LoginPage() {
             </button>
 
             {/* Facebook OAuth */}
-            <button
+            {/* <button
               type="button"
               onClick={() => loginWithOAuth('facebook')}
               disabled={isLoading}
@@ -202,7 +201,7 @@ export default function LoginPage() {
             >
               <FacebookOutlined sx={{ fontSize: 18, color: '#1877F2' }} />
               Continue with Facebook
-            </button>
+            </button> */}
 
             {/* Divider */}
             <div className="flex items-center gap-3 mb-6">
