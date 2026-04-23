@@ -73,7 +73,7 @@ export const SPEEDAF_ZONES: Record<string, { zone: string; baseRate: number; add
 
 export const FREE_DELIVERY_THRESHOLD = 25000
 
-export function getDeliveryInfo(state: string, subtotal: number, weightInKg: number = 1) {
+export function getDeliveryInfo(state: string, subtotal: number, _weightInKg: number = 1) {
   const isFree = subtotal >= FREE_DELIVERY_THRESHOLD
   
   // Use backend delivery fee structure for consistency

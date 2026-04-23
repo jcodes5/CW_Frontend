@@ -11,7 +11,7 @@ import { useAuthStore } from '@/store/authStore'
 import { formatPrice } from '@/utils/mockData'
 import { FREE_DELIVERY_THRESHOLD, getDeliveryInfo } from '@/utils/nigeria'
 import { useUIStore } from '@/store/uiStore'
-import { couponsApi } from '@/services/api'
+import { couponsApi, addressesApi } from '@/services/api'
 
 export default function CartPage() {
   const items = useCartStore((s) => s.items)
@@ -27,11 +27,36 @@ export default function CartPage() {
   const [couponApplied, setCouponApplied] = React.useState<{ code: string; discount: number; type: string; value: number } | null>(null)
   const [couponLoading, setCouponLoading] = React.useState(false)
   const [couponError, setCouponError]   = React.useState('')
+  const [estimatedState, setEstimatedState] = React.useState('Lagos')
 
   useEffect(() => { document.title = 'Your Cart | CraftworldCentre' }, [])
 
+  useEffect(() => {
+    if (user) {
+      const fetchDefaultState = async () => {
+        try {
+          const response = await addressesApi.list();
+          const addresses = response.data || [];
+          const defaultAddr = addresses.find(addr => addr.isDefault);
+          if (defaultAddr) {
+            setEstimatedState(defaultAddr.state);
+          } else {
+            const firstAddr = addresses[0];
+            if (firstAddr) {
+              setEstimatedState(firstAddr.state);
+            }
+          }
+        } catch (err) {
+          // keep default 'Lagos'
+        }
+      };
+      fetchDefaultState();
+    } else {
+      setEstimatedState('Lagos');
+    }
+  }, [user])
+
   // Estimate delivery fee based on user's saved address state, or default estimate
-  const estimatedState = user?.defaultAddressState || 'Lagos'
   const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total).fee
   const deliveryFee = deliveryFeeEstimate
   const discount           = couponApplied?.discount ?? 0
