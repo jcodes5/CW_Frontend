@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   LockOutlined, ArrowBackOutlined, CheckCircleOutlined, InfoOutlined,
   CreditCardOutlined, AccountBalanceOutlined, PhoneIphoneOutlined, AccountBalanceWalletOutlined,
@@ -215,457 +215,256 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
-      className="space-y-6"
+      className="max-w-2xl mx-auto space-y-8"
     >
       {/* Header */}
-      <div className="text-center">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-          className="w-16 h-16 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
-        >
-          <LockOutlined sx={{ fontSize: 28, color: '#fff' }} />
-        </motion.div>
-        <h2 className="font-display font-bold text-[#0d1f22] text-2xl mb-2">Review & Pay</h2>
-        <p className="text-gray-600 text-sm">Verify your order and complete payment securely</p>
+      <div className="text-center pb-4">
+        <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <LockOutlined sx={{ fontSize: 20, color: '#0d9488' }} />
+        </div>
+        <h2 className="font-bold text-gray-900 text-xl mb-1">Review & Pay</h2>
+        <p className="text-gray-600 text-sm">Complete your secure payment</p>
       </div>
 
-      {/* ──────────────────────────────────────── */}
-      {/* ORDER REVIEW SECTION */}
-      {/* ──────────────────────────────────────── */}
+      {/* Order Review */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 rounded-2xl overflow-hidden shadow-sm"
+        className="bg-white border border-gray-200 rounded-xl shadow-sm"
       >
-        <div className="px-6 py-4 border-b border-teal-200 bg-white/50">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center">
-              <ShoppingBagOutlined sx={{ fontSize: 14, color: '#fff' }} />
-            </div>
-            <h3 className="font-semibold text-gray-900">Order Review ({items.length} item{items.length !== 1 ? 's' : ''})</h3>
-          </div>
+        <div className="px-4 py-3 border-b border-gray-100">
+          <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+            <ShoppingBagOutlined sx={{ fontSize: 16 }} />
+            Order Summary ({items.length} item{items.length !== 1 ? 's' : ''})
+          </h3>
         </div>
 
-        <div className="px-6 py-4 space-y-3 max-h-48 overflow-y-auto">
+        <div className="px-4 py-3 space-y-3">
           {items.map((item) => (
-            <motion.div
-              key={item.product.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex items-center justify-between py-2 border-b border-teal-100 last:border-0"
-            >
+            <div key={item.product.id} className="flex items-center justify-between">
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <img
                   src={item.product.images[0]}
                   alt={item.product.name}
-                  className="w-10 h-10 object-cover rounded-lg bg-gray-100 flex-shrink-0"
+                  className="w-12 h-12 object-cover rounded bg-gray-100 flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 line-clamp-1">{item.product.name}</p>
+                  <p className="text-sm font-medium text-gray-900 truncate">{item.product.name}</p>
                   <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                 </div>
               </div>
-              <span className="text-sm font-semibold text-teal-700 flex-shrink-0 ml-2">
+              <span className="text-sm font-semibold text-gray-900 flex-shrink-0">
                 {formatPrice(item.product.price * item.quantity)}
               </span>
-            </motion.div>
+            </div>
           ))}
         </div>
       </motion.div>
 
-      {/* Delivery address summary */}
+      {/* Delivery Address */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow"
+        className="bg-white border border-gray-200 rounded-xl p-4"
       >
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <LocalShippingOutlined sx={{ fontSize: 16, color: '#3b82f6' }} />
-            </div>
+            <LocalShippingOutlined sx={{ fontSize: 16, color: '#6b7280' }} />
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-medium">Shipping To</p>
+              <p className="text-xs text-gray-500 font-medium mb-1">Shipping Address</p>
               <p className="font-semibold text-gray-900 text-sm">
                 {shippingAddress.firstName} {shippingAddress.lastName}
               </p>
-              <p className="text-sm text-gray-600 mt-1">{shippingAddress.addressLine1}</p>
+              <p className="text-sm text-gray-600">{shippingAddress.addressLine1}</p>
               <p className="text-sm text-gray-600">
-                {shippingAddress.city}, {shippingAddress.state}, Nigeria
+                {shippingAddress.city}, {shippingAddress.state}
               </p>
-              {shippingAddress.deliveryNotes && (
-                <p className="text-xs text-gray-500 italic mt-2">Note: {shippingAddress.deliveryNotes}</p>
-              )}
             </div>
           </div>
           <button
             onClick={onBack}
-            className="text-teal-600 text-xs font-semibold hover:text-teal-700 transition-colors flex items-center gap-1 whitespace-nowrap ml-4"
+            className="text-teal-600 text-sm font-medium hover:text-teal-700 flex items-center gap-1"
           >
-            <ArrowBackOutlined sx={{ fontSize: 12 }} />
             Change
           </button>
         </div>
       </motion.div>
 
-      {/* ──────────────────────────────────────── */}
-      {/* PROMO CODE SECTION */}
-      {/* ──────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm"
-      >
-        <label className="flex items-center gap-2 mb-4">
-          <PercentOutlined sx={{ fontSize: 18, color: '#f59e0b' }} />
-          <span className="font-semibold text-gray-900">Apply Promo Code</span>
-        </label>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Enter promo code (optional)"
-            defaultValue={couponCode || ''}
-            disabled
-            className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm
-                       text-gray-600 placeholder-gray-400 disabled:opacity-60"
-          />
-          <button
-            type="button"
-            disabled
-            className="px-6 py-2 bg-amber-100 text-amber-700 font-semibold rounded-xl text-sm
-                       hover:bg-amber-200 transition-colors disabled:opacity-50"
-          >
-            Apply
-          </button>
-        </div>
-        {couponCode && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2"
-          >
-            <CheckCircleOutlined sx={{ fontSize: 16, color: '#059669' }} />
-            <span className="text-sm text-green-700 font-medium">
-              Promo code applied: {couponCode} (-{formatPrice(discount || 0)})
-            </span>
-          </motion.div>
-        )}
-      </motion.div>
 
-      {/* ──────────────────────────────────────── */}
-      {/* PAYMENT METHOD SELECTION */}
-      {/* ──────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
-      >
+
+      {/* Payment Methods */}
+      <div>
         <div className="mb-4">
-          <h3 className="font-semibold text-gray-900 text-base">Select Payment Method</h3>
-          <p className="text-sm text-gray-600 mt-1">Choose how you'd like to pay</p>
+          <h3 className="font-semibold text-gray-900 text-lg">Payment Method</h3>
+          <p className="text-sm text-gray-600">Choose your preferred payment option</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {PAYMENT_METHODS.map((method, index) => {
+        <div className="space-y-3">
+          {PAYMENT_METHODS.map((method) => {
             const isWallet = method.id === 'wallet'
             const isDisabled = isWallet && (!user || isLoadingWallet || !canUseWallet)
             const isSelected = selectedMethod === method.id
 
             return (
-              <motion.button
+              <button
                 key={method.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.08 }}
-                whileHover={{ y: isDisabled ? 0 : -4 }}
-                whileTap={{ scale: isDisabled ? 1 : 0.97 }}
                 onClick={() => !isDisabled && setSelectedMethod(method.id)}
                 disabled={isDisabled}
-                className={`relative p-5 rounded-2xl border-2 transition-all duration-300 text-left group overflow-hidden
+                className={`w-full p-4 rounded-xl border-2 transition-all text-left
                            ${isSelected
-                             ? 'border-teal-500 bg-gradient-to-br from-teal-50 to-teal-100 shadow-lg shadow-teal-100'
-                             : 'border-gray-200 bg-white hover:border-teal-300 hover:shadow-md'
+                             ? 'border-teal-500 bg-teal-50'
+                             : 'border-gray-200 bg-white hover:border-teal-300'
                            } ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               >
-                {/* Background gradient on selection */}
-                <AnimatePresence>
-                  {isSelected && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className={`absolute inset-0 bg-gradient-to-br ${method.color} opacity-5`}
-                    />
-                  )}
-                </AnimatePresence>
-
-                <div className="relative z-10">
-                  {/* Header with icon and selection indicator */}
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`p-3 rounded-xl transition-colors
-                                   ${isSelected ? 'bg-teal-200 text-teal-700' : 'bg-gray-100 text-gray-500 group-hover:bg-teal-100 group-hover:text-teal-600'}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${isSelected ? 'bg-teal-100 text-teal-600' : 'bg-gray-100 text-gray-600'}`}>
                       {method.icon}
                     </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
-                                   ${isSelected ? 'border-teal-500 bg-teal-500' : 'border-gray-300 group-hover:border-teal-400'}`}>
-                      <AnimatePresence>
-                        {isSelected && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            exit={{ scale: 0 }}
-                          >
-                            <CheckCircleOutlined sx={{ fontSize: 12, color: '#fff' }} />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="space-y-2">
-                    <h4 className={`font-bold text-sm transition-colors
-                                  ${isSelected ? 'text-teal-900' : 'text-gray-900'}`}>
-                      {method.label}
-                    </h4>
-
-                    {isWallet && user ? (
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <div className={`text-xs font-bold px-3 py-1 rounded-full
-                                       ${canUseWallet
-                                         ? 'bg-green-100 text-green-700'
-                                         : 'bg-red-100 text-red-700'}`}>
-                          Balance: {formatPrice(walletBalance)}
-                        </div>
-                        {!canUseWallet && (
-                          <span className="text-xs text-red-600 font-semibold">
-                            Short by {formatPrice(grandTotal - walletBalance)}
+                    <div>
+                      <h4 className="font-medium text-gray-900">{method.label}</h4>
+                      {isWallet && user ? (
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className={`text-xs font-medium px-2 py-1 rounded-full
+                                          ${canUseWallet ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            Balance: {formatPrice(walletBalance)}
                           </span>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="text-xs text-gray-500 leading-tight">{method.desc}</p>
-                    )}
-
-                    {/* Benefits as badges */}
-                    <div className="flex flex-wrap gap-1.5 pt-2">
-                      {method.benefits.slice(0, 2).map((benefit, idx) => (
-                        <span key={idx} className={`text-[10px] font-semibold px-2 py-1 rounded-full
-                                                  ${isSelected
-                                                    ? 'bg-teal-200 text-teal-800'
-                                                    : 'bg-gray-100 text-gray-600'}`}>
-                          ✓ {benefit}
-                        </span>
-                      ))}
+                          {!canUseWallet && (
+                            <span className="text-xs text-red-600">
+                              Short by {formatPrice(grandTotal - walletBalance)}
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-600">{method.desc}</p>
+                      )}
                     </div>
                   </div>
+                  {isSelected && (
+                    <CheckCircleOutlined sx={{ fontSize: 20, color: '#0d9488' }} />
+                  )}
                 </div>
-
-                {/* Hover effect overlay */}
-                {!isDisabled && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                )}
-              </motion.button>
+              </button>
             )
           })}
         </div>
-      </motion.div>
+      </div>
 
-      {/* ──────────────────────────────────────── */}
-      {/* ENHANCED PRICING BREAKDOWN */}
-      {/* ──────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.45 }}
-        className="bg-gradient-to-br from-slate-900 via-teal-900 to-teal-800 rounded-2xl p-6 text-white shadow-2xl"
-      >
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-            <InfoOutlined sx={{ fontSize: 20, color: '#fff' }} />
-          </div>
-          <div>
-            <h4 className="font-bold text-white text-base">Order Total</h4>
-            <p className="text-teal-100 text-xs">Complete breakdown</p>
-          </div>
-        </div>
-
-        <div className="space-y-3 bg-black/20 rounded-xl p-4 mb-4">
+      {/* Order Total */}
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+        <div className="space-y-3">
           {/* Subtotal */}
           <div className="flex justify-between items-center">
-            <span className="text-teal-100 text-sm">Subtotal ({items.length} item{items.length !== 1 ? 's' : ''})</span>
-            <span className="text-white font-semibold">{formatPrice(total)}</span>
+            <span className="text-gray-700">Subtotal ({items.length} item{items.length !== 1 ? 's' : ''})</span>
+            <span className="font-semibold text-gray-900">{formatPrice(total)}</span>
           </div>
 
           {/* Delivery Fee */}
-          <div className="flex justify-between items-center border-t border-white/10 pt-3">
-            <span className="text-teal-100 text-sm">Delivery Fee</span>
-            <span className={`font-semibold ${deliveryFee === 0 ? 'text-green-400' : 'text-white'}`}>
+          <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+            <span className="text-gray-700">Delivery</span>
+            <span className={`font-semibold ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
               {deliveryFee === 0 ? 'FREE' : formatPrice(deliveryFee)}
             </span>
           </div>
 
           {/* Discount */}
-          {discount !== undefined && discount > 0 && (
-            <div className="flex justify-between items-center border-t border-white/10 pt-3">
-              <span className="text-teal-100 text-sm flex items-center gap-1">
+          {discount > 0 && (
+            <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+              <span className="text-gray-700 flex items-center gap-1">
                 <PercentOutlined sx={{ fontSize: 14 }} />
-                Discount Applied
+                Discount
               </span>
-              <span className="text-green-400 font-bold">-{formatPrice(discount)}</span>
+              <span className="text-green-600 font-semibold">-{formatPrice(discount)}</span>
             </div>
           )}
         </div>
 
         {/* Grand Total */}
-        <div className="bg-white/10 rounded-xl p-4 border border-white/20">
+        <div className="mt-4 pt-4 border-t border-gray-300">
           <div className="flex justify-between items-center">
-            <span className="text-white font-bold text-lg">Amount to Pay</span>
-            <span className="text-white font-black text-3xl">{formatPrice(grandTotal)}</span>
+            <span className="text-lg font-bold text-gray-900">Total</span>
+            <span className="text-xl font-bold text-gray-900">{formatPrice(grandTotal)}</span>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* ──────────────────────────────────────── */}
-      {/* ERROR ALERT */}
-      {/* ──────────────────────────────────────── */}
-      <AnimatePresence>
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="bg-red-50 border border-red-200 text-red-700 rounded-2xl px-5 py-4 flex items-start gap-3 shadow-sm"
-          >
-            <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-              <InfoOutlined sx={{ fontSize: 14, color: '#dc2626' }} />
-            </div>
-            <p className="text-sm font-medium leading-relaxed">{error}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Error Alert */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 flex items-start gap-3">
+          <InfoOutlined sx={{ fontSize: 16, color: '#dc2626' }} />
+          <p className="text-sm font-medium">{error}</p>
+        </div>
+      )}
 
-      {/* ──────────────────────────────────────── */}
-      {/* WEBHOOK POLLING STATUS */}
-      {/* ──────────────────────────────────────── */}
-      <AnimatePresence>
-        {webhook.isPolling && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="bg-blue-50 border border-blue-200 text-blue-700 rounded-2xl px-5 py-4 flex items-start gap-3 shadow-sm"
-          >
-            <div className="flex-shrink-0 mt-0.5">
-              <CircularProgress size={14} sx={{ color: '#3b82f6' }} />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium">Processing your payment...</p>
-              <p className="text-xs text-blue-600 mt-1">
-                Waiting for confirmation (attempt {webhook.status.attempt}/60)
-              </p>
-              <p className="text-xs text-blue-600 mt-2">
-                💡 <strong>Tip:</strong> You can close this page - your order will be confirmed when payment is received.
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Processing Status */}
+      {webhook.isPolling && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 rounded-xl px-4 py-3 flex items-start gap-3">
+          <CircularProgress size={16} sx={{ color: '#3b82f6' }} />
+          <div>
+            <p className="text-sm font-medium">Processing payment...</p>
+            <p className="text-xs text-blue-600 mt-1">
+              Attempt {webhook.status.attempt}/60
+            </p>
+          </div>
+        </div>
+      )}
 
-      {/* ──────────────────────────────────────── */}
-      {/* ERROR ALERT FOR POLLING */}
-      {/* ──────────────────────────────────────── */}
-
-      {/* ──────────────────────────────────────── */}
-      {/* CTA BUTTONS */}
-      {/* ──────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="space-y-3"
-      >
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+      {/* Action Buttons */}
+      <div className="space-y-3">
+        <button
           onClick={handlePayment}
           disabled={isProcessing}
-          className="w-full py-5 rounded-2xl bg-gradient-to-r from-teal-500 to-teal-600 text-white font-bold text-lg
-                     hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-xl hover:shadow-2xl
-                     disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center
-                     justify-center gap-3 relative overflow-hidden group"
+          className="w-full py-4 rounded-xl bg-teal-600 text-white font-semibold text-base
+                     hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed
+                     flex items-center justify-center gap-2"
         >
-          {/* Background animation */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          {isProcessing ? (
+            <>
+              <CircularProgress size={18} sx={{ color: '#fff' }} />
+              Processing Payment…
+            </>
+          ) : (
+            <>
+              <SecurityOutlined sx={{ fontSize: 18 }} />
+              Pay {formatPrice(grandTotal)}
+            </>
+          )}
+        </button>
 
-          <div className="relative z-10 flex items-center gap-3">
-            {isProcessing ? (
-              <>
-                <CircularProgress size={20} sx={{ color: '#fff' }} />
-                <span>Processing Payment…</span>
-              </>
-            ) : (
-              <>
-                <SecurityOutlined sx={{ fontSize: 20 }} />
-                <span>Complete Payment {formatPrice(grandTotal)}</span>
-              </>
-            )}
-          </div>
-        </motion.button>
-
-        <motion.button
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
+        <button
           onClick={onBack}
           disabled={isProcessing}
-          className="w-full py-4 rounded-2xl border-2 border-gray-200 text-gray-600 font-semibold
-                     text-sm hover:border-gray-300 hover:bg-gray-50 transition-all duration-300
-                     disabled:opacity-40 disabled:hover:scale-100 flex items-center justify-center gap-2"
+          className="w-full py-3 rounded-xl border border-gray-300 text-gray-700 font-medium
+                     hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed
+                     flex items-center justify-center gap-2"
         >
           <ArrowBackOutlined sx={{ fontSize: 16 }} />
-          Back to Shipping
-        </motion.button>
-      </motion.div>
+          Back to Delivery
+        </button>
+      </div>
 
-      {/* ──────────────────────────────────────── */}
-      {/* SECURITY & TRUST BADGES */}
-      {/* ──────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.55 }}
-        className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-5 border border-gray-100"
-      >
-        <div className="flex items-center justify-center gap-1 mb-4">
+      {/* Security */}
+      <div className="bg-white border border-gray-200 rounded-xl p-4">
+        <div className="flex items-center justify-center gap-2 mb-3">
           <VerifiedOutlined sx={{ fontSize: 16, color: '#059669' }} />
-          <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Protected Transaction</span>
+          <span className="text-sm font-medium text-gray-700">Secure Payment</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="flex items-center justify-center gap-6 text-center">
           {[
-            { icon: '🔒', label: 'SSL Encrypted', desc: 'Secure connection' },
-            { icon: '✓', label: 'PCI DSS', desc: 'Payment certified' },
-            { icon: '🛡️', label: 'Paystack', desc: 'Trusted processor' }
-          ].map((badge, index) => (
-            <motion.div
-              key={badge.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + index * 0.08 }}
-              className="text-center p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow hover:border-teal-200"
-            >
-              <div className="text-xl mb-2">{badge.icon}</div>
-              <div className="text-xs font-bold text-gray-900">{badge.label}</div>
-              <div className="text-[10px] text-gray-500 mt-1">{badge.desc}</div>
-            </motion.div>
+            { icon: '🔒', label: 'SSL Encrypted' },
+            { icon: '✓', label: 'PCI Compliant' },
+            { icon: '🛡️', label: 'Paystack Secured' }
+          ].map((badge) => (
+            <div key={badge.label} className="text-center">
+              <div className="text-lg mb-1">{badge.icon}</div>
+              <div className="text-xs text-gray-600">{badge.label}</div>
+            </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   )
 }
