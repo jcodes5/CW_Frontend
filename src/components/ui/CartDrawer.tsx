@@ -11,11 +11,14 @@ import {
   RecyclingOutlined,
 } from '@mui/icons-material'
 import { useCartStore } from '@/store/cartStore'
+import { useAuthStore } from '@/store/authStore'
 import { formatPrice } from '@/utils/mockData'
+import { getDeliveryInfo } from '@/utils/nigeria'
 
 export default function CartDrawer() {
   const { items, isOpen, toggleCart, removeItem, updateQuantity } =
     useCartStore()
+  const { user } = useAuthStore()
   
   // Compute derived values directly from items for proper reactivity
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0)
@@ -38,9 +41,11 @@ export default function CartDrawer() {
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  const payAmount = total
-  const deliveryFee = total > 25000 ? 0 : 2500
-  const grandTotal = payAmount + deliveryFee
+  // Estimate delivery fee based on user's saved address state, or default estimate
+  const estimatedState = user?.defaultAddressState || 'Lagos'
+  const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total).fee
+  const deliveryFee = deliveryFeeEstimate
+  const grandTotal = total + deliveryFee
 
   return (
     <AnimatePresence>

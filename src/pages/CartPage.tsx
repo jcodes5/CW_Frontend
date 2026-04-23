@@ -9,7 +9,7 @@ import {
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
 import { formatPrice } from '@/utils/mockData'
-import { FREE_DELIVERY_THRESHOLD } from '@/utils/nigeria'
+import { FREE_DELIVERY_THRESHOLD, getDeliveryInfo } from '@/utils/nigeria'
 import { useUIStore } from '@/store/uiStore'
 import { couponsApi } from '@/services/api'
 
@@ -20,7 +20,7 @@ export default function CartPage() {
   const clearCart = useCartStore((s) => s.clearCart)
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0)
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, user } = useAuthStore()
   const addToast = useUIStore((s) => s.addToast)
   const navigate = useNavigate()
   const [couponCode, setCouponCode]     = React.useState('')
@@ -30,7 +30,10 @@ export default function CartPage() {
 
   useEffect(() => { document.title = 'Your Cart | CraftworldCentre' }, [])
 
-  const deliveryFee        = total >= FREE_DELIVERY_THRESHOLD ? 0 : 2500
+  // Estimate delivery fee based on user's saved address state, or default estimate
+  const estimatedState = user?.defaultAddressState || 'Lagos'
+  const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total).fee
+  const deliveryFee = deliveryFeeEstimate
   const discount           = couponApplied?.discount ?? 0
   const grandTotal         = total + deliveryFee - discount
   const amountToFree       = FREE_DELIVERY_THRESHOLD - total
