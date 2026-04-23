@@ -278,15 +278,17 @@ export default function AdminDashboard() {
                     <span className="text-gray-400">{order.email}</span>
                   </td>
                   <td className="px-5 py-3 font-semibold text-gray-900 text-xs">
-                    {formatPrice(order.pricing?.total ?? 0)}
+                    {order.pricing?.total !== undefined && order.pricing?.total !== null ? formatPrice(order.pricing.total) : formatPrice(0)}
                   </td>
                   <td className="px-5 py-3">
                     <OrderStatusBadge status={order.status as OrderStatus} />
                   </td>
                   <td className="px-5 py-3 text-xs text-gray-400 whitespace-nowrap">
-                    {new Date(order.createdAt).toLocaleDateString('en-NG', {
-                      day: 'numeric', month: 'short',
-                    })}
+                    {order.createdAt && !isNaN(new Date(order.createdAt).getTime()) 
+                      ? new Date(order.createdAt).toLocaleDateString('en-NG', {
+                          day: 'numeric', month: 'short',
+                        })
+                      : 'N/A'}
                   </td>
                 </tr>
               ))}
