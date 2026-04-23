@@ -332,9 +332,9 @@ function ProductModal({
       }
 
       if (product) {
-        // Update product first
+        // Update existing product
         await adminApi.updateProduct(product.id, payload)
-        // Then upload images if any were selected (for existing products)
+        // Then upload images if any were selected
         if (fileRef.current?.files?.length) {
           setUploading(true)
           const files = Array.from(fileRef.current.files)
@@ -347,19 +347,9 @@ function ProductModal({
           }
         }
       } else {
-        const res = await adminApi.createProduct(payload)
-        // Upload images if any were selected
-        if (fileRef.current?.files?.length && res.data) {
-          setUploading(true)
-          const files = Array.from(fileRef.current.files)
-          try {
-            await adminApi.uploadImages(res.data.id, files)
-          } catch (uploadErr) {
-            addToast({ type: 'error', message: uploadErr instanceof Error ? uploadErr.message : 'Image upload failed' })
-          } finally {
-            setUploading(false)
-          }
-        }
+        // Create new product with images
+        const files = fileRef.current?.files ? Array.from(fileRef.current.files) : []
+        await adminApi.createProduct(payload, files)
       }
       onSuccess()
     } catch (err) {

@@ -272,7 +272,24 @@ export const adminApi = {
   getAnalytics:  ()  => api.get<AnalyticsData>('/admin/analytics'),
 
   // Products
-  createProduct: (data: AdminProductInput) => api.post<Product>('/admin/products', data),
+  createProduct: (data: AdminProductInput, images?: File[]) => {
+    if (images?.length) {
+      const form = new FormData()
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined) {
+          if (typeof value === 'object' && value !== null) {
+            form.append(key, JSON.stringify(value))
+          } else {
+            form.append(key, String(value))
+          }
+        }
+      })
+      images.forEach((f) => form.append('images', f))
+      return api.upload<Product>('/admin/products', form)
+    } else {
+      return api.post<Product>('/admin/products', data)
+    }
+  },
   updateProduct: (id: string, data: Partial<AdminProductInput>) =>
     api.put<Product>(`/admin/products/${id}`, data),
   deleteProduct: (id: string) => api.delete(`/admin/products/${id}`),
@@ -514,7 +531,7 @@ export interface PasswordInput   { currentPassword: string; newPassword: string 
 export interface ReviewInput     { rating: number; title?: string; body: string }
 export interface AddressInput    { label?: string; firstName: string; lastName: string; email: string; phone: string; addressLine1: string; addressLine2?: string; city: string; state: string; postalCode?: string; country?: string; isDefault?: boolean; deliveryNotes?: string }
 export interface CreateOrderInput { items: Array<{ productId: string; quantity: number }>; shippingAddress: Record<string, string>; notes?: string }
-export interface AdminProductInput { name: string; description: string; price: number; comparePrice?: number; specifications?: Record<string, string>; categoryId: string; brandId: string; stock: number; tags: string[]; isFeatured?: boolean; isNew?: boolean }
+export interface AdminProductInput { name: string; description: string; price: number; comparePrice?: number; images?: string[]; specifications?: Record<string, string>; categoryId: string; brandId: string; stock: number; tags: string[]; isFeatured?: boolean; isNew?: boolean }
 
 export interface RewardsDTO {
   points: number; tier: string; lifetimePoints: number
