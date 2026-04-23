@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -14,6 +14,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
 import { formatPrice } from '@/utils/mockData'
 import { getDeliveryInfo } from '@/utils/nigeria'
+import { addressesApi } from '@/services/api'
 
 export default function CartDrawer() {
   const { items, isOpen, toggleCart, removeItem, updateQuantity } =
@@ -25,6 +26,44 @@ export default function CartDrawer() {
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
   
   const overlayRef = useRef<HTMLDivElement>(null)
+
+  // Get the default address state for delivery calculation
+  const [defaultAddressState, setDefaultAddressState] = useState<string | null>(null);
+  
+  // Load default address state when cart opens and user exists
+  useEffect(() => {
+    if (isOpen && user) {
+      const fetchDefaultAddress = async () => {
+        try {
+          const response = await addressesApi.list();
+          const addresses = response.data || [];
+          
+          // Find the default address (isDefault === true)
+          const defaultAddr = addresses.find(addr => addr.isDefault);
+          
+          if (defaultAddr) {
+            setDefaultAddressState(defaultAddr.state);
+          } else {
+            // Fallback to first address if no default
+            const firstAddr = addresses[0];
+            if (firstAddr) {
+              setDefaultAddressState(firstAddr.state);
+            } else {
+              setDefaultAddressState('Lagos'); // Final fallback
+            }
+          }
+        } catch (error) {
+          console.warn('Could not fetch addresses for delivery calculation', error);
+          setDefaultAddressState('Lagos'); // Safe fallback
+        }
+      };
+      
+      fetchDefaultAddress();
+    } else if (!user) {
+      // If no user, use Lagos as default
+      setDefaultAddressState('Lagos');
+    }
+  }, [isOpen, user]);
 
   // Close on Escape
   useEffect(() => {
@@ -42,7 +81,7 @@ export default function CartDrawer() {
   }, [isOpen])
 
   // Estimate delivery fee based on user's saved address state, or default estimate
-  const estimatedState = user?.defaultAddressState || 'Lagos'
+  const estimatedState = defaultAddressState || 'Lagos'
   const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total).fee
   const deliveryFee = deliveryFeeEstimate
   const grandTotal = total + deliveryFee
