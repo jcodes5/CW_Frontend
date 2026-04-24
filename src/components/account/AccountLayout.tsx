@@ -18,6 +18,7 @@ const NAV_ITEMS = [
   { to: '/account/wallet',    label: 'Wallet',       icon: AccountBalanceWalletOutlined, exact: false },
   { to: '/account/profile',   label: 'Profile',      icon: PersonOutlined,          exact: false },
   { to: '/account/addresses', label: 'Addresses',    icon: LocationOnOutlined,      exact: false },
+  { to: '#logout',            label: 'Sign Out',     icon: LogoutOutlined,          exact: false },
 ]
 
 export default function AccountLayout() {
@@ -61,47 +62,50 @@ export default function AccountLayout() {
 
       {/* Nav links */}
       <nav className="flex-1 p-4 space-y-1" aria-label="Account navigation">
-        {NAV_ITEMS.map(({ to, label, icon: Icon, exact }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={exact}
-            onClick={() => setMobileOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium
-               transition-all duration-200 group
-               ${isActive
-                 ? 'bg-teal-50 text-teal-700 shadow-sm'
-                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <Icon sx={{ fontSize: 18, color: isActive ? '#1A7A8A' : 'inherit' }} />
+        {NAV_ITEMS.map(({ to, label, icon: Icon, exact }) => {
+          if (to === '#logout') {
+            return (
+              <button
+                key={to}
+                onClick={() => { handleLogout(); setMobileOpen(false); }}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium
+                           text-red-500 hover:bg-red-50 transition-colors w-full text-left"
+              >
+                <Icon sx={{ fontSize: 18 }} />
                 <span className="flex-1">{label}</span>
-                {BADGES[to] > 0 && (
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full
-                    ${isActive ? 'bg-teal-200 text-teal-800' : 'bg-gray-200 text-gray-600'}`}>
-                    {BADGES[to]}
-                  </span>
-                )}
-              </>
-            )}
-          </NavLink>
-        ))}
+              </button>
+            )
+          }
+          return (
+            <NavLink
+              key={to}
+              to={to}
+              end={exact}
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium
+                 transition-all duration-200 group
+                 ${isActive
+                   ? 'bg-teal-50 text-teal-700 shadow-sm'
+                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon sx={{ fontSize: 18, color: isActive ? '#1A7A8A' : 'inherit' }} />
+                  <span className="flex-1">{label}</span>
+                  {BADGES[to] > 0 && (
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full
+                      ${isActive ? 'bg-teal-200 text-teal-800' : 'bg-gray-200 text-gray-600'}`}>
+                      {BADGES[to]}
+                    </span>
+                  )}
+                </>
+              )}
+            </NavLink>
+          )
+        })}
       </nav>
-
-      {/* Logout */}
-      <div className="p-4 border-t border-gray-100">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm
-                     font-medium text-red-500 hover:bg-red-50 transition-colors"
-        >
-          <LogoutOutlined sx={{ fontSize: 18 }} />
-          Sign Out
-        </button>
-      </div>
     </div>
   )
 
