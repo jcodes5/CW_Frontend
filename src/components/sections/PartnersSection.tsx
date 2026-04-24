@@ -106,7 +106,7 @@ export default function PartnersSection() {
                     <motion.img
                       src={brand.logo}
                       alt={`${brand.name} logo`}
-                      className="w-17 h-16 object-contain"
+                      className={`object-contain ${brand.id === 'adulawo' ? 'w-20 h-20' : 'w-17 h-16'}`}
                       animate={{ rotate: [0, 10, -5, 0] }}
                       transition={{ duration: 6, repeat: Infinity, delay: i }}
                     />

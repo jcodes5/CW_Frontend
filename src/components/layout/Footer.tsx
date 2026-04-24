@@ -104,7 +104,9 @@ export default function Footer() {
                 {['Adúláwò', 'Planet 3R'].map((brand) => (
                   <span
                     key={brand}
-                    className="text-xs font-semibold px-3 py-1 rounded-full border border-gray-700 text-gray-400"
+                    className={`font-semibold px-3 py-1 rounded-full border border-gray-700 text-gray-400 ${
+                      brand === 'Adúláwò' ? 'text-sm' : 'text-xs'
+                    }`}
                   >
                     {brand}
                   </span>
@@ -161,7 +163,7 @@ export default function Footer() {
         <div className="flex flex-wrap gap-6 py-6 border-t border-gray-800 border-b mb-6 text-sm text-gray-400">
           <a href="mailto:hello@craftworldcentre.com" className="flex items-center gap-2 hover:text-teal-300 transition-colors">
             <EmailOutlined sx={{ fontSize: 16 }} />
-            hello@craftworldcentre.com
+            supportcraftworldcentre@gmail.com
           </a>
           <a href="tel:+2341234567890" className="flex items-center gap-2 hover:text-teal-300 transition-colors">
             <PhoneOutlined sx={{ fontSize: 16 }} />
@@ -185,12 +187,12 @@ export default function Footer() {
               100% circular economy focused
             </span>
           </div>
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <span className="flex items-center gap-1">
               SSL Secured
             </span>
             <span>Powered by Paystack</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

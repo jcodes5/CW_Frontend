@@ -493,9 +493,9 @@ export default function SignupPage() {
               </motion.button>
             </form>
 
-            <p className="text-center text-xs text-gray-400 mt-5 flex items-center justify-center gap-1">
+            {/* <p className="text-center text-xs text-gray-400 mt-5 flex items-center justify-center gap-1">
               Your data is safe · 256-bit SSL encryption
-            </p>
+            </p> */}
           </motion.div>
         </div>
       </div>
