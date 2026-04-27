@@ -225,6 +225,7 @@ export default function AdminProducts() {
             onClose={() => { setShowModal(false); setEdit(null); setModalStep(1) }}
             onSuccess={() => {
               setShowModal(false); setEdit(null); setModalStep(1)
+              setPreviews([]); setSelectedFiles([])
               fetchProducts(page)
               addToast({ type: 'success', message: editProduct ? 'Product updated' : 'Product created' })
             }}
@@ -286,6 +287,7 @@ function ProductModal({
   const [saving, setSaving]       = useState(false)
   const [uploading, setUploading] = useState(false)
   const [previewUrls, setPreviews]= useState<string[]>(product?.images ?? [])
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const fileRef = useRef<HTMLInputElement>(null)
   const addToast = useUIStore((s) => s.addToast)
   
@@ -348,8 +350,7 @@ function ProductModal({
         }
       } else {
         // Create new product with images
-        const files = fileRef.current?.files ? Array.from(fileRef.current.files) : []
-        await adminApi.createProduct(payload, files)
+        await adminApi.createProduct(payload, selectedFiles)
       }
       onSuccess()
     } catch (err) {
@@ -370,11 +371,15 @@ function ProductModal({
       addToast({ type: 'warning', message: `Maximum ${maxImages} images allowed` })
       return
     }
-    setPreviews((prev) => [...prev, ...urls].slice(0, maxImages))
+    const filesToAdd = files.slice(0, availableSlots)
+    const urlsToAdd = urls.slice(0, availableSlots)
+    setPreviews((prev) => [...prev, ...urlsToAdd])
+    setSelectedFiles((prev) => [...prev, ...filesToAdd])
   }
 
   const removeImage = (index: number) => {
     setPreviews((prev) => prev.filter((_, i) => i !== index))
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
   return (
