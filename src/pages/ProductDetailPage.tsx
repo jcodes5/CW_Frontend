@@ -22,6 +22,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useUIStore } from '@/store/uiStore'
 import { formatPrice } from '@/utils/mockData'
 import { productsApi } from '@/services/api'
+import { getDeliveryInfo } from '@/utils/nigeria'
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton'
 import ProductCard from '@/components/ui/ProductCard'
 import ReviewsList from '@/components/ui/ReviewsList'
@@ -43,6 +44,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1)
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [activeTab, setActiveTab] = useState<'description' | 'reviews' | 'sustainability'>('description')
+  const [estimatedState, setEstimatedState] = useState('Lagos')
   const addItem = useCartStore((s) => s.addItem)
   const toggleCart = useCartStore((s) => s.toggleCart)
   const addToast = useUIStore((s) => s.addToast)
@@ -112,6 +114,10 @@ export default function ProductDetailPage() {
   const discount = product.comparePrice
     ? Math.round((1 - product.price / product.comparePrice) * 100)
     : null
+
+  // Calculate shipping estimate for single product with selected quantity
+  const totalWeight = (product.weightKg || 0.5) * quantity
+  const shippingInfo = getDeliveryInfo(estimatedState, product.price * quantity, totalWeight)
 
   return (
     <main className="min-h-screen bg-white">
@@ -329,6 +335,41 @@ export default function ProductDetailPage() {
                   Only {product.stock} left in stock
                 </p>
               )}
+            </div>
+
+            {/* Shipping Estimate */}
+            <div className="p-4 rounded-xl border border-teal-100 bg-teal-50">
+              <div className="flex items-start gap-3">
+                <LocalShippingOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} className="mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-teal-900 mb-2">Estimated Delivery</p>
+                  <div className="space-y-1">
+                    <p className="text-sm text-gray-700">
+                      To <span className="font-semibold">{estimatedState}</span>:{' '}
+                      <span className="font-bold text-teal-700">{shippingInfo.days}</span>
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      Fee: <span className="font-bold text-teal-700">
+                        {shippingInfo.isFree ? 'FREE' : formatPrice(shippingInfo.fee)}
+                      </span>
+                    </p>
+                    {totalWeight > 0 && (
+                      <p className="text-xs text-gray-500">Weight: {totalWeight.toFixed(2)} kg</p>
+                    )}
+                  </div>
+                  <select
+                  title='Select state for estimate'
+                    value={estimatedState}
+                    onChange={(e) => setEstimatedState(e.target.value)}
+                    className="mt-2 text-xs border border-teal-200 rounded px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  >
+                    <option value="">Select state for estimate...</option>
+                    {['Abeokuta', 'Lagos', 'Akure', 'Ado-Ekiti', 'Ibadan', 'Ogbomosho', 'Oshogbo', 'Ota', 'Ilorin', 'Aba', 'Asaba', 'Enugu', 'Onitsha', 'Owerri', 'Umuahia', 'Abuja', 'FCT - Abuja', 'Benin', 'Benin City', 'Calabar', 'Port Harcourt', 'Port-Harcourt', 'Uyo', 'Warri', 'Yenagoa', 'Lafia', 'Lokoja', 'Makurdi', 'Minna', 'Bauchi', 'Jalingo', 'Jos', 'Gombe', 'Maiduguri', 'Damaturu', 'Yola', 'Kaduna', 'Katsina', 'Dutse', 'Birnin Kebbi', 'Sokoto', 'Kano'].map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
 
             {/* CTA Buttons */}

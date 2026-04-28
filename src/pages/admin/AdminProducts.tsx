@@ -312,6 +312,7 @@ function ProductModal({
       categoryId:  product.category?.id,
       brandId:     product.brand?.id,
       stock:       product.stock,
+      weightKg:    product.weightKg,
       tags:        product.tags,
       isFeatured:  product.isFeatured,
       isNew:       product.isNew,
@@ -542,6 +543,21 @@ function ProductModal({
                 <label className="text-sm font-medium text-gray-700 block mb-1.5">Stock *</label>
                 <input type="number" min="0" className={`input-field text-sm ${errors.stock ? 'border-red-300' : ''}`}
                   {...register('stock', { required: 'Stock is required', min: 0, valueAsNumber: true })} />
+              </div>
+
+              {/* Weight */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1.5">Weight (kg) *</label>
+                <input type="number" min="0.1" max="30" step="0.1" className={`input-field text-sm ${errors.weightKg ? 'border-red-300' : ''}`}
+                  placeholder="e.g. 2.5"
+                  {...register('weightKg', { 
+                    required: 'Weight is required', 
+                    min: { value: 0.1, message: 'Minimum weight is 0.1 kg' },
+                    max: { value: 30, message: 'Maximum weight is 30 kg' },
+                    valueAsNumber: true 
+                  })} />
+                <p className="text-xs text-gray-400 mt-1">Required for delivery price calculation</p>
+                {errors.weightKg && <p className="text-red-500 text-xs mt-1">• {errors.weightKg.message}</p>}
               </div>
 
               {/* Flags */}

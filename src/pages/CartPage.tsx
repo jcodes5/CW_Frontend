@@ -19,6 +19,10 @@ export default function CartPage() {
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const clearCart = useCartStore((s) => s.clearCart)
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
+  const totalWeight = items.reduce((sum, i) => {
+    const itemWeight = i.product.weightKg || 0.5
+    return sum + (itemWeight * i.quantity)
+  }, 0)
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0)
   const { isAuthenticated, user } = useAuthStore()
   const addToast = useUIStore((s) => s.addToast)
@@ -57,7 +61,7 @@ export default function CartPage() {
   }, [user])
 
   // Estimate delivery fee based on user's saved address state, or default estimate
-  const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total).fee
+  const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total, totalWeight).fee
   const deliveryFee = deliveryFeeEstimate
   const discount           = couponApplied?.discount ?? 0
   const grandTotal         = total + deliveryFee - discount

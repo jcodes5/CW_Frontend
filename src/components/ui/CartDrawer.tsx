@@ -24,6 +24,10 @@ export default function CartDrawer() {
   // Compute derived values directly from items for proper reactivity
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0)
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
+  const totalWeight = items.reduce((sum, i) => {
+    const itemWeight = i.product.weightKg || 0.5
+    return sum + (itemWeight * i.quantity)
+  }, 0)
   
   const overlayRef = useRef<HTMLDivElement>(null)
 
@@ -82,7 +86,7 @@ export default function CartDrawer() {
 
   // Estimate delivery fee based on user's saved address state, or default estimate
   const estimatedState = defaultAddressState || 'Lagos'
-  const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total).fee
+  const deliveryFeeEstimate = getDeliveryInfo(estimatedState, total, totalWeight).fee
   const deliveryFee = deliveryFeeEstimate
   const grandTotal = total + deliveryFee
 

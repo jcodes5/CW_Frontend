@@ -440,7 +440,7 @@ export interface AuthResponse { user: User; accessToken: string }
 
 export interface Product {
   id: string; name: string; slug: string; description: string
-  price: number; weight: number; comparePrice?: number; images: string[]
+  price: number; weight: number; weightKg: number; comparePrice?: number; images: string[]
   specifications?: Record<string, string>
   category: { id: string; name: string; slug: string; icon: string }
   brand: { id: string; name: string; color: string; accentColor: string; tagline?: string; description?: string; logo?: string; focus?: string[] }
@@ -531,7 +531,7 @@ export interface PasswordInput   { currentPassword: string; newPassword: string 
 export interface ReviewInput     { rating: number; title?: string; body: string }
 export interface AddressInput    { label?: string; firstName: string; lastName: string; email: string; phone: string; addressLine1: string; addressLine2?: string; city: string; state: string; postalCode?: string; country?: string; isDefault?: boolean; deliveryNotes?: string }
 export interface CreateOrderInput { items: Array<{ productId: string; quantity: number }>; shippingAddress: Record<string, string>; notes?: string }
-export interface AdminProductInput { name: string; description: string; price: number; comparePrice?: number; images?: string[]; specifications?: Record<string, string>; categoryId: string; brandId: string; stock: number; tags: string[]; isFeatured?: boolean; isNew?: boolean }
+export interface AdminProductInput { name: string; description: string; price: number; comparePrice?: number; images?: string[]; specifications?: Record<string, string>; categoryId: string; brandId: string; stock: number; weightKg: number; tags: string[]; isFeatured?: boolean; isNew?: boolean }
 
 export interface RewardsDTO {
   points: number; tier: string; lifetimePoints: number

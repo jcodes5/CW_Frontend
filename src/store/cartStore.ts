@@ -56,6 +56,13 @@ export const useCartStore = create<CartState>()(
         get itemCount() {
           return get().items.reduce((sum, i) => sum + i.quantity, 0)
         },
+
+        get totalWeight() {
+          return get().items.reduce((sum, i) => {
+            const itemWeight = i.product.weightKg || 0.5
+            return sum + (itemWeight * i.quantity)
+          }, 0)
+        },
       }),
       {
         name: 'craftworld-cart',
