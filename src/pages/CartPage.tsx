@@ -20,7 +20,7 @@ export default function CartPage() {
   const clearCart = useCartStore((s) => s.clearCart)
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
   const totalWeight = items.reduce((sum, i) => {
-    const itemWeight = i.product.weightKg || 0.5
+    const itemWeight = i.product.weight || 0.5
     return sum + (itemWeight * i.quantity)
   }, 0)
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0)

@@ -59,7 +59,7 @@ export const useCartStore = create<CartState>()(
 
         get totalWeight() {
           return get().items.reduce((sum, i) => {
-            const itemWeight = i.product.weightKg || 0.5
+            const itemWeight = i.product.weight || 0.5
             return sum + (itemWeight * i.quantity)
           }, 0)
         },
