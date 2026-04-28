@@ -225,7 +225,6 @@ export default function AdminProducts() {
             onClose={() => { setShowModal(false); setEdit(null); setModalStep(1) }}
             onSuccess={() => {
               setShowModal(false); setEdit(null); setModalStep(1)
-              setPreviews([]); setSelectedFiles([])
               fetchProducts(page)
               addToast({ type: 'success', message: editProduct ? 'Product updated' : 'Product created' })
             }}
