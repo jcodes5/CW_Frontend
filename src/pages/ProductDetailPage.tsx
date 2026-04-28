@@ -22,7 +22,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useUIStore } from '@/store/uiStore'
 import { formatPrice } from '@/utils/mockData'
 import { productsApi, Product } from '@/services/api'
-import { getDeliveryInfo } from '@/utils/nigeria'
+import { getDeliveryInfo, SPEEDAF_CITY_TO_ZONE_INDEX } from '@/utils/nigeria'
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton'
 import ProductCard from '@/components/ui/ProductCard'
 import ReviewsList from '@/components/ui/ReviewsList'
@@ -45,6 +45,7 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [activeTab, setActiveTab] = useState<'description' | 'reviews' | 'sustainability'>('description')
   const [estimatedState, setEstimatedState] = useState('Lagos')
+  const [estimatedCity, setEstimatedCity] = useState('Lagos') // Default to Lagos city which is in Speedaf Zone 2
   const addItem = useCartStore((s) => s.addItem)
   const toggleCart = useCartStore((s) => s.toggleCart)
   const addToast = useUIStore((s) => s.addToast)
@@ -117,7 +118,7 @@ export default function ProductDetailPage() {
 
   // Calculate shipping estimate for single product with selected quantity
   const totalWeight = (product.weightKg || 0.5) * quantity
-  const shippingInfo = getDeliveryInfo(estimatedState, product.price * quantity, totalWeight)
+  const shippingInfo = getDeliveryInfo(estimatedState, product.price * quantity, totalWeight, estimatedCity)
 
   return (
     <main className="min-h-screen bg-white">
@@ -345,7 +346,7 @@ export default function ProductDetailPage() {
                   <p className="text-xs font-semibold text-teal-900 mb-2">Estimated Delivery</p>
                   <div className="space-y-1">
                     <p className="text-sm text-gray-700">
-                      To <span className="font-semibold">{estimatedState}</span>:{' '}
+                      To <span className="font-semibold">{estimatedCity || estimatedState}</span>:{' '}
                       <span className="font-bold text-teal-700">{shippingInfo.days}</span>
                     </p>
                     <p className="text-sm text-gray-700">
@@ -357,17 +358,84 @@ export default function ProductDetailPage() {
                       <p className="text-xs text-gray-500">Weight: {totalWeight.toFixed(2)} kg</p>
                     )}
                   </div>
-                  <select
-                  title='Select state for estimate'
-                    value={estimatedState}
-                    onChange={(e) => setEstimatedState(e.target.value)}
-                    className="mt-2 text-xs border border-teal-200 rounded px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                  >
-                    <option value="">Select state for estimate...</option>
-                    {['Abeokuta', 'Lagos', 'Akure', 'Ado-Ekiti', 'Ibadan', 'Ogbomosho', 'Oshogbo', 'Ota', 'Ilorin', 'Aba', 'Asaba', 'Enugu', 'Onitsha', 'Owerri', 'Umuahia', 'Abuja', 'FCT - Abuja', 'Benin', 'Benin City', 'Calabar', 'Port Harcourt', 'Port-Harcourt', 'Uyo', 'Warri', 'Yenagoa', 'Lafia', 'Lokoja', 'Makurdi', 'Minna', 'Bauchi', 'Jalingo', 'Jos', 'Gombe', 'Maiduguri', 'Damaturu', 'Yola', 'Kaduna', 'Katsina', 'Dutse', 'Birnin Kebbi', 'Sokoto', 'Kano'].map((state) => (
-                      <option key={state} value={state}>{state}</option>
-                    ))}
-                  </select>
+                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <select
+                      title='Select state for estimate'
+                      value={estimatedState}
+                      onChange={(e) => {
+                        setEstimatedState(e.target.value);
+                        // Update city to a valid Speedaf city in that state
+                        switch(e.target.value) {
+                          case 'Lagos':
+                            setEstimatedCity('Lagos');
+                            break;
+                          case 'Ogun':
+                            setEstimatedCity('Abeokuta'); // Zone 1
+                            break;
+                          case 'FCT - Abuja':
+                            setEstimatedCity('Abuja');
+                            break;
+                          case 'Rivers':
+                            setEstimatedCity('Port Harcourt');
+                            break;
+                          case 'Kano':
+                            setEstimatedCity('Kano');
+                            break;
+                          case 'Kaduna':
+                            setEstimatedCity('Kaduna');
+                            break;
+                          case 'Delta':
+                            setEstimatedCity('Warri');
+                            break;
+                          case 'Anambra':
+                            setEstimatedCity('Onitsha');
+                            break;
+                          case 'Enugu':
+                            setEstimatedCity('Enugu');
+                            break;
+                          case 'Oyo':
+                            setEstimatedCity('Ibadan');
+                            break;
+                          case 'Ondo':
+                            setEstimatedCity('Akure');
+                            break;
+                          case 'Edo':
+                            setEstimatedCity('Benin City');
+                            break;
+                          case 'Imo':
+                            setEstimatedCity('Owerri');
+                            break;
+                          case 'Abia':
+                            setEstimatedCity('Aba');
+                            break;
+                          default:
+                            // If the selected state has a corresponding city in our Speedaf map, use it
+                            // Otherwise, default to Lagos which is a valid Speedaf city
+                            const validSpeedafCities = Object.keys(SPEEDAF_CITY_TO_ZONE_INDEX);
+                            const stateCities = validSpeedafCities.filter(city => 
+                              city.toLowerCase().includes(e.target.value.toLowerCase()) || 
+                              e.target.value.toLowerCase().includes(city.toLowerCase())
+                            );
+                            setEstimatedCity(stateCities.length > 0 ? stateCities[0] : 'Lagos');
+                        }
+                      }}
+                      className="text-xs border border-teal-200 rounded px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500 w-full"
+                    >
+                      <option value="">Select state...</option>
+                      {['Abeokuta', 'Lagos', 'Akure', 'Ado-Ekiti', 'Ibadan', 'Ogbomosho', 'Oshogbo', 'Ota', 'Ilorin', 'Aba', 'Asaba', 'Enugu', 'Onitsha', 'Owerri', 'Umuahia', 'Abuja', 'FCT - Abuja', 'Benin', 'Benin City', 'Calabar', 'Port Harcourt', 'Port-Harcourt', 'Uyo', 'Warri', 'Yenagoa', 'Lafia', 'Lokoja', 'Makurdi', 'Minna', 'Bauchi', 'Jalingo', 'Jos', 'Gombe', 'Maiduguri', 'Damaturu', 'Yola', 'Kaduna', 'Katsina', 'Dutse', 'Birnin Kebbi', 'Sokoto', 'Kano'].map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
+                    
+                    <input
+                      type="text"
+                      title="Enter city for more accurate estimate"
+                      value={estimatedCity}
+                      onChange={(e) => setEstimatedCity(e.target.value)}
+                      placeholder="Enter city..."
+                      className="text-xs border border-teal-200 rounded px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500 w-full"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

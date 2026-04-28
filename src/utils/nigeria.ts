@@ -32,7 +32,7 @@ const SPEEDAF_RATE_TABLE = [
 ] as const;
 
 // Speedaf zone to city mapping
-const SPEEDAF_CITY_TO_ZONE_INDEX: Record<string, number> = {
+export const SPEEDAF_CITY_TO_ZONE_INDEX: Record<string, number> = {
   'Abeokuta': 0,
   'Lagos': 1, 'Akure': 1, 'Ado-Ekiti': 1, 'Ibadan': 1, 'Ogbomosho': 1, 'Oshogbo': 1, 'Ota': 1, 'Ilorin': 1,
   'Aba': 2, 'Asaba': 2, 'Enugu': 2, 'Onitsha': 2, 'Owerri': 2, 'Umuahia': 2, 'Abuja': 2, 'Benin': 2, 'Benin City': 2, 'Calabar': 2, 'Port Harcourt': 2, 'Port-Harcourt': 2, 'Uyo': 2, 'Warri': 2, 'Yenagoa': 2, 'Yenegoa': 2,
@@ -175,14 +175,15 @@ export const FREE_DELIVERY_THRESHOLD = 25000
 
 /**
  * Get delivery information for a state/city, with weight-aware pricing
- * If city is provided, uses Speedaf tier-based pricing; otherwise uses state-based static pricing
+ * If city is provided and is in the Speedaf zone map, uses Speedaf tier-based pricing; otherwise uses state-based static pricing
  */
 export function getDeliveryInfo(state: string, subtotal: number, weightInKg: number = 1, city?: string) {
   // Determine if using city (Speedaf) or state (backend) pricing
-  const useSpeedafPricing = city !== undefined && city.trim() !== '';
+  // Use Speedaf pricing if city is provided AND is in the Speedaf zone mapping
+  const isInSpeedafZone = city !== undefined && city.trim() !== '' && SPEEDAF_CITY_TO_ZONE_INDEX[city] !== undefined;
   
   let fee = 0;
-  if (useSpeedafPricing) { // Use Speedaf if city is provided
+  if (isInSpeedafZone) { // Use Speedaf if city is provided and is in Speedaf zones
     // Use Speedaf tier-based pricing with weight
     fee = calculateSpeedafFee(weightInKg, city || '', subtotal);
   } else {
@@ -199,7 +200,7 @@ export function getDeliveryInfo(state: string, subtotal: number, weightInKg: num
                   state && SPEEDAF_ZONES[state] ? SPEEDAF_ZONES[state] : 
                   SPEEDAF_ZONES['Kano']; // Default fallback
                   
-  const isFree = subtotal >= FREE_DELIVERY_THRESHOLD;
+  const isFree = fee === 0; // Check if fee is 0 (either free delivery or not in zones)
   const label = isFree ? 'Free' : 'Speedaf Express';
   
   return {
