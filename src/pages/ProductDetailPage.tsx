@@ -21,12 +21,12 @@ import { Recycle, Globe, Users, Package } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useUIStore } from '@/store/uiStore'
 import { formatPrice } from '@/utils/mockData'
-import { productsApi } from '@/services/api'
+import { productsApi, Product } from '@/services/api'
 import { getDeliveryInfo } from '@/utils/nigeria'
 import { ProductDetailSkeleton } from '@/components/ui/Skeleton'
 import ProductCard from '@/components/ui/ProductCard'
 import ReviewsList from '@/components/ui/ReviewsList'
-import type { Product } from '@/types'
+// import type {Product} from '@/types'
 
 const BRAND_CONFIG: Record<string, { bg: string; text: string; border: string; label: string }> = {
   craftworld: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200', label: 'Flagship Brand' },
@@ -116,7 +116,7 @@ export default function ProductDetailPage() {
     : null
 
   // Calculate shipping estimate for single product with selected quantity
-  const totalWeight = (product.weight || 0.5) * quantity
+  const totalWeight = (product.weightKg || 0.5) * quantity
   const shippingInfo = getDeliveryInfo(estimatedState, product.price * quantity, totalWeight)
 
   return (

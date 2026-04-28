@@ -22,7 +22,7 @@ export default function DeliveryForm({ onNext }: Props) {
   // Calculate total weight of items in the cart
   const totalWeight = items.reduce((sum, item) => {
     // Assuming each product has a weight property, default to 0.5kg if not provided
-    const itemWeight = item.product.weight || 0.5; // Default to 0.5kg per item
+    const itemWeight = item.product.weightKg || 0.5; // Default to 0.5kg per item
     return sum + (itemWeight * item.quantity);
   }, 0)
 
