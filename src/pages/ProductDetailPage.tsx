@@ -116,7 +116,7 @@ export default function ProductDetailPage() {
     : null
 
   // Calculate shipping estimate for single product with selected quantity
-  const totalWeight = (product.weightKg || 0.5) * quantity
+  const totalWeight = (product.weight || 0.5) * quantity
   const shippingInfo = getDeliveryInfo(estimatedState, product.price * quantity, totalWeight)
 
   return (
