@@ -47,7 +47,8 @@ export default function DeliveryForm({ onNext }: Props) {
   })
 
   const watchedState = watch('state')
-  const deliveryInfo = getDeliveryInfo(watchedState, total, totalWeight)
+  const watchedCity = watch('city')
+  const deliveryInfo = getDeliveryInfo(watchedState, total, totalWeight, watchedCity)
 
   const onSubmit = (data: ShippingAddress) => {
     setShippingAddress(data)
@@ -220,7 +221,7 @@ export default function DeliveryForm({ onNext }: Props) {
                 {deliveryInfo.isFree ? 'Free Delivery' : `Delivery: ${new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(deliveryInfo.fee)} (${deliveryInfo.zone})`}
               </p>
               <p className="text-xs text-teal-600">
-                Estimated {deliveryInfo.days} to {watchedState}
+                Estimated {deliveryInfo.days} to {watchedCity || watchedState}
               </p>
             </div>
           </motion.div>

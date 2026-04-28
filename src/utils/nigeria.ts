@@ -67,8 +67,18 @@ function lookupRateFromTable(billedWeightKg: number, zoneIndex: number): number 
  * Get zone index for a city (defaults to Zone 4 if not found)
  */
 function getCityZoneIndex(city: string): number {
-  const zoneIndex = SPEEDAF_CITY_TO_ZONE_INDEX[city];
-  return zoneIndex !== undefined ? zoneIndex : 3; // Default to Zone 4
+  // Normalize city name to handle case-insensitive comparison
+  const normalizedCity = city.trim().toLowerCase();
+  
+  // Find the matching city in the mapping (case-insensitive)
+  for (const mappedCity in SPEEDAF_CITY_TO_ZONE_INDEX) {
+    if (mappedCity.toLowerCase() === normalizedCity) {
+      return SPEEDAF_CITY_TO_ZONE_INDEX[mappedCity];
+    }
+  }
+  
+  // If no match found, default to Zone 4
+  return 3;
 }
 
 /**
@@ -119,46 +129,46 @@ const BACKEND_DELIVERY_FEES: Record<string, number> = {
 
 // Speedaf delivery zones based on the rate card (kept for reference)
 export const SPEEDAF_ZONES: Record<string, { zone: string; baseRate: number; additionalRatePerKg: number; days: string }> = {
-  'Abeokuta': { zone: 'Zone 1', baseRate: 3500, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Lagos': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Akure': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Ado-Ekiti': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Ibadan': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Ogbomosho': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Oshogbo': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Ota': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Ilorin': { zone: 'Zone 2', baseRate: 2000, additionalRatePerKg: 100, days: '1–2 business days' },
-  'Aba': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Asaba': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Enugu': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Onitsha': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Owerri': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Umuahia': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Abuja': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'FCT - Abuja': { zone: 'Zone 3', baseRate: 3500, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Benin': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Calabar': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Port Harcourt': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Uyo': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Warri': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Yenagoa': { zone: 'Zone 3', baseRate: 3000, additionalRatePerKg: 100, days: '2–3 business days' },
-  'Lafia': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Lokoja': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Makurdi': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Minna': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Bauchi': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Jalingo': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Jos': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Gombe': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Maiduguri': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Damaturu': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Yola': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Kaduna': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Katsina': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Dutse': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Birnin Kebbi': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Sokoto': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
-  'Kano': { zone: 'Zone 4', baseRate: 4000, additionalRatePerKg: 100, days: '3–4 business days' },
+  'Abeokuta': { zone: 'Zone 1', baseRate: 3118, additionalRatePerKg: 1075, days: '1–2 business days' },
+  'Lagos': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Akure': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Ado-Ekiti': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Ibadan': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Ogbomosho': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Oshogbo': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Ota': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Ilorin': { zone: 'Zone 2', baseRate: 4547, additionalRatePerKg: 1290, days: '1–2 business days' },
+  'Aba': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Asaba': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Enugu': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Onitsha': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Owerri': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Umuahia': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Abuja': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'FCT - Abuja': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Benin': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Calabar': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Port Harcourt': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Uyo': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Warri': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Yenagoa': { zone: 'Zone 3', baseRate: 6085, additionalRatePerKg: 1613, days: '2–3 business days' },
+  'Lafia': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Lokoja': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Makurdi': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Minna': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Bauchi': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Jalingo': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Jos': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Gombe': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Maiduguri': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Damaturu': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Yola': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Kaduna': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Katsina': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Dutse': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Birnin Kebbi': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Sokoto': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
+  'Kano': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
 };
 
 export const FREE_DELIVERY_THRESHOLD = 25000
@@ -169,12 +179,12 @@ export const FREE_DELIVERY_THRESHOLD = 25000
  */
 export function getDeliveryInfo(state: string, subtotal: number, weightInKg: number = 1, city?: string) {
   // Determine if using city (Speedaf) or state (backend) pricing
-  const useSpeedafPricing = city && SPEEDAF_CITY_TO_ZONE_INDEX[city] !== undefined;
+  const useSpeedafPricing = city !== undefined && city.trim() !== '';
   
   let fee = 0;
-  if (useSpeedafPricing) {
+  if (useSpeedafPricing) { // Use Speedaf if city is provided
     // Use Speedaf tier-based pricing with weight
-    fee = calculateSpeedafFee(weightInKg, city!, subtotal);
+    fee = calculateSpeedafFee(weightInKg, city || '', subtotal);
   } else {
     // Use state-based static pricing (for backward compatibility)
     const isFree = subtotal >= FREE_DELIVERY_THRESHOLD;
@@ -184,16 +194,20 @@ export function getDeliveryInfo(state: string, subtotal: number, weightInKg: num
   }
 
   // Get zone info from SPEEDAF_ZONES for display details (days, zone name)
-  const zone = SPEEDAF_ZONES[state] ?? SPEEDAF_ZONES['Kano'];
-  const isFree = fee === 0;
+  // First try to get info based on the city, fall back to state
+  const zoneInfo = city && SPEEDAF_ZONES[city] ? SPEEDAF_ZONES[city] : 
+                  state && SPEEDAF_ZONES[state] ? SPEEDAF_ZONES[state] : 
+                  SPEEDAF_ZONES['Kano']; // Default fallback
+                  
+  const isFree = subtotal >= FREE_DELIVERY_THRESHOLD;
   const label = isFree ? 'Free' : 'Speedaf Express';
   
   return {
     fee,
-    days: zone.days,
+    days: zoneInfo.days,
     isFree,
     label,
-    zone: zone.zone
+    zone: zoneInfo.zone
   }
 }
 
