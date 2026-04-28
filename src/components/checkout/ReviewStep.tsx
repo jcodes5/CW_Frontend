@@ -26,7 +26,7 @@ export default function ReviewStep({ onNext, onBack }: ReviewStepProps) {
   // Calculate total weight of items in the cart
   const totalWeight = items.reduce((sum, item) => {
     // Using optional chaining for weight property which may not exist in the Product interface
-    const itemWeight = item.product?.weight ?? 0.5; // Default to 0.5kg per item if weight property doesn't exist
+    const itemWeight = item.product?.weightKg ?? 0.5; // Default to 0.5kg per item if weight property doesn't exist
     return sum + (itemWeight * item.quantity);
   }, 0)
 

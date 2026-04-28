@@ -84,7 +84,7 @@ function toLocalProduct(p: ApiProduct): Product {
     price: p.price,
     comparePrice: p.comparePrice,
     images: p.images,
-    weight: p.weight,
+    weightKg: p.weightKg,
     category: {
       id: p.category?.id ?? '',
       name: p.category?.name ?? '',

@@ -4,7 +4,7 @@ export const MOCK_PRODUCTS: Product[] = [
   // ─── CraftworldCentre ──────────────────────────────────────
   {
     id: 'cwc-001',
-    weight: 12,
+    weightKg: 12,
     name: 'Reclaimed Teak Coffee Table',
     slug: 'reclaimed-teak-coffee-table',
     description:
@@ -36,7 +36,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'cwc-002',
-    weight: 0.5,
+    weightKg: 0.5,
     name: 'Upcycled Rope Wall Hanging',
     slug: 'upcycled-rope-wall-hanging',
     description:
@@ -66,7 +66,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'cwc-003',
-    weight: 0.8,
+    weightKg: 0.8,
     name: 'Recycled Glass Vase Set (3)',
     slug: 'recycled-glass-vase-set',
     description:
@@ -97,7 +97,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'cwc-004',
-    weight: 1.2,
+    weightKg: 1.2,
     name: 'Scrap Metal Desk Lamp',
     slug: 'scrap-metal-desk-lamp',
     description:
@@ -129,7 +129,7 @@ export const MOCK_PRODUCTS: Product[] = [
   // ─── Adúláwò ───────────────────────────────────────────────
   {
     id: 'adl-001',
-    weight: 0.5,
+    weightKg: 0.5,
     name: 'Aso-oke Fragment Tote Bag',
     slug: 'asooke-fragment-tote-bag',
     description:
@@ -161,7 +161,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'adl-002',
-    weight: 0.2,
+    weightKg: 0.2,
     name: 'Brass Offcut Pendant Necklace',
     slug: 'brass-offcut-pendant-necklace',
     description:
@@ -191,7 +191,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'adl-003',
-    weight: 0.5,
+    weightKg: 0.5,
     name: 'Indigo-Dyed Adire Cushion Cover',
     slug: 'indigo-adire-cushion-cover',
     description:
@@ -222,7 +222,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'adl-004',
-    weight: 0.5,
+    weightKg: 0.5,
     name: 'Leather Scrap Wallet',
     slug: 'leather-scrap-wallet',
     description:
@@ -253,7 +253,7 @@ export const MOCK_PRODUCTS: Product[] = [
   // ─── Planet 3R ─────────────────────────────────────────────
   {
     id: 'p3r-001',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Recycled Plastic Planter Set',
     slug: 'recycled-plastic-planter-set',
     description:
@@ -285,7 +285,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'p3r-002',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Compressed Earth Block Bookends',
     slug: 'compressed-earth-bookends',
     description:
@@ -315,7 +315,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'p3r-003',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Upcycled Tyre Garden Stool',
     slug: 'upcycled-tyre-garden-stool',
     description:
@@ -346,7 +346,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'p3r-004',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Recycled Paper Stationery Set',
     slug: 'recycled-paper-stationery-set',
     description:
@@ -376,7 +376,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'p3r-005',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Shredded Plastic Doormat',
     slug: 'shredded-plastic-doormat',
     description:
@@ -407,7 +407,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'cwc-005',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Denim Patchwork Throw Blanket',
     slug: 'denim-patchwork-throw-blanket',
     description:
@@ -437,7 +437,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
   {
     id: 'adl-005',
-     weight: 0.5,
+     weightKg: 0.5,
     name: 'Ankara Fabric Earrings',
     slug: 'ankara-fabric-earrings',
     description:
