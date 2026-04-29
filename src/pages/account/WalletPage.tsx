@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   AccountBalanceWalletOutlined,
@@ -12,6 +13,7 @@ import { walletApi, type WalletDTO, type WalletTransactionDTO } from '@/services
 import { formatPrice } from '@/utils/mockData'
 
 export default function WalletPage() {
+  const [searchParams] = useSearchParams()
   const [wallet, setWallet] = useState<WalletDTO | null>(null)
   const [transactions, setTransactions] = useState<WalletTransactionDTO[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -23,6 +25,21 @@ export default function WalletPage() {
     document.title = 'My Wallet | CraftworldCentre'
     fetchWalletData()
   }, [])
+
+  // Effect to handle refresh parameter in URL
+  useEffect(() => {
+    const shouldRefresh = searchParams.get('refresh')
+    if (shouldRefresh === 'true') {
+      // Remove the refresh parameter from URL without triggering navigation
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('refresh');
+      const newUrl = `${window.location.pathname}${newSearchParams.toString() ? '?' + newSearchParams.toString() : ''}`;
+      window.history.replaceState({}, '', newUrl);
+
+      // Fetch fresh data
+      fetchWalletData();
+    }
+  }, [searchParams]) // This will run when searchParams changes
 
   const fetchWalletData = async () => {
     try {

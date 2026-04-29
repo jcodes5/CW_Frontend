@@ -22,7 +22,7 @@ export default function WalletDepositCallbackPage() {
       if (!reference) {
         setStatus('error')
         toast.error('Invalid payment reference')
-        setTimeout(() => navigate('/account/wallet'), 3000)
+        setTimeout(() => navigate('/account/wallet?refresh=true'), 3000)
         return
       }
 
@@ -33,12 +33,12 @@ export default function WalletDepositCallbackPage() {
         setStatus('success')
         // Show success message and redirect
         toast.success('Wallet funded successfully!')
-        // Redirect to wallet page after 2 seconds
-        setTimeout(() => navigate('/account/wallet'), 2000)
+        // Redirect to wallet page after 2 seconds with refresh flag
+        setTimeout(() => navigate('/account/wallet?refresh=true'), 2000)
       } else {
         setStatus('error')
         toast.error('Failed to verify payment. Please try again.')
-        setTimeout(() => navigate('/account/wallet'), 3000)
+        setTimeout(() => navigate('/account/wallet?refresh=true'), 3000)
       }
     } catch (err) {
       console.error('Wallet deposit verification failed:', err)
@@ -50,8 +50,8 @@ export default function WalletDepositCallbackPage() {
       }
       
       toast.error(errorMessage)
-      // Redirect back to wallet page after 3 seconds
-      setTimeout(() => navigate('/account/wallet'), 3000)
+      // Redirect back to wallet page after 3 seconds with refresh flag
+      setTimeout(() => navigate('/account/wallet?refresh=true'), 3000)
     }
   }
 
