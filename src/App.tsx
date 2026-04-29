@@ -29,6 +29,7 @@ const SignupPage            = lazy(() => import('@/pages/SignupPage'))
 const VerifyEmailPage       = lazy(() => import('@/pages/VerifyEmailPage'))
 const ResendVerificationPage = lazy(() => import('@/pages/ResendVerificationPage'))
 const OAuthCallbackPage     = lazy(() => import('@/pages/OAuthCallbackPage'))
+const WalletDepositCallbackPage = lazy(() => import('@/pages/WalletDepositCallbackPage'))
 const ForgotPasswordPage    = lazy(() => import('@/pages/info/ForgotPasswordPage'))
 
 // ── Checkout (fullscreen) ─────────────────────────────────────
@@ -68,7 +69,7 @@ const AdminHeroImages = lazy(() => import('@/pages/admin/AdminHeroImages'))
 const AdminRoles      = lazy(() => import('@/pages/admin/AdminRoles'))
 
 // ── Helpers ───────────────────────────────────────────────────
-const CHROME_FREE = ['/login', '/signup', '/verify-email', '/resend-verification', '/checkout', '/order-confirmation', '/forgot-password', '/admin']
+const CHROME_FREE = ['/login', '/signup', '/verify-email', '/resend-verification', '/checkout', '/order-confirmation', '/wallet-deposit-callback', '/forgot-password', '/admin']
 const hideChrome  = (path: string) => CHROME_FREE.some((r) => path.startsWith(r))
 
 function PageLoader() {
@@ -135,6 +136,7 @@ export default function App() {
             {/* Checkout — fullscreen */}
             <Route path="/checkout"        element={<CheckoutPage />} />
             <Route path="/order-confirmation/:reference" element={<OrderConfirmationPage />} />
+            <Route path="/wallet-deposit-callback" element={<ProtectedRoute><WalletDepositCallbackPage /></ProtectedRoute>} />
 
             {/* Account — protected + nested layout */}
             <Route path="/account"
