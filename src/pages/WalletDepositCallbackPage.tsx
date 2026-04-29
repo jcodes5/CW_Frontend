@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { CircularProgress, CheckCircleOutlined, ErrorOutlineOutlined } from '@mui/icons-material'
+import { CheckCircleOutlined, ErrorOutlineOutlined } from '@mui/icons-material'
+import { CircularProgress } from '@mui/material'
 import { toast } from 'react-toastify'
 import { walletApi } from '@/services/api'
 
@@ -8,7 +9,6 @@ export default function WalletDepositCallbackPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [amount, setAmount] = useState(0)
 
   useEffect(() => {
     document.title = 'Processing Deposit | CraftworldCentre'
@@ -31,11 +31,7 @@ export default function WalletDepositCallbackPage() {
 
       if (response.success) {
         setStatus('success')
-        // Extract amount from the response or calculate it
-        if (response.data) {
-          // The backend should return wallet DTO, we'll show a generic message
-          setAmount(response.data.balance || 0)
-        }
+        // Show success message and redirect
         toast.success('Wallet funded successfully!')
         // Redirect to wallet page after 2 seconds
         setTimeout(() => navigate('/account/wallet'), 2000)
