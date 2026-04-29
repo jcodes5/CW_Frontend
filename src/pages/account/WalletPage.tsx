@@ -44,14 +44,16 @@ export default function WalletPage() {
   const fetchWalletData = async () => {
     try {
       setIsLoading(true)
-      const [walletRes, transactionsRes] = await Promise.all([
-        walletApi.getBalance(),
-        walletApi.getTransactions(1, 10),
-      ])
+      // First get the wallet balance
+      const walletRes = await walletApi.getBalance();
       setWallet(walletRes.data ?? null)
+      
+      // Then get transactions
+      const transactionsRes = await walletApi.getTransactions(1, 10);
       setTransactions(transactionsRes.data?.data ?? [])
     } catch (err) {
       console.error('Failed to fetch wallet data:', err)
+      toast.error('Failed to load wallet data. Please refresh the page.')
     } finally {
       setIsLoading(false)
     }
@@ -226,7 +228,7 @@ export default function WalletPage() {
           <div className="p-8 text-center text-gray-500">Loading...</div>
         ) : transactions.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
-            No transactions yet. Add money to your wallet to get started!
+            {wallet?.balance === 0 ? 'No transactions yet. Add money to your wallet to get started!' : 'Loading transactions...'}
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
