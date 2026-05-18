@@ -82,10 +82,10 @@ function getCityZoneIndex(city: string): number {
 }
 
 /**
- * Calculate Speedaf delivery fee based on weight, city, and subtotal
+ * Calculate Speedaf delivery fee based on weight and city
  * Supports splitting orders over 10 kg into multiple waybills
  */
-function calculateSpeedafFee(weightInKg: number, city: string, subtotal: number): number {
+function calculateSpeedafFee(weightInKg: number, city: string): number {
 
   // Calculate total fee by splitting into waybills if needed (max 10 kg per waybill)
   let totalFee = 0;
@@ -173,7 +173,7 @@ export const FREE_DELIVERY_THRESHOLD = 25000
  * Get delivery information for a state/city, with weight-aware pricing
  * If city is provided and is in the Speedaf zone map, uses Speedaf tier-based pricing; otherwise uses state-based static pricing
  */
-export function getDeliveryInfo(state: string, subtotal: number, weightInKg: number = 1, city?: string) {
+export function getDeliveryInfo(state: string, _subtotal: number, weightInKg: number = 1, city?: string) {
   // Determine if using city (Speedaf) or state (backend) pricing
   // Use Speedaf pricing if city is provided AND is in the Speedaf zone mapping
   const isInSpeedafZone = city !== undefined && city.trim() !== '' && SPEEDAF_CITY_TO_ZONE_INDEX[city] !== undefined;
@@ -181,7 +181,7 @@ export function getDeliveryInfo(state: string, subtotal: number, weightInKg: num
   let fee = 0;
   if (isInSpeedafZone) { // Use Speedaf if city is provided and is in Speedaf zones
     // Use Speedaf tier-based pricing with weight
-    fee = calculateSpeedafFee(weightInKg, city || '', subtotal);
+    fee = calculateSpeedafFee(weightInKg, city || '');
   } else {
     // Use state-based static pricing (for backward compatibility)
     fee = BACKEND_DELIVERY_FEES[state] ?? 5000; // Default to 5000 if state not found

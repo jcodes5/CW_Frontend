@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { LocalShippingOutlined } from '@mui/icons-material'
 import { useCartStore } from '@/store/cartStore'
 import { formatPrice } from '@/utils/mockData'
