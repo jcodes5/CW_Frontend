@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { LocalShippingOutlined } from '@mui/icons-material'
 import { useCartStore } from '@/store/cartStore'
 import { formatPrice } from '@/utils/mockData'
-import { FREE_DELIVERY_THRESHOLD } from '@/utils/nigeria'
+
 
 interface OrderSummaryProps {
   deliveryFee: number
@@ -14,7 +14,6 @@ export default function OrderSummary({ deliveryFee, collapsed = false }: OrderSu
   const total = items.reduce((sum, i) => sum + (i.product.price || 0) * i.quantity, 0)
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0)
   const grandTotal = total + deliveryFee
-  const isFreeShipping = total >= FREE_DELIVERY_THRESHOLD
 
   return (
     <div className="bg-white rounded-2xl shadow-card overflow-hidden">
@@ -69,20 +68,10 @@ export default function OrderSummary({ deliveryFee, collapsed = false }: OrderSu
             <LocalShippingOutlined sx={{ fontSize: 15 }} />
             Delivery
           </span>
-          <span className={`font-medium ${isFreeShipping ? 'text-green-600' : ''}`}>
-            {isFreeShipping ? 'Free' : formatPrice(deliveryFee)}
+          <span className="font-medium">
+            {formatPrice(deliveryFee)}
           </span>
         </div>
-
-        {!isFreeShipping && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-xs text-teal-600 bg-teal-50 rounded-lg px-3 py-2 border border-teal-100"
-          >
-            Add <strong>{formatPrice(FREE_DELIVERY_THRESHOLD - total)}</strong> more for free delivery
-          </motion.div>
-        )}
 
         <div className="h-px bg-gray-100" />
         <div className="flex justify-between font-bold text-gray-900">

@@ -277,17 +277,10 @@ export default function CartDrawer() {
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Delivery</span>
-                    <span className={deliveryFee === 0 ? 'text-green-600 font-medium' : 'font-medium'}>
-                      {deliveryFee === 0 ? 'Free' : formatPrice(deliveryFee)}
-                    </span>
-                  </div>
-                  {deliveryFee > 0 && (
-                    <p className="text-xs text-teal-600">
-                      Add{' '}
-                      <strong>{formatPrice(25000 - total)}</strong>{' '}
-                      more for free delivery
-                    </p>
-                  )}
+                     <span className="font-medium">
+                       {formatPrice(deliveryFee)}
+                     </span>
+                   </div>
                   <div className="flex justify-between font-bold text-gray-900 text-base pt-1.5 border-t border-gray-100">
                     <span>Total</span>
                     <span>{formatPrice(grandTotal)}</span>

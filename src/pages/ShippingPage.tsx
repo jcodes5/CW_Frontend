@@ -17,8 +17,6 @@ export default function ShippingPage() {
           <tr><td>Zone 5</td><td>All other states</td><td>4–7 business days</td><td>₦5,000</td></tr>
         </tbody>
       </table>
-      <h2>Free Delivery</h2>
-      <p>All orders above <strong>₦25,000</strong> qualify for free delivery, regardless of destination state. Free delivery is automatically applied at checkout.</p>
       <h2>Order Processing</h2>
       <p>Orders are processed within 24 hours of payment confirmation on business days (Monday–Friday). Orders placed on weekends or public holidays are processed the next business day.</p>
       <h2>Tracking Your Order</h2>

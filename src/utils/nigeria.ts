@@ -86,10 +86,6 @@ function getCityZoneIndex(city: string): number {
  * Supports splitting orders over 10 kg into multiple waybills
  */
 function calculateSpeedafFee(weightInKg: number, city: string, subtotal: number): number {
-  // Free delivery for orders above threshold
-  if (subtotal >= 25000) {
-    return 0;
-  }
 
   // Calculate total fee by splitting into waybills if needed (max 10 kg per waybill)
   let totalFee = 0;
@@ -188,10 +184,7 @@ export function getDeliveryInfo(state: string, subtotal: number, weightInKg: num
     fee = calculateSpeedafFee(weightInKg, city || '', subtotal);
   } else {
     // Use state-based static pricing (for backward compatibility)
-    const isFree = subtotal >= FREE_DELIVERY_THRESHOLD;
-    if (!isFree) {
-      fee = BACKEND_DELIVERY_FEES[state] ?? 5000; // Default to 5000 if state not found
-    }
+    fee = BACKEND_DELIVERY_FEES[state] ?? 5000; // Default to 5000 if state not found
   }
 
   // Get zone info from SPEEDAF_ZONES for display details (days, zone name)

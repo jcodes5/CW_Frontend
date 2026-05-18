@@ -82,7 +82,7 @@ export default function Navbar() {
     <>
       {/* Announcement Bar */}
       <div className="bg-teal-500 text-white text-xs sm:text-sm py-2 px-4 text-center font-body">
-        Free shipping on orders over ₦125,000 · Every purchase diverts waste from landfill
+        Every purchase diverts waste from landfill
       </div>
 
       <nav

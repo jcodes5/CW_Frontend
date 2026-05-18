@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   DeleteOutlineOutlined, AddOutlined, RemoveOutlined,
   ShoppingCartOutlined, ArrowForwardOutlined, ArrowBackOutlined,
-  RecyclingOutlined, LocalShippingOutlined, LockOutlined,
+  RecyclingOutlined,  LockOutlined,
 } from '@mui/icons-material'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
 import { formatPrice } from '@/utils/mockData'
-import { FREE_DELIVERY_THRESHOLD, getDeliveryInfo } from '@/utils/nigeria'
+import { getDeliveryInfo } from '@/utils/nigeria'
 import { useUIStore } from '@/store/uiStore'
 import { couponsApi, addressesApi } from '@/services/api'
 
@@ -65,8 +65,6 @@ export default function CartPage() {
   const deliveryFee = deliveryFeeEstimate
   const discount           = couponApplied?.discount ?? 0
   const grandTotal         = total + deliveryFee - discount
-  const amountToFree       = FREE_DELIVERY_THRESHOLD - total
-  const freeDeliveryPct    = Math.min((total / FREE_DELIVERY_THRESHOLD) * 100, 100)
 
   // ── Protected checkout handler ──────────────────────────────
   const handleApplyCoupon = async () => {
@@ -156,39 +154,7 @@ export default function CartPage() {
             {/* ── Cart Items ──────────────────────── */}
             <div className="lg:col-span-2 space-y-4">
 
-              {/* Free delivery progress */}
-              {amountToFree > 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white rounded-2xl p-4 border border-teal-100"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <LocalShippingOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} />
-                    <p className="text-sm text-gray-700">
-                      Add{' '}
-                      <strong className="text-teal-600">{formatPrice(amountToFree)}</strong>{' '}
-                      more for <strong className="text-teal-600">free delivery</strong>
-                    </p>
-                  </div>
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${freeDeliveryPct}%` }}
-                      transition={{ duration: 0.6, ease: 'easeOut' }}
-                      className="h-full bg-teal-500 rounded-full"
-                    />
-                  </div>
-                </motion.div>
-              ) : (
-                <div className="bg-teal-50 border border-teal-200 rounded-2xl p-4
-                                flex items-center gap-2">
-                  <LocalShippingOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} />
-                  <p className="text-sm text-teal-700 font-medium">
-                    You've unlocked free delivery!
-                  </p>
-                </div>
-              )}
+
 
               {/* Guest notice — shown only when not logged in */}
               {!isAuthenticated && (

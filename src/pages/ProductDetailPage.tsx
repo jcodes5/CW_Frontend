@@ -351,7 +351,7 @@ export default function ProductDetailPage() {
                     </p>
                     <p className="text-sm text-gray-700">
                       Fee: <span className="font-bold text-teal-700">
-                        {shippingInfo.isFree ? 'FREE' : formatPrice(shippingInfo.fee)}
+                        {formatPrice(shippingInfo.fee)}
                       </span>
                     </p>
                     {totalWeight > 0 && (
