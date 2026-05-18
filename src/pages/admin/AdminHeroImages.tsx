@@ -348,11 +348,11 @@ export default function AdminHeroImages() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="fixed top-0.5 left-1/2 -translate-x-1/2 -translate-y-1/3 bg-white rounded-2xl shadow-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto z-50 sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-2/5"
+              className="fixed inset-y-0 left-1/2 -translate-x-1/2 my-auto bg-white rounded-2xl shadow-lg w-11/12 max-w-4xl max-h-[95vh] overflow-y-auto z-50 sm:w-10/12 md:w-3/4 lg:w-1/2 xl:w-2/5"
             >
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-display font-bold text-[#0d1f22] text-xl">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4 sm:p-6">
+                <div className="flex items-center justify-between mb-4 gap-2">
+                  <h2 className="font-display font-bold text-[#0d1f22] text-lg sm:text-xl">
                     {editImage ? 'Edit Hero Image' : 'Add Hero Image'}
                   </h2>
                   <button
@@ -368,16 +368,16 @@ export default function AdminHeroImages() {
 
                 {/* Image Upload */}
                 <div className="space-y-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Image</label>
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Upload Image</label>
                   
-                  <div className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
+                  <div className={`relative border-2 border-dashed rounded-lg p-3 sm:p-6 text-center cursor-pointer
                     ${selectedFile ? 'border-green-500 bg-green-50' : 'border-gray-300 hover:border-gray-400'}`}>
                     {previewUrl ? (
                       <div className="relative group">
                         <img
                           src={previewUrl}
                           alt="Preview"
-                          className="w-full h-48 object-contain rounded-md mx-auto"
+                          className="w-full h-32 sm:h-48 object-contain rounded-md mx-auto"
                         />
                         <button
                         title='Upload'
