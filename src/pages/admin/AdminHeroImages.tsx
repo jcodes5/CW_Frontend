@@ -370,7 +370,7 @@ export default function AdminHeroImages() {
                 <div className="space-y-4">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Image</label>
                   
-                  <div className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
+                  <div className={`relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
                     ${selectedFile ? 'border-green-500 bg-green-50' : 'border-gray-300 hover:border-gray-400'}`}>
                     {previewUrl ? (
                       <div className="relative group">

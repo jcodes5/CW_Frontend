@@ -46,10 +46,15 @@ export default function AdminAnalytics() {
   // Socket.io real-time updates
   useEffect(() => {
     if (!token) return
-    const socketUrl = import.meta.env.VITE_SOCKET_URL ?? 'http://localhost:5000'
 
-    import('socket.io-client').then(({ io }) => {
-      const socket = io(socketUrl, {
+    let socket: any
+    let cleanup: (() => void) | null = null
+
+    const setupSocket = async () => {
+      const socketUrl = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL?.replace(/\/api.*$/, '') || 'http://localhost:5000'
+
+      const { io } = await import('socket.io-client')
+      socket = io(socketUrl, {
         auth: { token },
         transports: ['websocket'],
       })
@@ -63,8 +68,18 @@ export default function AdminAnalytics() {
         fetchAnalytics()
       })
 
-      return () => { socket.disconnect() }
+      cleanup = () => {
+        socket.disconnect()
+      }
+    }
+
+    setupSocket().catch((err) => {
+      console.error('Failed to setup socket:', err)
     })
+
+    return () => {
+      cleanup?.()
+    }
   }, [token, fetchAnalytics])
 
   if (analyticsLoading || !analytics) {
