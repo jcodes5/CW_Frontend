@@ -9,20 +9,7 @@ import { gsap } from '@/utils/gsap'
 import { api } from '@/services/api'
 
 // Split layout hero
-const HERO_IMAGES = [
-  {
-    src: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
-    alt: 'Upcycled wooden furniture',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
-    alt: 'Handcrafted recycled bags',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&q=80',
-    alt: 'Sustainable fashion items',
-  },
-]
+
 
 // Fallback carousel slides (used if no admin-managed slides are available)
 const DEFAULT_CAROUSEL_SLIDES = [
