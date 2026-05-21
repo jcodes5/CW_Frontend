@@ -287,7 +287,7 @@ export default function HeroSection() {
             </motion.div>
 
             {/* Product Showcase */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
@@ -318,7 +318,7 @@ export default function HeroSection() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </motion.div> */}
 
             {/* CTA Section */}
             <motion.div
