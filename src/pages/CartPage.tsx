@@ -323,8 +323,8 @@ export default function CartPage() {
                     )}
                     <div className="flex justify-between text-sm text-gray-600">
                       <span>Delivery</span>
-                      <span className={`font-medium ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-                        {deliveryFee === 0 ? 'Free' : formatPrice(deliveryFee)}
+                      <span className="font-medium text-gray-900">
+                        {formatPrice(deliveryFee)}
                       </span>
                     </div>
                     <div className="border-t border-gray-100 pt-3 flex justify-between

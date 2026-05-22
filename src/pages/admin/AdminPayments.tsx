@@ -392,7 +392,7 @@ export default function AdminPayments() {
                   <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
                     {[
                       { l: 'Subtotal',  v: formatPrice(selectedOrder.pricing?.subtotal ?? 0) },
-                      { l: 'Delivery',  v: (selectedOrder.pricing?.deliveryFee ?? 0) === 0 ? 'Free' : formatPrice(selectedOrder.pricing.deliveryFee) },
+                      { l: 'Delivery',  v: formatPrice(selectedOrder.pricing.deliveryFee) },
                     ].map(({ l, v }) => (
                       <div key={l} className="flex justify-between text-gray-600 text-xs">
                         <span>{l}</span><span className="font-medium text-gray-900">{v}</span>

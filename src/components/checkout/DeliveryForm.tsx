@@ -218,7 +218,7 @@ export default function DeliveryForm({ onNext }: Props) {
             <span className="text-xl">🚚</span>
             <div>
               <p className="text-sm font-semibold text-teal-800">
-                {deliveryInfo.isFree ? 'Free Delivery' : `Delivery: ${new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(deliveryInfo.fee)} (${deliveryInfo.zone})`}
+                {`Delivery: ${new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(deliveryInfo.fee)} (${deliveryInfo.zone})`}
               </p>
               <p className="text-xs text-teal-600">
                 Estimated {deliveryInfo.days} to {watchedCity || watchedState}

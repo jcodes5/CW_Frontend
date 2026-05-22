@@ -487,7 +487,7 @@ export default function ProductDetailPage() {
             {/* Trust badges */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { icon: <LocalShippingOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} />, title: 'Free Delivery', sub: 'On orders over ₦25,000' },
+                { icon: <LocalShippingOutlined sx={{ fontSize: 18, color: '#1A7A8A' }} />, title: 'Fast Delivery', sub: 'Nationwide shipping available' },
                 { icon: <RecyclingOutlined sx={{ fontSize: 18, color: '#3d6b2d' }} />, title: '100% Circular', sub: 'Fully traceable materials' },
                 { icon: <VerifiedOutlined sx={{ fontSize: 18, color: '#8B6914' }} />, title: 'Quality Assured', sub: 'Inspected before dispatch' },
               ].map((badge) => (

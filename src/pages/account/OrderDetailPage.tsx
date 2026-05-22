@@ -140,7 +140,7 @@ export default function OrderDetailPage() {
         <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50 space-y-2">
           {[
             { label: 'Subtotal',  value: formatPrice(order.pricing?.subtotal ?? 0) },
-            { label: 'Delivery',  value: order.pricing?.deliveryFee === 0 ? 'Free' : formatPrice(order.pricing?.deliveryFee ?? 0) },
+            { label: 'Delivery',  value: formatPrice(order.pricing?.deliveryFee ?? 0) },
             { label: 'Discount',  value: order.pricing?.discount ? `-${formatPrice(order.pricing.discount)}` : '₦0' },
           ].map((row) => (
             <div key={row.label} className="flex justify-between text-sm text-gray-600">

@@ -88,8 +88,8 @@ export default function OrderSummaryPanel({ deliveryFee, discount = 0 }: Props) 
               <LocalShippingOutlined sx={{ fontSize: 14 }} />
               Delivery
             </span>
-            <span className={`font-medium ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-              {deliveryFee === 0 ? 'Free' : formatPrice(deliveryFee)}
+            <span className="font-medium text-gray-900">
+              {formatPrice(deliveryFee)}
             </span>
           </div>
           {discount > 0 && (

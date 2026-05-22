@@ -288,7 +288,7 @@ export default function OrderConfirmationPage() {
             <div className="border-t border-gray-100 pt-4 space-y-2">
               {[
                 { label: 'Subtotal', value: formatPrice(order.pricing.subtotal) },
-                { label: 'Delivery', value: order.pricing.deliveryFee === 0 ? 'Free' : formatPrice(order.pricing.deliveryFee) },
+                { label: 'Delivery', value: formatPrice(order.pricing.deliveryFee) },
               ].map((row) => (
                 <div key={row.label} className="flex justify-between text-sm text-gray-600">
                   <span>{row.label}</span>

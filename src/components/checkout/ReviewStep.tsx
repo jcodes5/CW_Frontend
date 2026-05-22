@@ -104,8 +104,8 @@ export default function ReviewStep({ onNext, onBack }: ReviewStepProps) {
             <p className="font-medium text-gray-800">{deliveryInfo.label} Delivery</p>
             <p className="text-xs text-gray-500 mt-0.5">Zone: {deliveryInfo.zone}, Estimated: {deliveryInfo.days}</p>
           </div>
-          <span className={`font-bold text-base ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-            {deliveryFee === 0 ? 'Free 🎉' : formatPrice(deliveryFee)}
+          <span className="font-bold text-base text-gray-900">
+            {formatPrice(deliveryFee)}
           </span>
         </div>
       </div>
@@ -147,8 +147,8 @@ export default function ReviewStep({ onNext, onBack }: ReviewStepProps) {
         </div>
         <div className="flex justify-between text-sm text-gray-600">
           <span>Delivery</span>
-          <span className={`font-medium ${deliveryFee === 0 ? 'text-green-600' : ''}`}>
-            {deliveryFee === 0 ? 'Free' : formatPrice(deliveryFee)}
+          <span className="font-medium text-gray-900">
+            {formatPrice(deliveryFee)}
           </span>
         </div>
         <div className="h-px bg-gray-100" />

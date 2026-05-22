@@ -364,8 +364,8 @@ export default function PaymentStep({ deliveryFee, discount = 0, couponCode, onB
           {/* Delivery Fee */}
           <div className="flex justify-between items-center pt-2 border-t border-gray-200">
             <span className="text-gray-700">Delivery</span>
-            <span className={`font-semibold ${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-              {deliveryFee === 0 ? 'FREE' : formatPrice(deliveryFee)}
+            <span className="font-semibold text-gray-900">
+              {formatPrice(deliveryFee)}
             </span>
           </div>
 

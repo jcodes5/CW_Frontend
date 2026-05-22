@@ -167,8 +167,6 @@ export const SPEEDAF_ZONES: Record<string, { zone: string; baseRate: number; add
   'Kano': { zone: 'Zone 4', baseRate: 7439, additionalRatePerKg: 1720, days: '3–4 business days' },
 };
 
-export const FREE_DELIVERY_THRESHOLD = 25000
-
 /**
  * Get delivery information for a state/city, with weight-aware pricing
  * If city is provided and is in the Speedaf zone map, uses Speedaf tier-based pricing; otherwise uses state-based static pricing
@@ -193,13 +191,11 @@ export function getDeliveryInfo(state: string, _subtotal: number, weightInKg: nu
                   state && SPEEDAF_ZONES[state] ? SPEEDAF_ZONES[state] : 
                   SPEEDAF_ZONES['Kano']; // Default fallback
                   
-  const isFree = fee === 0; // Check if fee is 0 (either free delivery or not in zones)
-  const label = isFree ? 'Free' : 'Speedaf Express';
+  const label = 'Speedaf Express';
   
   return {
     fee,
     days: zoneInfo.days,
-    isFree,
     label,
     zone: zoneInfo.zone
   }
